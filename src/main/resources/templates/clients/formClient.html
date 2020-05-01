@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" th:href="@{/images/favicon.ico}">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/bootstrap/css/bootstrap.min.css}">
+    <link href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" rel="stylesheet">
+    <title>Fauna Health | Registro de cliente</title>
+</head>
+
+<body>
+
+	<nav th:insert="fragments/menu.html :: navbar">
+	</nav>
+	
+    <div class="container">
+        <div class="card animated fadeIn fast">
+            <h4 class="card-header">
+                <i class="fas fa-male"></i>|<i class="fas fa-female"></i> Datos del cliente
+            </h4>
+            <div class="card-body">
+                <form name="formClient" th:action="@{/clients/save}" th:object="${client}" method="post" onsubmit="return validateFormClient(this)">
+                    <div class="form-row">
+                        <div class="form-group col-md-3">
+                            <label for="documentType">Tipo de documento(*): </label>
+                            <input type="hidden" th:field="*{id}">
+                            <select th:field="*{documentType.id}" id="documentType" class="form-control">
+                                <option value="1">DNI</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label for="documentNumber">N&uacute;mero de documento(*): </label>
+                            <input th:field="*{documentNumber}" id="documentNumber" type="text" class="form-control" 
+                            	maxlength="8" size="8" placeholder="N&uacute;mero DNI" onkeypress="return checkNumbers(event)" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-3">
+                            <label for="name">Nombre(*): </label>
+                            <input th:field="*{name}" id="name" type="text" class="form-control" placeholder="Nombre cliente" required>
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label for="primaryLastName">Apellido Paterno(*): </label>
+                            <input th:field="*{primaryLastName}" id="primaryLastName" type="text" class="form-control" placeholder="Primer apellido" required>
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label for="secondLastName">Apellido Materno(*): </label>
+                            <input th:field="*{secondLastName}" id="secondLastName" type="text" class="form-control" placeholder="Segundo apellido" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-5">
+                            <label for="district">Distrito(*): </label>
+                            <select th:field="*{district.id}" id="district" class="form-control">
+                                <option th:each="district : ${districts}" th:value="${district.id}" th:text="${district.name}"></option>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-5">
+                            <label for="address">Direcci&oacute;n(*): </label>
+                            <input th:field="*{address}" id="address" type="text" class="form-control" placeholder="Urbanizaci&oacute;n, calle, manzana, lote" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-3">
+                            <label for="phone">Tel&eacute;fono: </label>
+                            <input th:field="*{phone}" id="phone" type="text" class="form-control" placeholder="N&uacute;mero fijo(Opcional)" 
+                            	maxlength="7" size="7" onkeypress="return checkNumbers(event)">
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label for="cellPhone">Celular(*): </label>
+                            <input th:field="*{cellPhone}" id="cellPhone" type="text" class="form-control" placeholder="Celular personal" 
+                            	maxlength="9" size="9" onkeypress="return checkNumbers(event)" required>
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label for="emailAddress">Correo(*): </label>
+                            <input th:field="*{emailAddress}" id="emailAddress" type="email" class="form-control" placeholder="example@gmail.com" required>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Registrar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <footer th:insert="fragments/footer.html :: footer">
+    </footer>
+    
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script th:src="@{/js/validations.js}"></script>
+</body>
+
+</html>
