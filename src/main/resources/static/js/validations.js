@@ -48,6 +48,25 @@ function validateFormClient(form) {
 	
 }
 
+function validateFormPatient(form) {
+	var nickname = document.getElementById("nickname")
+	if(!validateText(nickname.value)) {
+		alert('No se aceptan valores numericos en el campo "Alias"')
+		document.getElementById("nickname").focus()
+		return false
+	}
+	
+	var colorHair = document.getElementById("colorHair")
+	if(!validateText(colorHair.value)) {
+		alert('No se aceptan valores numericos en el campo "Color de pelo"')
+		document.getElementById("colorHair").focus()
+		return false
+	}
+	
+	alert('Guardando datos...')
+	return true
+}
+
 function validateSearchBy(form) {
 	
 	var name = document.getElementById("name")
@@ -66,3 +85,35 @@ function validateSearchBy(form) {
 	
 	return true;
 }
+
+function validateSearchByPatients(form) {
+	var nickname = document.getElementById("nickname")
+	if(!validateText(nickname.value)) {
+		alert('No se pueden ingresar valores numericos en el campo "Alias"')
+		document.getElementById("nickname").focus()
+		return false
+	}
+	
+	var primaryLastName = document.getElementById("primaryLastName")
+	if(!validateText(primaryLastName.value)) {
+		alert('No se pueden ingresar valores numericos en el campo "Apellido"')
+		document.getElementById("primaryLastName").focus()
+		return false
+	}
+	
+	return true
+}
+
+var close = document.querySelectorAll(".closeAlert");
+close.forEach(function(e) {
+    e.addEventListener("click", function() {
+        this.offsetParent.style.display = "none";
+    });
+});
+
+
+
+
+
+
+

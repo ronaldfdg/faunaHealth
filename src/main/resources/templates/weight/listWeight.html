@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" th:href="@{/images/favicon.ico}">
+    <link rel="stylesheet" th:href="@{/bootstrap/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" rel="stylesheet">
+    
+    <title>Fauna Health | Historial de pesos</title>
+    
+</head>
+
+<body>
+	<nav th:insert="fragments/menu.html :: navbar">
+	</nav>
+    <div class="container">
+        <form>
+            <div class="form-row">
+                <div class="col-md-4 mb-3">
+                    <label for="weight">Peso (kg):</label>
+                    <input type="text" class="form-control" id="weight" placeholder="Peso" maxlength="3" required>
+                </div>
+            </div>
+            <button class="btn btn-outline-dark" type="submit">Registrar peso</button>
+        </form>
+        <hr>
+        <div class="card-columns">
+            <div class="card text-center">
+                <div class="card-body">
+                    <i class="fas fa-weight" style="font-size: 20px;"></i>
+                    <p class="card-text">This card has supporting text below as a natural lead-in to additional content.</p>
+                    <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+                    <div class="card-footer bg-transparent border-success">
+                    	<a href="#" class="btn btn-secondary btn-sm" role="button">Eliminar</a>
+                   	</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <footer th:insert="fragments/footer.html :: footer">
+    </footer>
+    
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script th:src="@{/js/validations.js}"></script>
+</body>
+
+</html>

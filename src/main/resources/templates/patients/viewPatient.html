@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" th:href="@{/images/favicon.ico}">
+    <link rel="stylesheet" th:href="@{/bootstrap/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" rel="stylesheet">
+    
+    <title>Fauna Health | Detalle del Paciente</title>
+    
+    <style type="text/css">
+    	p {
+    		font-size: 18px;
+    	}
+    </style>
+    
+</head>
+
+<body>
+    <nav th:insert="fragments/menu.html :: navbar">
+
+    </nav>
+    <hr>
+    <main role="main">
+        <div class="container">
+            <div class="card">
+                <h4 class="card-header" th:text="'Paciente: ' + ${patient.nickname} + ' ' + ${patient.client.primaryLastName}"></h4>
+                <div class="card-body">
+                	<a class="btn btn-primary" th:href="@{/patient/weight}" title="Sección de pesos" role="button"><i class="fas fa-weight"></i> Pesaje</a>	
+					<hr>
+                    <p class="card-text">
+                    	<strong>Nombre/Alias: </strong><span th:text="${patient.nickname}"></span>
+                   	</p>
+                    <p class="card-text">
+                    	<strong>Color de pelo: </strong><span th:text="${patient.hairColor}"></span>
+                   	</p>
+                    <p class="card-text">
+                    	<strong>Fecha de cumpleaños: </strong><span th:text="${#dates.format(patient.birthday, 'dd-MM-yyyy')}"></span>
+                   	</p>
+                    <p class="card-text">
+                    	<strong>Sexo: </strong><span th:text="${patient.gender == 'M'} ? 'Macho' : 'Hembra'"></span>
+                   	</p>
+                    <p class="card-text">
+                    	<strong>Señas/Caracter&iacute;sticas: </strong><span th:text="${patient.signs}"></span>
+                   	</p>
+                    <p class="card-text">
+                    	<strong>Fallecido: </strong><span th:text="${patient.dead} ? 'SI' : 'NO'"></span>
+                   	</p>
+		            <div class="card bg-light mb-3">
+		            	<div class="card-body">
+		            		<h5 class="card-title" th:text="'Dueño: ' + ${patient.client.name} + ' ' + ${patient.client.primaryLastName}"></h5>
+		            		<hr>
+			            	<p class="card-text">
+			            		<strong>Nombre: </strong><span th:text="${patient.client.name}"></span>
+		            		</p>
+			            	<p class="card-text">
+			            		<strong>Apellido Paterno: </strong><span th:text="${patient.client.primaryLastName}"></span>
+		            		</p>
+			            	<p class="card-text">
+			            		<strong>Apellido Materno: </strong><span th:text="${patient.client.secondLastName}"></span>
+		            		</p>
+			            	<p class="card-text">
+			            		<strong>Correo: </strong><span th:text="${patient.client.emailAddress}"></span>
+		            		</p>
+			            	<p class="card-text">
+			            		<strong>Celular: </strong><span th:text="${patient.client.cellPhone}"></span>
+	            			</p>
+			            </div>
+		            </div>
+		            
+	            </div>
+            </div>
+        </div>
+    </main>
+    
+    <footer th:insert="fragments/footer.html :: footer">
+    </footer>
+    
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+ 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+</body>
+
+</html>
