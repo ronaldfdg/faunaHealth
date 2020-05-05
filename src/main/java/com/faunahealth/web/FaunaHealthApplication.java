@@ -10,4 +10,14 @@ public class FaunaHealthApplication {
 		SpringApplication.run(FaunaHealthApplication.class, args);
 	}
 
+	/*@Override
+	public void run(String... args) throws Exception {
+		getPatients();
+	}
+	
+	public void getPatients() {
+		for(Patient patient : repository.findByClient_PrimaryLastNameContaining("Do"))
+			System.out.println(patient);
+	}*/
+
 }

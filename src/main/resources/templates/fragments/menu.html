@@ -26,9 +26,13 @@
 	                  Pacientes
 	                </button>
 	                <div class="dropdown-menu">
-	                    <a class="dropdown-item" href="#">Registrar</a>
+	                    <a class="dropdown-item" th:href="@{/patient/record/dog}">Registrar perro</a>
 	                    <div class="dropdown-divider"></div>
-	                    <a class="dropdown-item" href="#">Listado</a>
+	                    <a class="dropdown-item" th:href="@{/patient/record/cat}">Registrar gato</a>
+	                    <div class="dropdown-divider"></div>
+	                    <a class="dropdown-item" th:href="@{/patient/record/rabbit}">Registrar conejo</a>
+	                    <div class="dropdown-divider"></div>
+	                    <a class="dropdown-item" th:href="@{/patient/}">Listado</a>
 	                </div>
 	            </div>
 	        </li>

@@ -25,11 +25,17 @@
                 <hr>
                 <strong>Puede encontrar clientes utilizando los siguientes filtros:</strong>
                 <br><br>
-                <div id="messageSuccess" th:if="${messageSuccess!=null}" class="alert alert-success" role="alert">
-                	<strong th:text="${messageSuccess}"></strong>
+                <div id="messageSuccess" th:if="${messageSuccess!=null}" class="alert alert-success alert-dismissible fade show" role="alert">
+                	<strong th:text="${messageSuccess}" class="closeAlert"></strong>
+                	<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+				    		<span aria-hidden="true">&times;</span>
+			  		</button>
                 </div>
-                <div id="messageWarning" th:if="${messageWarning!=null}" class="alert alert-warning" role="alert">
-                	<strong th:text="${messageWarning}"></strong>
+                <div id="messageWarning" th:if="${messageWarning!=null}" class="alert alert-warning alert-dismissible fade show" role="alert">
+                	<strong th:text="${messageWarning}" class="closeAlert"></strong>
+                	<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+				    		<span aria-hidden="true">&times;</span>
+			  		</button>
                 </div>
                 <form name="searchByDNI" th:action="@{/clients/searchByDNI}">
                     <div class="form-row">
