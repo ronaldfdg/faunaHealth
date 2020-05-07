@@ -12,12 +12,12 @@ public class FaunaHealthApplication {
 
 	/*@Override
 	public void run(String... args) throws Exception {
-		getPatients();
+		getWeight();
 	}
 	
-	public void getPatients() {
-		for(Patient patient : repository.findByClient_PrimaryLastNameContaining("Do"))
-			System.out.println(patient);
+	public void getWeight() {
+		for(Weight weight : repository.getWeightsByPatient(1))
+			System.out.println(weight);
 	}*/
 
 }

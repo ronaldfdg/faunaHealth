@@ -29,7 +29,7 @@
             <div class="card">
                 <h4 class="card-header" th:text="'Paciente: ' + ${patient.nickname} + ' ' + ${patient.client.primaryLastName}"></h4>
                 <div class="card-body">
-                	<a class="btn btn-primary" th:href="@{/patient/weight}" title="Sección de pesos" role="button"><i class="fas fa-weight"></i> Pesaje</a>	
+                	<a class="btn btn-primary" th:href="@{/weight/{id} ( id = ${patient.id} )}" title="Sección de pesos" role="button"><i class="fas fa-weight"></i> Pesaje</a>	
 					<hr>
                     <p class="card-text">
                     	<strong>Nombre/Alias: </strong><span th:text="${patient.nickname}"></span>
