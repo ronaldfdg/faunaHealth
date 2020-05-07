@@ -218,11 +218,6 @@ public class PatientController {
 		model.addAttribute("patient", servicePatient.findById(id));
 		return "patients/viewPatient";
 	}
-	
-	@GetMapping("/weight")
-	public String viewWeight() {
-		return "weight/listWeight";
-	}
 
 	@InitBinder
 	public void initBinder(WebDataBinder binder) {
