@@ -44,7 +44,7 @@ public class Client {
 	private String emailAddress;
 	
 	@Column(name="Estado", nullable=false)
-	private boolean status;
+	private boolean status = true;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name="idDistrito")

@@ -23,6 +23,7 @@ import com.faunahealth.web.entity.Client;
 import com.faunahealth.web.entity.Patient;
 import com.faunahealth.web.service.BreedService;
 import com.faunahealth.web.service.ClientService;
+import com.faunahealth.web.service.DistrictService;
 import com.faunahealth.web.service.PatientService;
 
 @Controller
@@ -34,6 +35,9 @@ public class PatientController {
 
 	@Autowired
 	private PatientService servicePatient;
+	
+	@Autowired
+	private DistrictService serviceDistrict;
 
 	@Autowired
 	private ClientService serviceClient;
@@ -45,95 +49,70 @@ public class PatientController {
 	}
 
 	@GetMapping("/record/dog")
-	public String recordDog(@ModelAttribute Patient patient, Model model) {
+	public String recordDog(@ModelAttribute Patient patient, @RequestParam(name = "clientId", required = false) Integer clientId, Model model) {
 		model.addAttribute("breeds", serviceBreed.getBreedsDog());
+		model.addAttribute("districts", serviceDistrict.findAll());
+		
+		if(clientId != null)
+			patient.setClient(serviceClient.findById(clientId));
+		
 		return "patients/dog/formDog";
 	}
+	
+	@GetMapping("/record/cat")
+	public String recordCat(@ModelAttribute Patient patient, @RequestParam(name = "clientId", required = false) Integer clientId, Model model) {
+		model.addAttribute("breeds", serviceBreed.getBreedsCat());
+		model.addAttribute("districts", serviceDistrict.findAll());
+		
+		if(clientId != null)
+			patient.setClient(serviceClient.findById(clientId));
+		
+		return "patients/cat/formCat";
+	}
 
-	@PostMapping("/saveDog")
+	@GetMapping("/record/rabbit")
+	public String recordRabbit(@ModelAttribute Patient patient, @RequestParam(name = "clientId", required = false) Integer clientId, Model model) {
+		model.addAttribute("breeds", serviceBreed.getBreedsRabbit());
+		model.addAttribute("districts", serviceDistrict.findAll());
+		
+		if(clientId != null)
+			patient.setClient(serviceClient.findById(clientId));
+		
+		return "patients/rabbit/formRabbit";
+	}
+
+	@PostMapping("/savePatient")
 	public String saveDog(@ModelAttribute Patient patient, BindingResult result, RedirectAttributes attribute,
 			Model model) {
 
 		if (result.hasErrors()) {
-			model.addAttribute("breeds", serviceBreed.getBreedsDog());
+			
+			switch(patient.getBreed().getSpecie().getId()) {
+				case 1:
+					model.addAttribute("breeds", serviceBreed.getBreedsDog());
+					break;
+				case 2:
+					model.addAttribute("breeds", serviceBreed.getBreedsCat());
+					break;
+				case 3:
+					model.addAttribute("breeds", serviceBreed.getBreedsRabbit());
+					break;
+			}
+			
+			model.addAttribute("districts", serviceDistrict.findAll());
 			return "patients/dog/formDog";
 		}
 
-		if (!serviceClient.existsById(patient.getClient().getId())) {
-			model.addAttribute("messageError",
-					"No existe ningun cliente con el codigo: " + patient.getClient().getId());
-			model.addAttribute("breeds", serviceBreed.getBreedsDog());
-			return "patients/dog/formDog";
-		}
-
 		if (servicePatient.existsById(patient.getId()))
-			attribute.addFlashAttribute("messageSuccess", "Se actualizó al paciente: " + patient.getNickname());
+			attribute.addFlashAttribute("messageSuccess", "Se actualizó al paciente: " + patient.getNickname() 
+				+ " " + patient.getClient().getPrimaryLastName());
 		else
-			attribute.addFlashAttribute("messageSuccess", "Se registró al paciente: " + patient.getNickname());
+			attribute.addFlashAttribute("messageSuccess", "Se registró al paciente: " + patient.getNickname() 
+				+ " " + patient.getClient().getPrimaryLastName());
 
+		serviceClient.save(patient.getClient());
 		servicePatient.save(patient);
-		return "redirect:/patient/";
-	}
-
-	@GetMapping("/record/cat")
-	public String recordCat(@ModelAttribute Patient patient, Model model) {
-		model.addAttribute("breeds", serviceBreed.getBreedsCat());
-		return "patients/cat/formCat";
-	}
-
-	@PostMapping("/saveCat")
-	public String saveCat(@ModelAttribute Patient patient, BindingResult result, RedirectAttributes attribute,
-			Model model) {
-
-		if (result.hasErrors()) {
-			model.addAttribute("breeds", serviceBreed.getBreedsDog());
-			return "patients/cat/formCat";
-		}
-
-		if (!serviceClient.existsById(patient.getClient().getId())) {
-			model.addAttribute("messageError",
-					"No existe ningun cliente con el codigo: " + patient.getClient().getId());
-			model.addAttribute("breeds", serviceBreed.getBreedsDog());
-			return "patients/cat/formCat";
-		}
-
-		if (servicePatient.existsById(patient.getId()))
-			attribute.addFlashAttribute("messageSuccess", "Se actualizó al paciente: " + patient.getNickname());
-		else
-			attribute.addFlashAttribute("messageSuccess", "Se registró al paciente: " + patient.getNickname());
-
-		servicePatient.save(patient);
-		return "redirect:/patient/";
-	}
-
-	@GetMapping("/record/rabbit")
-	public String recordRabbit(@ModelAttribute Patient patient, Model model) {
-		model.addAttribute("breeds", serviceBreed.getBreedsRabbit());
-		return "patients/rabbit/formRabbit";
-	}
-
-	@PostMapping("/saveRabbit")
-	public String saveRabbit(@ModelAttribute Patient patient, BindingResult result, RedirectAttributes attribute,
-			Model model) {
-
-		if (result.hasErrors()) {
-			model.addAttribute("breeds", serviceBreed.getBreedsDog());
-			return "patients/rabbit/formRabbit";
-		}
-
-		if (!serviceClient.existsById(patient.getClient().getId())) {
-			model.addAttribute("messageError",
-					"No existe ningun cliente con el codigo: " + patient.getClient().getId());
-			model.addAttribute("breeds", serviceBreed.getBreedsDog());
-			return "patients/rabbit/formRabbit";
-		}
-
-		if (servicePatient.existsById(patient.getId()))
-			attribute.addFlashAttribute("messageSuccess", "Se actualizó al paciente: " + patient.getNickname());
-		else
-			attribute.addFlashAttribute("messageSuccess", "Se registró al paciente: " + patient.getNickname());
-
-		servicePatient.save(patient);
+		
 		return "redirect:/patient/";
 	}
 
@@ -156,6 +135,7 @@ public class PatientController {
 		}
 
 		model.addAttribute("patient", patient);
+		model.addAttribute("districts", serviceDistrict.findAll());
 		return page;
 	}
 
