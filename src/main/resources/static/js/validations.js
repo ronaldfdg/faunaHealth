@@ -21,7 +21,7 @@ function checkNumbers(event) {
 }
 
 /* Validate clients form */
-function validateFormClient(form) {
+function validateFormClientAndPatient(form) {
 	var name = document.getElementById("name")
 	if(!validateText(name.value)) {
 		alert('No pueden ingresar valores numericos en el campo "Nombre"')
@@ -43,12 +43,6 @@ function validateFormClient(form) {
 		return false
 	}
 	
-	alert('Guardando datos...')
-	return true
-	
-}
-
-function validateFormPatient(form) {
 	var nickname = document.getElementById("nickname")
 	if(!validateText(nickname.value)) {
 		alert('No se aceptan valores numericos en el campo "Alias"')
@@ -65,6 +59,10 @@ function validateFormPatient(form) {
 	
 	alert('Guardando datos...')
 	return true
+	
+}
+
+function validateFormPatient(form) {
 }
 
 function validateSearchBy(form) {
