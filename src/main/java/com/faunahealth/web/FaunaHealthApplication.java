@@ -12,12 +12,13 @@ public class FaunaHealthApplication {
 
 	/*@Override
 	public void run(String... args) throws Exception {
-		getWeight();
+		getYear();
 	}
 	
-	public void getWeight() {
-		for(Weight weight : repository.getWeightsByPatient(1))
-			System.out.println(weight);
+	public void getYear() {
+		Patient patient = repository.findById(4).get();
+		System.out.println(patient.getBirthday());
+		System.out.println(Utileria.getYears(patient.getBirthday(), new Date()));
 	}*/
 
 }

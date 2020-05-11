@@ -62,9 +62,6 @@ function validateFormClientAndPatient(form) {
 	
 }
 
-function validateFormPatient(form) {
-}
-
 function validateSearchBy(form) {
 	
 	var name = document.getElementById("name")
@@ -101,13 +98,6 @@ function validateSearchByPatients(form) {
 	
 	return true
 }
-
-var close = document.querySelectorAll(".closeAlert");
-close.forEach(function(e) {
-    e.addEventListener("click", function() {
-        this.offsetParent.style.display = "none";
-    });
-});
 
 
 

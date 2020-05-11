@@ -2,6 +2,11 @@
 	margin-top: 20px;
 }
 
+.jumbotron {
+	padding-bottom: 30px;
+	margin-bottom: 100px;
+}
+
 footer {
     color: white;
     position: fixed;
