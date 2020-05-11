@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" th:href="@{/images/favicon.ico}">
+    <link rel="stylesheet" th:href="@{/bootstrap/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" rel="stylesheet">
+    
+    <title>Fauna Health | Historial cl&iacute;nico</title>
+    
+</head>
+<body>
+
+	<nav th:insert="fragments/menu.html :: navbar">
+	</nav>
+
+	    <div class="container">
+    	<blockquote class="blockquote text-center">
+		  <p class="mb-0">Historial Cl&iacute;nico</p>
+		  <div class="blockquote-footer">Paciente: <cite title="Source Title">[[${patient.nickname}]] [[${patient.client.primaryLastName}]]</cite></div>
+		</blockquote>
+		<hr>
+		
+		<a href="#" class="btn btn-primary" role="button" title="Añadir nuevo registro de atención"><i class="fas fa-notes-medical"></i> Nueva atenci&oacute;n</a>
+		<br><br>
+        <div th:if="${messageInfo != null}" class="alert alert-info alert-dismissible fade show" role="alert">
+        	<strong th:text="${messageInfo}"></strong>
+        	<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+		    	<span aria-hidden="true">&times;</span>
+		  	</button>
+        </div>
+        <div th:if="${messageSuccess != null}" class="alert alert-success alert-dismissible fade show" role="alert">
+        	<strong th:text="${messageSuccess}"></strong>
+        	<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+		    	<span aria-hidden="true">&times;</span>
+		  	</button>
+        </div>
+		<div class="animated fadeIn fast" th:if="${history == null}">
+	        <form name="save" th:action="@{/clinicHistory/save}" th:object="${clinicHistory}" method="post">
+	        	<div class="form-row">
+	            	<div class="col-md-4 mb-3">
+	                	<label for="behavior">Comportamiento: </label>
+	                	<input type="hidden" th:field=*{id}>
+	                    <input type="hidden" th:name="patient.id" th:value="${patient.id}">
+	                    <input th:field="*{behavior}" type="text" class="form-control" id="behavior" placeholder="Comportamiento - Opcional">
+	               	</div>
+	           	</div>
+	           	<div class="form-row">
+	           		<div class="col-md-4 mb-3">
+	               		<label for="importantInformation">Datos importantes: </label>
+	               		<textarea th:field="*{importantInformation}" class="form-control" 
+	               			id="importantInformation" placeholder="Datos importantes - Opcional" rows="3"></textarea>
+	               	</div>
+	           	</div>
+	           	<button class="btn btn-outline-dark" type="submit">Registrar historia cl&iacute;nica</button>
+	        </form>
+        </div>
+        <div th:unless="${history == null}">
+        	<div class="jumbotron animated fadeIn fast">
+        		<h3 class="text-center">Datos del dueño</h3>
+        		<p class="lead" th:text="'Dueño: ' + ${patient.client.name} + ' ' + ${patient.client.primaryLastName} + ' ' + ${patient.client.secondLastName}"></p>
+        		<p class="lead" th:text="'Dirección: ' + ${patient.client.address}"></p>
+        		<p class="lead" th:text="'Celular: ' + ${patient.client.cellPhone}"></p>
+        		<p class="lead" th:text="'Correo: ' + ${patient.client.emailAddress}"></p>
+        		<h3 class="text-center">Datos del paciente</h3>
+        		<p class="lead" th:text="'Especie: ' + ${patient.breed.specie.name}"></p>
+        		<p class="lead" th:text="'Raza: ' + ${patient.breed.name}"></p>
+        		
+        		<p class="lead" th:if="${patient.gender == 'M'}" th:text=""></p>
+        		<p class="lead" th:unless="${patient.gender == 'M'}" th:text="'Sexo: Hembra'"></p>
+        		
+        		<p class="lead" th:text="'Edad: ' + ${years} + ' años'">
+        		<p class="lead" th:text="'Fecha de ingreso: ' + ${#dates.format(history.registrationDate, 'dd-MM-yyyy')}">
+        		
+        		<p class="lead" th:if="${history.behavior == ''}" th:text="'Comportamiento: ---'"></p>
+        		<p class="lead" th:unless="${history.behavior == ''}" th:text="'Comportamiento: ' + ${history.behavior}"></p>
+        		
+        		<p class="lead" th:if="${history.importantInformation == ''}" th:text="'Datos importantes: ---'"></p>
+        		<p class="lead" th:unless="${history.importantInformation == ''}" th:text="'Datos importantes: ' + ${history.importantInformation}"></p>
+        		<br>
+        		<div class="text-center">
+        			<a th:href="@{/clinicHistory/edit(patientId = ${patient.id})}" class="btn btn-primary" role="button">Actualizar informacion</a>
+        		</div>
+        	</div>
+        </div>
+        
+    </div>
+    
+    <footer th:insert="fragments/footer.html :: footer">
+    </footer>
+
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+ 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+	<script th:src="@{/js/validations.js}"></script>
+</body>
+</html>
