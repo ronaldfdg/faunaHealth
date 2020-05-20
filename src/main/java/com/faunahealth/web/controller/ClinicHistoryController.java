@@ -41,7 +41,7 @@ public class ClinicHistoryController {
 		model.addAttribute("patient", servicePatient.findById(id));
 		model.addAttribute("years", Utileria.getYears(servicePatient.findById(id).getBirthday(), new Date()));
 		
-		return "clinicHistory/listHistory";
+		return "clinicHistory/clinicSheet";
 	}
 	
 	@PostMapping("/save")

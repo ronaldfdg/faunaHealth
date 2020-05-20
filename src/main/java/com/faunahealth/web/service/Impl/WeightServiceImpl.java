@@ -1,5 +1,6 @@
 package com.faunahealth.web.service.Impl;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -32,8 +33,8 @@ public class WeightServiceImpl implements WeightService {
 	}
 
 	@Override
-	public Weight findById(int id) {
-		Optional<Weight> optional = repositoryWeight.findById(id);
+	public Weight findByPatientAndDate(int id, Date date) {
+		Optional<Weight> optional = repositoryWeight.getWeightByPatientAndDate(id, date);
 		
 		if(optional.isPresent())
 			return optional.get();

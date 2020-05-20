@@ -24,7 +24,7 @@
                 <form name="formPatient" th:action="@{/patient/savePatient}" th:object="${patient}" method="post" onsubmit="return validateFormClientAndPatient(this)">
                 	
                 	<div th:if="${#fields.hasErrors('*')}" class="alert alert-danger alert-dismissible fade show" role="alert">
-                		<strong class="closeAlert">Algo no fue bien. Por favor correjir: </strong>
+                		<strong>Algo no fue bien. Por favor correjir: </strong>
                 		<button type="button" class="close" data-dismiss="alert" aria-label="Close">
 				    		<span aria-hidden="true">&times;</span>
 				  		</button>

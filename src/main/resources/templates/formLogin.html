@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    
+    <title>Fauna Health | Ingresar al sistema</title>
+    
+    <link rel="icon" th:href="@{/images/favicon.ico}">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/bootstrap/css/bootstrap.min.css}">
+    
+</head>
+<body>
+
+	<nav th:insert="fragments/menu.html :: navbar">
+	</nav>
+	
+	<main role="main">
+	<hr>
+		<div class="container">
+			<div class="card">
+				<div class="card-body">
+					<form class="form-signin" th:action="@{/login}" method="post">
+						<div class="row">
+							<div class="col-md-4">
+							</div>
+							<div class="col-md-4">
+								<img class="mb-4 rounded mx-auto d-block" th:src="@{/images/login.png}" alt="" width="128" height="128">
+								<div th:if="${param.error != null}" style="text-align: center;" class="alert alert-danger" role="alert">
+									<strong>Acceso denegado</strong>
+								</div>
+								<h4 class="h3 mb-3 font-weight-normal">Ingresar</h4>
+								<label for="username" class="sr-only">Username</label>
+								<input type="text" name="username" id="username" class="form-control" placeholder="Username" required autofocus><br>
+								<label for="password" class="sr-only">Password</label>
+								<input type="password" name="password" id="password" class="form-control" placeholder="Password" required><br>
+								<button class="btn btn-lg btn-primary btn-block" type="submit">Entrar</button>
+								<p class="text-primary" style="font-size: medium;">¿Olvidaste tu contraseña?</p>
+							</div>
+							<div class="col-md-4">
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	
+	</main>
+
+	<footer th:insert="fragments/footer.html :: footer">
+	</footer>
+
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+</body>
+</html>
