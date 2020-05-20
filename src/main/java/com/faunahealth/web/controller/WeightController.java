@@ -46,14 +46,4 @@ public class WeightController {
 		return "redirect:/weight/" + weight.getPatient().getId();
 	}
 	
-	@GetMapping("/delete/{id}")
-	public String delete(@PathVariable("id") int id, RedirectAttributes attribute) {
-		
-		int idPatient = serviceWeight.findById(id).getPatient().getId();
-		serviceWeight.deleteById(id);
-		attribute.addFlashAttribute("messageSuccess", "Se eliminó el registro del pesaje");
-		return "redirect:/weight/" + idPatient;
-		
-	}
-	
 }

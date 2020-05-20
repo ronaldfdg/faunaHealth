@@ -16,9 +16,8 @@ public class FaunaHealthApplication {
 	}
 	
 	public void getYear() {
-		Patient patient = repository.findById(4).get();
-		System.out.println(patient.getBirthday());
-		System.out.println(Utileria.getYears(patient.getBirthday(), new Date()));
+		for(HistoryDetail historyDetail : repository.findHistoryDetailsPerClinicHistory(4))
+			System.out.println(historyDetail);
 	}*/
-
+	
 }

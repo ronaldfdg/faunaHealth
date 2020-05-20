@@ -18,7 +18,9 @@
     <div class="container">
         <div class="jumbotron jumbotron-fluid animated fadeIn fast">
             <div class="container">
-                <h1 class="display-4">Bienvenido Doctor(a): </h1>
+                <h1 th:if="${session.user != null}" 
+                	th:text="'Bienvenido Doctor(a): ' + ${session.user.name} + ' ' + ${session.user.primaryLastName}" 
+                	class="display-4"></h1>
                 <br>
                 <p class="lead">Aplicaci&oacute;n web desarrollada para gestionar temas administrativos.</p>
             </div>

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" th:href="@{/images/favicon.ico}">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/bootstrap/css/bootstrap.min.css}">
+    
+    <title>Fauna Health | Histórico de atenciones</title>
+    
+</head>
+<body>
+
+	<nav th:insert="fragments/menu.html :: navbar">
+	</nav>
+	
+	<div class="container">
+		<blockquote class="blockquote text-center">
+		  <p class="mb-0">Historial Cl&iacute;nico</p>
+		  <div class="blockquote-footer">Paciente: <cite title="Source Title">[[${patient.nickname}]] [[${patient.client.primaryLastName}]]</cite></div>
+		</blockquote>
+		<hr>
+		<div th:if="${messageInfo != null}" class="alert alert-info alert-dismissible fade show" role="alert">
+			<strong th:text="${messageInfo}"></strong>
+        	<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+		    	<span aria-hidden="true">&times;</span>
+		  	</button>
+		</div>
+		<div class="card-columns animated fadeIn fast">
+			<div class="card text-center" th:each="attention : ${attentions}">
+				<div class="card-body">
+					<i class="fas fa-hand-holding-medical" style="font-size: 20px;"></i>
+					<p class="card-text">Atendido por: [[${attention.user.name}]] [[${attention.user.primaryLastName}]]</p>
+					<p class="card-text">Motivo: [[${attention.reason}]]</p>
+					<p class="card-text">Constantes vitales: [[${attention.vitalSigns}]]</p>
+					<p class="card-text">Diagnostico: [[${attention.diagnostic}]]</p>
+					<p class="card-text" th:if="${!attention.prescription.equals('')}">Receta: [[${attention.prescription}]]</p>
+					<p class="card-text" th:if="${!attention.analysisResult.equals('')}">Resultado: [[${attention.analysisResult}]]</p>
+					<p class="card-text" th:if="${!attention.evolution.equals('')}">Evoluci&oacute;n: [[${attention.evolution}]]</p>
+					
+					<div class="card-body" th:each="weight : ${weights}" th:if="${weight.registrationDate.compareTo(attention.attentionDate) == 0}">
+						<p class="card-text">Peso: [[${weight.amount}]]</p>
+					</div>
+					
+					<p class="card-text">
+						<small class="text-muted" th:text="'Fecha de atención: ' + ${#dates.format(attention.attentionDate, 'dd-MM-yyyy')}"></small>
+					</p>
+					
+					<div class="card-footer bg-transparent border-success">
+                    	<a th:href="@{/historyDetails/edit/{patientId} (patientId=${patient.id}, clinicHistory=${clinicHistory.id}, date=${#dates.format(attention.attentionDate, 'dd-MM-yyyy')}) }" 
+                    		class="btn btn-secondary btn-sm" role="button">Editar</a>
+                   	</div>
+                   	
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<footer th:insert="fragments/footer.html :: footer">
+	</footer>
+
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+ 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+ 	
+</body>
+</html>
