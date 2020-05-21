@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" th:href="@{/images/favicon.ico}">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/bootstrap/css/bootstrap.min.css}">
+    <link href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" rel="stylesheet">
+    
+	<title>Fauna Health | Nueva cirug&iacute;a</title>
+	
+</head>
+<body>
+	<nav th:insert="fragments/menu.html :: navbar">
+	</nav>
+	
+	<main role="main">
+		<hr>
+		<div class="container">
+			<div class="card animated fadeIn fast">
+				<h4 class="card-header">
+					<i class="fas fa-paint-roller"></i> Datos de la Cirug&iacute;a
+				</h4>
+				<div class="card-body">
+					<form name="" th:action="@{/operations/record}" th:object="${operationDetail}" method="post">
+						<div th:if="${#fields.hasErrors('*')}" class="alert alert-danger" role="alert">
+							<strong th:text="${messageError} + ' Los errores fueron:'"></strong>
+							<ul>
+								<li th:each="error : ${#fields.errors('*')}" th:text="${error}"></li>
+							</ul>
+						</div>
+						<div class="row">
+							<div class="col-md-3">
+								<div class="form-group">
+									<label for="user">Realizado por</label>
+									<input type="hidden" th:name="patient.id" th:value="${patient.id}">
+									<select th:field="*{user.id}" id="user" class="form-control">
+										<option th:each="user : ${users}" th:text="${user.name} + ' ' + ${user.primaryLastName}" th:value="${user.id}"></option>
+									</select>
+								</div>
+							</div>
+							<div class="col-md-3">
+								<div class="form-group">
+									<label for="operationType">Tipo de cirug&iacute;a</label>
+									<select th:field="*{operation.id}" id="operationType" class="form-control">
+										<option th:each="operationType : ${operationTypes}" th:text="${operationType.name}" 
+											th:value="${operationType.id}"></option>
+									</select>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-3">
+								<div class="form-group">
+									<label for="temperature">Temperatura</label>
+									<input type="text" th:field="*{temperature}" id="temperature" class="form-control" placeholder="Temperatura" required="required">
+								</div>
+							</div>
+							<div class="col-md-3">
+								<div class="form-group">
+									<label for="heartRate">Frecuencia Cardiaca</label>
+									<input type="text" th:field="*{heartRate}" id="heartRate" class="form-control" placeholder="Frecuencia Cardiaca" required="required">
+								</div>
+							</div>
+							<div class="col-md-3">
+								<div class="form-group">
+									<label for="breathingFrequency">Frecuencia Respiratoria</label>
+									<input type="text" th:field="*{breathingFrequency}" id="breathingFrequency" class="form-control" placeholder="Frecuencia Respiratoria" required="required">
+								</div>
+							</div>
+						</div>
+						<hr>
+						<div class="row">
+							<div class="col-md-8">
+								<div class="form-group">
+									<label for="anamnesis"><strong>Anamnesis</strong></label>
+									<textarea th:field="*{anamnesis}" id="anamnesis" class="form-control tinymce" rows="7"></textarea>
+								</div>
+							</div>
+						</div>
+						<hr>
+						<div class="row">
+							<div class="col-md-8">
+								<div class="form-group">
+									<label for="treatment"><strong>Tratamiento</strong></label>
+									<textarea th:field="*{treatment}" id="treatment" class="form-control tinymce" rows="7"></textarea>
+								</div>
+							</div>
+						</div>
+						<button type="submit" class="btn btn-primary">Guardar</button>
+					</form>
+				</div>
+			</div>
+		</div>
+	</main>
+	
+	<footer th:insert="fragments/footer.html :: footer">
+	</footer>
+	
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+	<script th:src="@{/tinymce/tinymce.min.js}"></script>
+	<script>
+		tinymce.init({
+	        selector: 'textarea.tinymce',
+	        plugins: "textcolor, table lists code",
+	        toolbar: " undo redo | bold italic | alignleft aligncenter alignright alignjustify \n\
+	                  | bullist numlist outdent indent | forecolor backcolor table code"
+	    });
+	</script>
+</body>
+</html>
