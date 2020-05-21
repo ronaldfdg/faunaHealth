@@ -15,9 +15,24 @@ public class FaunaHealthApplication {
 		getYear();
 	}
 	
+	//repository.findOperationsByPatientAndDates("Ro", "Do", firstDate, secondDate, Sort.by("operationDate").descending())
+	//repository.findOperationsByDate(secondDate, Sort.by("operationDate"))
+	
 	public void getYear() {
-		for(HistoryDetail historyDetail : repository.findHistoryDetailsPerClinicHistory(4))
-			System.out.println(historyDetail);
+		
+		SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+		Date firstDate = null;
+		Date secondDate = null;
+		
+		try {
+			firstDate = dateFormat.parse("15-05-2020");
+			secondDate = dateFormat.parse("20-05-2020");
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		
+		for(OperationDetail operation : repository.findOperationsByPatientLastNameAndDate("Do", secondDate, Sort.by("operationDate")))
+			System.out.println(operation);
 	}*/
 	
 }

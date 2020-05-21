@@ -85,6 +85,7 @@
                                 <th scope="col">Fecha de Nacimiento</th>
                                 <th scope="col">Esterilizado</th>
                                 <th scope="col">Historial Cl&iacute;nico</th>
+                                <th scope="col">Cirug&iacute;a</th>
                                 <th scope="col">Opciones</th>
                             </tr>
                         </thead>
@@ -100,7 +101,9 @@
                                 </td>
                                 <td>
                                 	<a class="btn btn-primary btn-sm" th:href="@{/clinicHistory/{id} ( id = ${patient.id} )}" title="Sección de historial clínico" role="button"><i class="fas fa-notes-medical"></i>  Historia cl&iacute;nica</a>
-                                	<!-- <a th:href="@{/patient/view/{id} (id=${patient.id}) }" class="btn btn-primary btn-sm active" role="button" aria-pressed="true">Ver info.</a> -->
+                                </td>
+                                <td>
+                                	<a class="btn btn-primary btn-sm" th:href="@{/operations/register/{id} ( id = ${patient.id} )}" title="Registrar nueva cirugía" role="button"><i class="fas fa-paint-roller"></i> Nueva Cirug&iacute;a</a>
                                 </td>
                                 <td>
                                     <a th:href="@{/patient/edit/{id} (id=${patient.id}) }" class="btn btn-primary btn-sm" role="button" title="Editar cliente"><i class="fas fa-pencil-alt" aria-hidden="true"></i></a>
