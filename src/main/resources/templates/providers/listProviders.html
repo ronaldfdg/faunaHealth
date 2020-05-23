@@ -1,16 +1,73 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-	<meta charset="ISO-8859-1">
-	<title>Insert title here</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" th:href="@{/images/favicon.ico}">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/bootstrap/css/bootstrap.min.css}">
+    <link href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" rel="stylesheet">
+    
+	<title>Fauna Health | Proveedores</title>
+	
 </head>
 <body>
 	<nav th:insert="fragments/menu.html :: navbar">
 	</nav>
 	
-	
+	<main role="main">
+		<hr>
+		<div class="container">
+			<div class="card">
+				<h4 class="card-header"><strong>Listado de proveedores</strong></h4>
+				<div class="card-body">
+					<a class="btn btn-primary" th:href="@{/providers/register}" title="Registrar nuevo proveedor" role="button">
+						<i class="fas fa-plus"></i> Nuevo Proveedor
+					</a>
+					<hr>
+					<div th:if="${messageSuccess != null}" class="alert alert-success alert-dismissible fade show" role="alert">
+						<strong th:text="${messageSuccess}"></strong>
+						<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+				    		<span aria-hidden="true">&times;</span>
+				  		</button>
+					</div>
+					<hr>
+					<div class="table-responsive animated fadeIn fast">
+						<table class="table table-hover">
+							<thead class="thead-light">
+								<tr>
+									<th scope="col">Raz&oacute;n Social</th>
+									<th scope="col">Fecha de registo</th>
+									<th scope="col">Tel&eacute;fono</th>
+									<th scope="col">Celular</th>
+									<th scope="col">Direcci&oacute;n</th>
+									<th scope="col">Opciones</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr th:each="provider : ${providers}">
+									<td th:text="${provider.businessName}"></td>
+									<td th:text="${#dates.format(provider.registrationDate, 'dd-MM-yyyy')}"></td>
+									<td th:text="${provider.phone}"></td>
+									<td th:text="${provider.cellPhone}"></td>
+									<td th:text="${provider.address}"></td>
+									<td>
+										<a th:href="@{/providers/edit/{id} ( id = ${provider.id} )}" class="btn btn-primary btn-sm" title="Editar proveedor" role="button"><i class="fas fa-pencil-alt" aria-hidden="true"></i></a>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+	</main>
 	
 	<footer th:insert="fragments/footer.html :: footer">
 	</footer>
+	
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 </body>
 </html>

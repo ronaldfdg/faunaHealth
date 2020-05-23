@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" th:href="@{/images/favicon.ico}">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/bootstrap/css/bootstrap.min.css}">
+    <link href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" rel="stylesheet">
+    
+	<title>Fauna Health | Registrar Proveedor</title>
+	
+</head>
+<body>
+
+	<nav th:insert="fragments/menu.html :: navbar">
+	</nav>
+
+	<main role="main">
+		<hr>
+		<div class="container">
+			<div class="card animated fadeIn fast">
+				<h4 class="card-header">
+					Registro de proveedor
+				</h4>
+				<div class="card-body animated fadeIn fast">
+					<form name="" th:action="@{/providers/record}" th:object="${provider}" method="post" onsubmit="return validateFormProvider(this)">
+						<div th:if="${#fields.hasErrors('*')}" class="alert alert-danger" role="alert">
+							<strong th:text="${messageError} + ' Los errores fueron los siguientes:'"></strong>
+							<ul>
+								<li th:each="error : ${#fields.errors('*')}" th:text="${error}"></li>
+							</ul>
+						</div>
+						<div class="row">
+							<div class="col-md-4">
+								<div class="form-group">
+									<label for="district">Distrito</label>
+									<input type="hidden" th:field="*{id}">
+									<select th:field="*{district.id}" id="district" class="form-control">
+										<option th:each="district : ${districts}" th:text="${district.name}"
+											th:value="${district.id}"></option>
+									</select>
+								</div>
+							</div>
+							<div class="col-md-4">
+								<div class="form-group">
+									<label for="businessName">Raz&oacute;n Social</label>
+									<input type="text" th:field="*{businessName}" id="businessName" class="form-control" 
+										placeholder="Razón Social"  required="required">
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-3">
+								<div class="form-group">
+									<label for="address">Direcci&oacute;n</label>
+									<input type="text" th:field="*{address}" id="address" class="form-control" placeholder="Dirección">
+								</div>
+							</div>
+							<div class="col-md-3">
+								<div class="form-group">
+									<label for="phone">Tel&eacute;fono</label>
+									<input type="text" th:field="*{phone}" id="phone" class="form-control" placeholder="Teléfono"
+										maxlength="7" size="7" onkeypress="return checkNumbers(event)">
+								</div>
+							</div>
+							<div class="col-md-3">
+								<div class="form-group">
+									<label for="cellPhone">Celular</label>
+									<input type="text" th:field="*{cellPhone}" id="cellPhone" class="form-control" placeholder="Celular"
+										maxlength="9" size="9" onkeypress="return checkNumbers(event)">
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-5">
+								<div class="form-group">
+									<label for="registrationDate">Fecha de Registro</label>
+									<input type="text" th:field="*{registrationDate}" id="registrationDate" class="form-control" placeholder="Fecha de registro" required="required">
+								</div>
+							</div>
+							<div class="col-md-3">
+								<div class="form-group">
+									<label for="emailAddress">Correo</label>
+									<input type="email" th:field="*{emailAddress}" id="emailAddress" class="form-control" placeholder="example@gmail.com">
+								</div>
+							</div>
+						</div>
+						<button type="submit" class="btn btn-primary">Registrar</button>
+					</form>
+				</div>
+			</div>
+		</div>
+	</main>
+	
+	<footer th:insert="fragments/footer.html :: footer">
+	</footer>
+
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script th:src="@{/js/validations.js}"></script>
+	<script>
+        $(function() {
+            $("#registrationDate").datepicker({
+                dateFormat: 'dd-mm-yy'
+            });
+        });
+    </script>
+</body>
+</html>
