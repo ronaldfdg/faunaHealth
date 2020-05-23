@@ -62,6 +62,45 @@ function validateFormClientAndPatient(form) {
 	
 }
 
+function validateFormProvider(form) {
+	var businessName = document.getElementById("businessName")
+	if(!validateText(businessName.value)) {
+		alert('No se pueden ingresar valores numericos en el campo "Razón Social"')
+		document.getElementById("businessName").focus()
+		return false
+	}
+	
+	alert('Guardando datos...')
+	return true
+}
+
+function validateFormUser(form) {
+	
+	var name = document.getElementById("name")
+	if(!validateText(name.value)) {
+		alert('No pueden ingresar valores numericos en el campo "Nombre"')
+		document.getElementById("name").focus()
+		return false
+	}
+	
+	var primaryLastName = document.getElementById("primaryLastName")
+	if(!validateText(primaryLastName.value)) {
+		alert('No pueden ingresar valores numericos en el campo "Apellido Paterno"')
+		document.getElementById("primaryLastName").focus()
+		return false
+	}
+	
+	var secondLastName = document.getElementById("secondLastName")
+	if(!validateText(secondLastName.value)) {
+		alert('No pueden ingresar valores numericos en el campo "Apellido Materno"')
+		document.getElementById("secondLastName").focus()
+		return false
+	}
+	
+	alert('Guardando datos...')
+	return true
+}
+
 function validateSearchBy(form) {
 	
 	var name = document.getElementById("name")

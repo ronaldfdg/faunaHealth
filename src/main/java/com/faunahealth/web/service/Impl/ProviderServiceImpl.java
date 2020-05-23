@@ -1,6 +1,7 @@
 package com.faunahealth.web.service.Impl;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
@@ -24,6 +25,20 @@ public class ProviderServiceImpl implements ProviderService {
 	@Override
 	public void save(Provider provider) {
 		repositoryProvider.save(provider);
+	}
+
+	@Override
+	public Provider findById(int id) {
+		Optional<Provider> optional = repositoryProvider.findById(id);
+		if(optional.isPresent())
+			return optional.get();
+		
+		return null;
+	}
+
+	@Override
+	public boolean existsById(int id) {
+		return repositoryProvider.existsById(id);
 	}
 
 }

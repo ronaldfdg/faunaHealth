@@ -7,5 +7,7 @@ import com.faunahealth.web.entity.Provider;
 public interface ProviderService {
 
 	List<Provider> findAll();
+	Provider findById(int id);
+	boolean existsById(int id);
 	void save(Provider provider);
 }

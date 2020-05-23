@@ -20,7 +20,7 @@
 			<div class="card">
 				<h4 class="card-header"><strong>Registro de un nuevo usuario</strong></h4>
 				<div class="card-body">
-					<form th:action="@{/users/record}" th:object="${user}" method="post">
+					<form th:action="@{/users/record}" th:object="${user}" method="post" onsubmit="return validateFormUser(this)">
 						
 						<div th:if="${#fields.hasErrors('*')}" class="alert alert-danger alert-dismissible fade show" role="alert">
 							<strong>Algo no fue bien. Por favor correjir:</strong>
@@ -84,7 +84,7 @@
 							</div>
 							<div class="col-md-3">
 								<div class="form-group">
-									<label for="password">Username</label>
+									<label for="password">Password</label>
 									<input type="password" th:field="*{password}" id="password" class="form-control" placeholder="Contraseña" required="required">
 								</div>
 							</div>
@@ -103,5 +103,6 @@
 	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+	<script th:src="@{/js/validations.js}"></script>
 </body>
 </html>
