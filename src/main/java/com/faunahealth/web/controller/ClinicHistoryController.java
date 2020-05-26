@@ -69,7 +69,7 @@ public class ClinicHistoryController {
 		model.addAttribute("history", null);
 		model.addAttribute("patient", servicePatient.findById(id));
 		
-		return "clinicHistory/listHistory";
+		return "clinicHistory/clinicSheet";
 	}
 	
 }

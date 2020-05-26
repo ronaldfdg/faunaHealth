@@ -1,9 +1,9 @@
 package com.faunahealth.web.controller;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -31,7 +31,7 @@ public class ClientController {
 
 	@GetMapping("/")
 	public String index(Model model) {
-		model.addAttribute("clients", serviceClient.findAll());
+		model.addAttribute("messageInfo", "Realice una busqueda para poder visualizar la información");
 		return "clients/listClients";
 	}
 
@@ -58,39 +58,46 @@ public class ClientController {
 	}
 
 	@GetMapping("/searchByDNI")
-	public String searchByDNI(@RequestParam("documentNumber") String documentNumber, RedirectAttributes attribute,
+	public String searchByDNI(@RequestParam("pageNumber") int pageNumber,
+			@RequestParam("documentNumber") String documentNumber, 
+			RedirectAttributes attribute,
 			Model model) {
 
-		List<Client> clients = new ArrayList<>();
-		Client client = serviceClient.findByDocumentNumber(documentNumber);
+		Pageable page = PageRequest.of(pageNumber, 5);
+		
+		Page<Client> client = null;
+		
+		client = serviceClient.findByDocumentNumber(documentNumber, page);
 
-		if (client == null) {
+		if (client.isEmpty()) {
 			attribute.addFlashAttribute("messageWarning",
 					"No se encontró ningún cliente con el DNI: " + documentNumber);
 			return "redirect:/clients/";
 		}
-
-		clients.add(client);
-		model.addAttribute("clients", clients);
+		
+		model.addAttribute("clients", client);
 		return "clients/listClients";
 	}
 
 	@GetMapping("/searchBy")
 	public String searchBy(@RequestParam(name = "name", required = false) String name,
 			@RequestParam(name = "primaryLastName", required = false) String primaryLastName,
+			@RequestParam(name = "pageNumber", required = false) Integer pageNumber,
 			RedirectAttributes attribute, Model model) {
 
-		List<Client> clients = null;
-
+		Page<Client> clients = null;
+		
+		Pageable page = PageRequest.of(pageNumber, 5);
+		
 		if (!name.equals("") && primaryLastName.equals("")) {
-			clients = serviceClient.findByNameContaining(name);
-			model.addAttribute("clients", clients);
+			clients = serviceClient.findClientsByNameAndPage(name, page);
 		} else if (name.equals("") && !primaryLastName.equals("")) {
-			clients = serviceClient.findByPrimaryLastNameContaining(primaryLastName);
-			model.addAttribute("clients", clients);
+			clients = serviceClient.findClientsByPrimaryLastNameAndPage(primaryLastName, page);
 		} else if (!name.equals("") && !primaryLastName.equals("")) {
-			clients = serviceClient.findByNameContainingAndPrimaryLastNameContaining(name, primaryLastName);
-			model.addAttribute("clients", clients);
+			clients = serviceClient.findClientsByNameAndPrimaryLastNameAndPage(name, primaryLastName, page);
+		} else {
+			attribute.addFlashAttribute("messageWarning", "No ingreso ningún valor para Nombre ni Apellido. Debe ingresar por lo menos uno");
+			return "redirect:/clients/";
 		}
 		
 		if(clients.isEmpty()) {
@@ -98,6 +105,10 @@ public class ClientController {
 			return "redirect:/clients/";
 		}
 
+		model.addAttribute("clients", clients);
+		model.addAttribute("name", name);
+		model.addAttribute("primaryLastName", primaryLastName);
+		
 		return "clients/listClients";
 	}
 

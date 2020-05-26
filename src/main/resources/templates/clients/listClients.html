@@ -42,6 +42,7 @@
                         <div class="col-md-4 mb-3">
                             <label for="validationServer01">DNI</label>
                             <!-- class="form-control is-valid" <div class="valid-feedback">Looks good!</div> -->
+                            <input type="hidden" name="pageNumber" value="0">
                             <input name="documentNumber" type="text" class="form-control" id="validationServer01"
                             		 placeholder="N° documento" maxlength="8" size="8" onkeypress="return checkNumbers(event)" required>
                         </div>
@@ -53,6 +54,7 @@
                     <div class="form-row">
                         <div class="col-md-4 mb-3">
                             <label for="name">Nombre</label>
+                            <input type="hidden" name="pageNumber" value="0">
                             <input name="name" type="text" class="form-control" id="name" placeholder="Nombre">
                         </div>
                         <div class="col-md-4 mb-3">
@@ -63,7 +65,7 @@
                     <button class="btn btn-outline-dark" type="submit">Buscar</button>
                 </form>
                 <hr>
-                <div class="table-responsive animated fadeIn fast">
+                <div th:if="${clients != null}" class="table-responsive animated fadeIn fast">
                     <table class="table table-hover">
                         <thead>
                             <tr>
@@ -80,7 +82,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr th:each="client : ${clients}">
+                            <tr th:each="client : ${clients.content}">
                                 <th scope="row">[[${client.documentNumber}]]</th>
                                 <td>[[${client.name}]]</td>
                                 <td>[[${client.primaryLastName}]]</td>
@@ -106,6 +108,19 @@
                             </tr>
                         </tbody>
                     </table>
+                    <nav aria-label="Page navigation">
+                    	<ul class="pagination">
+                    		<li th:if="${clients.number > 0}" class="page-item">
+                    			<a th:href="@{/clients/searchBy( pageNumber = ${clients.number - 1}, name = ${name}, primaryLastName = ${primaryLastName} )}" class="page-link">Anterior</a>
+                    		</li>
+                    		<li th:if="${clients.number < clients.totalPages - 1}" class="page-item">
+                    			<a th:href="@{/clients/searchBy( pageNumber = ${clients.number + 1}, name = ${name}, primaryLastName = ${primaryLastName} )}" class="page-link">Siguiente</a>
+                    		</li>
+                    	</ul>
+                    </nav>
+                </div>
+                <div th:unless="${clients != null}" class="alert alert-info" role="alert">
+                	<strong th:text="${messageInfo}"></strong>
                 </div>
             </div>
         </div>
