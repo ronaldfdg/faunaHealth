@@ -2,10 +2,13 @@ package com.faunahealth.web.controller;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -43,7 +46,7 @@ public class OperationDetailController {
 	
 	@GetMapping("/")
 	public String index(Model model) {
-		model.addAttribute("operations", serviceOperationDetail.findAll());
+		model.addAttribute("messageInfo", "Realice una busqueda para poder visualizar la información");
 		return "operations/listOperations";
 	}
 	
@@ -57,46 +60,64 @@ public class OperationDetailController {
 	}
 	
 	@GetMapping("/searchByPatient")
-	public String searchByPatient(@RequestParam(name = "nickname", required = false) String nickname, 
+	public String searchByPatient(@RequestParam("pageNumber") int pageNumber,
+			@RequestParam(name = "nickname", required = false) String nickname, 
 			@RequestParam(name = "lastName", required = false) String lastName, RedirectAttributes attribute, Model model) {
 		
-		List<OperationDetail> operations = null;
+		Page<OperationDetail> operations = null;
+		
+		Pageable page = PageRequest.of(pageNumber, 10, Sort.by("operationDate").descending());
 		
 		if(!nickname.equals("") && !lastName.equals(""))
-			operations = serviceOperationDetail.findOperationsByPatient(nickname, lastName);
+			operations = serviceOperationDetail.findOperationsByPatient(nickname, lastName, page);
 		else if(!nickname.equals("") && lastName.equals(""))
-			operations = serviceOperationDetail.findOperationsByPatientName(nickname);
+			operations = serviceOperationDetail.findOperationsByPatientName(nickname, page);
 		else if(nickname.equals("") && !lastName.equals(""))
-			operations = serviceOperationDetail.findOperationsByPatientLastName(lastName);
+			operations = serviceOperationDetail.findOperationsByPatientLastName(lastName, page);
 		else {
-			attribute.addFlashAttribute("messageInfo", "Debe ingresar el nombre y/o el apellido!");
+			attribute.addFlashAttribute("messageWarning", "Debe ingresar el nombre y/o el apellido!");
 			return "redirect:/operations/";
 		}
 		
-		if(operations.isEmpty())
-			model.addAttribute("messageInfo", "No se encontraron resultados con el nombre/apodo" + 
-					nickname == "" ? "" : nickname + " y el apellido " + lastName == "" ? "" : lastName);
+		if(operations.isEmpty()) {
+			attribute.addFlashAttribute("messageWarning", "No se encontraron resultados");
+			return "redirect:/operations/";
+		}
+			
 		
 		model.addAttribute("operations", operations);
+		model.addAttribute("nickname", nickname);
+		model.addAttribute("lastName", lastName);
 		return "operations/listOperations";
 	}
 	
 	@GetMapping("/searchByDates")
-	public String searchByDates(@RequestParam(name = "startDate", required = false) Date startDate, 
+	public String searchByDates(@RequestParam("pageNumber") int pageNumber,
+			@RequestParam(name = "startDate", required = false) Date startDate, 
 			@RequestParam(name = "endDate", required = false) Date endDate, RedirectAttributes attribute, Model model) {
 		
-		List<OperationDetail> operations = null;
+		Page<OperationDetail> operations = null;
+		
+		Pageable page = PageRequest.of(pageNumber, 10, Sort.by("operationDate").descending());
 		
 		if(startDate != null && endDate == null)
-			operations = serviceOperationDetail.findOperationsByDate(startDate);
+			operations = serviceOperationDetail.findOperationsByDate(startDate, page);
 		else if(startDate != null && endDate != null)
-			operations = serviceOperationDetail.findOperationsBetweenDates(startDate, endDate);
+			operations = serviceOperationDetail.findOperationsBetweenDates(startDate, endDate, page);
 		else {
-			attribute.addFlashAttribute("messageInfo", "Debe igresar una fecha exacta o un rango de fechas!");
+			attribute.addFlashAttribute("messageWarning", "Debe igresar una fecha exacta o un rango de fechas!");
+			return "redirect:/operations/";
+		}
+		
+		if(operations.isEmpty()) {
+			attribute.addFlashAttribute("messageWarning", "No se encontraron resultados");
 			return "redirect:/operations/";
 		}
 		
 		model.addAttribute("operations", operations);
+		model.addAttribute("startDate", startDate);
+		model.addAttribute("endDate", endDate);
+		
 		return "operations/listOperations";
 	}
 	

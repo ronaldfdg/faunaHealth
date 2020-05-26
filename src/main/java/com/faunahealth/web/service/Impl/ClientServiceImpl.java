@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.faunahealth.web.entity.Client;
@@ -46,8 +48,8 @@ public class ClientServiceImpl implements ClientService {
 	}
 
 	@Override
-	public Client findByDocumentNumber(String documentNumber) {
-		return repositoryClient.findByDocumentNumber(documentNumber);
+	public Page<Client> findByDocumentNumber(String documentNumber, Pageable page) {
+		return repositoryClient.findByDocumentNumber(documentNumber, page);
 	}
 
 	@Override
@@ -63,6 +65,21 @@ public class ClientServiceImpl implements ClientService {
 	@Override
 	public List<Client> findByNameContainingAndPrimaryLastNameContaining(String name, String primaryLastName) {
 		return repositoryClient.findByNameContainingAndPrimaryLastNameContaining(name, primaryLastName);
+	}
+
+	@Override
+	public Page<Client> findClientsByNameAndPage(String name, Pageable page) {
+		return repositoryClient.findClientsByNameAndPage(name, page);
+	}
+
+	@Override
+	public Page<Client> findClientsByPrimaryLastNameAndPage(String primaryLastName, Pageable page) {
+		return repositoryClient.findClientsByPrimaryLastNameAndPage(primaryLastName, page);
+	}
+
+	@Override
+	public Page<Client> findClientsByNameAndPrimaryLastNameAndPage(String name, String primaryLastName, Pageable page) {
+		return repositoryClient.findClientsByNameAndPrimaryLastNameAndPage(name, primaryLastName, page);
 	}
 
 }

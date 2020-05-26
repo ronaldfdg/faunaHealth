@@ -4,6 +4,8 @@ import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
@@ -26,30 +28,30 @@ public class OperationDetailServiceImpl implements OperationDetailService {
 	public List<OperationDetail> findAll() {
 		return repositoryOperationDetail.findOperations(Sort.by("operationDate").descending().and(Sort.by("patient.nickname").descending()));
 	}
-
+	
 	@Override
-	public List<OperationDetail> findOperationsByPatient(String nickname, String primaryLastName) {
-		return repositoryOperationDetail.findOperationsByPatient(nickname, primaryLastName, Sort.by("operationDate").descending());
+	public Page<OperationDetail> findOperationsByPatient(String nickname, String primaryLastName, Pageable page) {
+		return repositoryOperationDetail.findOperationsByPatient(nickname, primaryLastName, page);
 	}
 
 	@Override
-	public List<OperationDetail> findOperationsByPatientName(String nickname) {
-		return repositoryOperationDetail.findOperationsByPatientName(nickname, Sort.by("operationDate").descending());
+	public Page<OperationDetail> findOperationsByPatientName(String nickname, Pageable page) {
+		return repositoryOperationDetail.findOperationsByPatientName(nickname, page);
 	}
 
 	@Override
-	public List<OperationDetail> findOperationsByPatientLastName(String primaryLastName) {
-		return repositoryOperationDetail.findOperationsByPatientLastName(primaryLastName, Sort.by("operationDate").descending());
+	public Page<OperationDetail> findOperationsByPatientLastName(String primaryLastName, Pageable page) {
+		return repositoryOperationDetail.findOperationsByPatientLastName(primaryLastName, page);
 	}
 
 	@Override
-	public List<OperationDetail> findOperationsByDate(Date date) {
-		return repositoryOperationDetail.findOperationsByDate(date, Sort.by("operationDate").descending());
+	public Page<OperationDetail> findOperationsByDate(Date date, Pageable page) {
+		return repositoryOperationDetail.findOperationsByDate(date, page);
 	}
 
 	@Override
-	public List<OperationDetail> findOperationsBetweenDates(Date startDate, Date endDate) {
-		return repositoryOperationDetail.findOperationsBetweenDates(startDate, endDate, Sort.by("operationDate").descending());
+	public Page<OperationDetail> findOperationsBetweenDates(Date startDate, Date endDate, Pageable page) {
+		return repositoryOperationDetail.findOperationsBetweenDates(startDate, endDate, page);
 	}
 
 }

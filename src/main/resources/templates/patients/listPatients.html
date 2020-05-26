@@ -42,12 +42,6 @@
 				    	<span aria-hidden="true">&times;</span>
 				  	</button>
             	</div>
-            	<div th:if="${messageInfo != null}" class="alert alert-primary alert-dismissible fade show" role="alert">
-            		<strong th:text="${messageInfo}"></strong>
-            		<button type="button" class="close" data-dismiss="alert" aria-label="Close">
-				    	<span aria-hidden="true">&times;</span>
-				  	</button>
-            	</div>
                 <strong>Puede encontrar pacientes utilizando los siguientes filtros:</strong>
                 <br><br>
                 <form name="searchByOwner" th:action="@{/patient/searchByOwner}">
@@ -55,6 +49,7 @@
                         <div class="col-md-4 mb-3">
                             <label for="clientId">Codigo del dueño</label>
                             <!-- class="form-control is-valid" <div class="valid-feedback">Looks good!</div> -->
+                            <input type="hidden" name="pageNumber" value="0">
                             <input name="clientId" type="text" class="form-control" id="client" placeholder="Codigo de dueño" onkeypress="return checkNumbers(event)" required>
                         </div>
                     </diV>
@@ -65,6 +60,7 @@
                     <div class="form-row">
                         <div class="col-md-4 mb-3">
                             <label for="nickname">Alias</label>
+                            <input type="hidden" name="pageNumber" value="0">
                             <input name="nickname" type="text" class="form-control" id="nickname" placeholder="Alias/Apodo">
                         </div>
                         <div class="col-md-4 mb-3">
@@ -75,7 +71,7 @@
                     <button class="btn btn-outline-dark" type="submit">Buscar</button>
                 </form>
                 <hr>
-                <div class="table-responsive animated fadeIn fast">
+                <div th:if="${patients != null}" class="table-responsive animated fadeIn fast">
                     <table class="table table-hover">
                         <thead>
                             <tr>
@@ -90,7 +86,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr th:each="patient : ${patients}">
+                            <tr th:each="patient : ${patients.content}">
                                 <th scope="row">[[${patient.id}]]</th>
                                 <td>[[${patient.nickname}]]</td>
                                 <td>[[${patient.client.primaryLastName}]]</td>
@@ -112,6 +108,19 @@
                             </tr>
                         </tbody>
                     </table>
+                    <nav aria-label="Page navigation">
+                    	<ul class="pagination">
+                    		<li th:if="${patients.number > 0}" class="page-item">
+                    			<a th:href="@{/patient/searchBy (pageNumber = ${patients.number - 1}, nickname = ${nickname}, primaryLastName = ${primaryLastName})}" class="page-link">Anterior</a>
+                    		</li>
+                    		<li th:if="${patients.number < patients.totalPages-1}" class="page-item">
+                    			<a th:href="@{/patient/searchBy (pageNumber = ${patients.number + 1}, nickname = ${nickname}, primaryLastName = ${primaryLastName})}" class="page-link">Siguiente</a>
+                    		</li>
+                    	</ul>
+                    </nav>
+                </div>
+                <div th:unless="${patients != null}" class="alert alert-info" role="alert">
+                	<strong th:text="${messageInfo}"></strong>
                 </div>
             </div>
         </div>

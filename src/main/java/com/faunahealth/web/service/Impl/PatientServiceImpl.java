@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
@@ -64,6 +66,27 @@ public class PatientServiceImpl implements PatientService {
 	@Override
 	public List<Patient> findByClient_PrimaryLastNameContaining(String primaryLastName) {
 		return repositoryPatient.findByClient_PrimaryLastNameContaining(primaryLastName);
+	}
+
+	@Override
+	public Page<Patient> findPatientsByNicknameAndPrimaryLastNameAndPage(String nickname, String primaryLastName,
+			Pageable page) {
+		return repositoryPatient.findPatientsByNicknameAndPrimaryLastNameAndPage(nickname, primaryLastName, page);
+	}
+
+	@Override
+	public Page<Patient> findPatientsByNicknameAndPage(String nickname, Pageable page) {
+		return repositoryPatient.findPatientsByNicknameAndPage(nickname, page);
+	}
+
+	@Override
+	public Page<Patient> findPatientsByPrimaryLastName(String primaryLastName, Pageable page) {
+		return repositoryPatient.findPatientsByPrimaryLastNameAndPage(primaryLastName, page);
+	}
+
+	@Override
+	public Page<Patient> findPatientsByClientAndPage(int clientId, Pageable page) {
+		return repositoryPatient.findPatientsByClientAndPage(clientId, page);
 	}
 
 }

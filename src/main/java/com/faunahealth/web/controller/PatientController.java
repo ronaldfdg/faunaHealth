@@ -2,10 +2,12 @@ package com.faunahealth.web.controller;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -27,7 +29,7 @@ import com.faunahealth.web.service.DistrictService;
 import com.faunahealth.web.service.PatientService;
 
 @Controller
-@RequestMapping("patient")
+@RequestMapping("/patient")
 public class PatientController {
 
 	@Autowired
@@ -44,7 +46,7 @@ public class PatientController {
 
 	@GetMapping("/")
 	public String index(Model model) {
-		model.addAttribute("patients", servicePatient.getPatients());
+		model.addAttribute("messageInfo", "Realice una busqueda para poder visualizar la información");
 		return "patients/listPatients";
 	}
 
@@ -150,7 +152,9 @@ public class PatientController {
 	}
 
 	@GetMapping("/searchByOwner")
-	public String searchByOwner(@RequestParam("clientId") int clientId, RedirectAttributes attribute, Model model) {
+	public String searchByOwner(@RequestParam("pageNumber") int pageNumber,
+			@RequestParam("clientId") int clientId, 
+			RedirectAttributes attribute, Model model) {
 
 		if (!serviceClient.existsById(clientId)) {
 			attribute.addFlashAttribute("messageWarning", "No existe ningún cliente con el código: " + clientId);
@@ -158,12 +162,15 @@ public class PatientController {
 		}
 
 		Client client = serviceClient.findById(clientId);
+		
+		Pageable page = PageRequest.of(pageNumber, 10);
+		Page<Patient> patients = servicePatient.findPatientsByClientAndPage(clientId, page);
 
-		List<Patient> patients = servicePatient.getPatientsByClient(clientId);
-
-		if (patients.size() == 0)
-			model.addAttribute("messageInfo", "El cliente " + client.getName() + " " + client.getPrimaryLastName()
-					+ " no tiene ninguna mascota registrada");
+		if (patients.isEmpty()) {
+			attribute.addFlashAttribute("messageWarning", "El cliente " + client.getName() + " " + client.getPrimaryLastName()
+			+ " no tiene ninguna mascota registrada");
+			return "redirect:/patient/";
+		}
 
 		model.addAttribute("patients", patients);
 		return "patients/listPatients";
@@ -171,25 +178,34 @@ public class PatientController {
 
 	@GetMapping("/searchBy")
 	public String searchBy(@RequestParam(name = "nickname", required = false) String nickname,  
-			@RequestParam(name = "primaryLastName", required = false) String primaryLastName, RedirectAttributes attribute, Model model) {
+			@RequestParam(name = "primaryLastName", required = false) String primaryLastName,
+			@RequestParam("pageNumber") int pageNumber,
+			RedirectAttributes attribute, Model model) {
 		
-		List<Patient> patients = null;
+		Page<Patient> patients = null;
+		
+		Pageable page = PageRequest.of(pageNumber, 10);
 		
 		if(!nickname.equals("") && !primaryLastName.equals(""))
-			patients =servicePatient.getPatientsByNicknameAndLastNameClient(nickname, primaryLastName);
+			patients =servicePatient.findPatientsByNicknameAndPrimaryLastNameAndPage(nickname, primaryLastName, page);
 		else if(!nickname.equals("") && primaryLastName.equals(""))
-			patients = servicePatient.findByNicknameContaining(nickname);
+			patients = servicePatient.findPatientsByNicknameAndPage(nickname, page);
 		else if(nickname.equals("") && !primaryLastName.equals(""))
-			patients = servicePatient.findByClient_PrimaryLastNameContaining(primaryLastName);
-		else
-			patients = servicePatient.getPatients();
-		
+			patients = servicePatient.findPatientsByPrimaryLastName(primaryLastName, page);
+		else {
+			attribute.addFlashAttribute("messageWarning", "No ingreso ningún valor para Alias ni Apellido. Debe ingresar por lo menos uno");
+			return "redirect:/patient/";
+		}
+			
 		if(patients.isEmpty()) {
-			attribute.addFlashAttribute("messageInfo", "No se encontraron resultados con el Alias: "+nickname+" y el Apellido: "+primaryLastName);
+			attribute.addFlashAttribute("messageWarning", "No se encontraron resultados con el Alias: "+nickname+" y el Apellido: "+primaryLastName);
 			return "redirect:/patient/";
 		}
 		
 		model.addAttribute("patients", patients);
+		model.addAttribute("nickname", nickname);
+		model.addAttribute("primaryLastName", primaryLastName);
+		
 		return "patients/listPatients";
 	}
 	

@@ -23,8 +23,8 @@
 			<div class="card">
 				<h4 class="card-header"><strong>Listado de cirug&iacute;as</strong></h4>
 				<div class="card-body">
-					<div th:if="${messageInfo != null}" class="alert alert-info alert-dismissible fade show" role="alert">
-						<strong th:text="${messageInfo}"></strong>
+					<div th:if="${messageWarning != null}" class="alert alert-warning alert-dismissible fade show" role="alert">
+						<strong th:text="${messageWarning}"></strong>
 						<button type="button" class="close" data-dismiss="alert" aria-label="Close">
 				    		<span aria-hidden="true">&times;</span>
 				  		</button>
@@ -35,10 +35,13 @@
 				    		<span aria-hidden="true">&times;</span>
 				  		</button>
 					</div>
+					<strong>Puede encontrar cirugias utilizando los siguientes filtros:</strong>
+					<br><br>
 					<form name="searchByPatient" th:action="@{/operations/searchByPatient}">
 						<div class="form-row">
 							<div class="col-md-3 mb-3">
 								<label for="patientNickname">Paciente</label>
+								<input type="hidden" name="pageNumber" value="0">
 								<input type="text" name="nickname" id="patientNickname" class="form-control" placeholder="Alias/Apodo">
 							</div>
 							<div class="col-md-3 mb-3">
@@ -53,6 +56,7 @@
 						<div class="form-row">
 							<div class="col-md-3 mb-3">
 								<label for="startDate">Fecha inicio</label>
+								<input type="hidden" name="pageNumber" value="0">
 								<input type="text" name="startDate" id="startDate" class="form-control date" placeholder="Rango inicial" maxlength="10">
 							</div>
 							<div class="col-md-3 mb-3">
@@ -63,7 +67,7 @@
 						<button class="btn btn-outline-dark" type="submit">Buscar</button>
 					</form>
 					<hr>
-					<div class="table-responsive animated fadeIn fast">
+					<div th:if="${operations != null}" class="table-responsive animated fadeIn fast">
 						<table class="table table-hover">
 							<thead class="thead-light">
 								<tr>
@@ -73,7 +77,7 @@
 								</tr>
 							</thead>
 							<tbody>
-								<tr th:each="operation : ${operations}">
+								<tr th:each="operation : ${operations.content}">
 									<td>[[${operation.patient.nickname}]] [[${operation.patient.client.primaryLastName}]]</td>
 									<td th:text="${#dates.format(operation.operationDate, 'dd-MM-yyyy')}"></td>
 									<td>
@@ -82,6 +86,27 @@
 								</tr>
 							</tbody>
 						</table>
+						<nav aria-label="Page navigation">
+							<ul th:if="${startDate == null}" class="pagination">
+								<li th:if="${operations.number > 0}" class="page-item">
+									<a th:href="@{/operations/searchByPatient (pageNumber = ${operations.number - 1}, nickname = ${nickname}, lastName = ${lastName})}" class="page-link">Anterior</a>
+								</li>
+								<li th:if="${operations.number < operations.totalPages - 1}" class="page-item">
+									<a th:href="@{/operations/searchByPatient (pageNumber = ${operations.number + 1}, nickname = ${nickname}, lastName = ${lastName})}" class="page-link">Siguiente</a>
+								</li>
+							</ul>
+							<ul th:unless="${startDate == null}" class="pagination">
+								<li th:if="${operations.number > 0}" class="page-item">
+									<a th:href="@{/operations/searchByDates (pageNumber = ${operations.number - 1}, startDate = ${#dates.format(startDate, 'dd-MM-yyyy')}, endDate = ${#dates.format(endDate, 'dd-MM-yyyy')} )}" class="page-link">Anterior</a>
+								</li>
+								<li th:if="${operations.number < operations.totalPages - 1}" class="page-item">
+									<a th:href="@{/operations/searchByDates (pageNumber = ${operations.number + 1}, startDate = ${#dates.format(startDate, 'dd-MM-yyyy')}, endDate = ${#dates.format(endDate, 'dd-MM-yyyy')} )}" class="page-link">Siguiente</a>
+								</li>
+							</ul>
+						</nav>
+					</div>
+					<div th:unless="${operations != null}" class="alert alert-info" role="alert">
+						<strong th:text="${messageInfo}"></strong>
 					</div>
 				</div>
 			</div>
