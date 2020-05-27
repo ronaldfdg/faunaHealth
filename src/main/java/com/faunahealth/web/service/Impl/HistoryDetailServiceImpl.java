@@ -1,10 +1,11 @@
 package com.faunahealth.web.service.Impl;
 
 import java.util.Date;
-import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.faunahealth.web.entity.HistoryDetail;
@@ -18,8 +19,8 @@ public class HistoryDetailServiceImpl implements HistoryDetailService{
 	private HistoryDetailRepository repositoryHistoryDetail;
 	
 	@Override
-	public List<HistoryDetail> findHistoryDetailPerClinicHistory(int id) {
-		return repositoryHistoryDetail.findHistoryDetailsPerClinicHistory(id);
+	public Page<HistoryDetail> findHistoryDetailsByClinicHistoryAndPage(int id, Pageable page) {
+		return repositoryHistoryDetail.findHistoryDetailsByClinicHistoryAndPage(id, page);
 	}
 
 	@Override
@@ -40,6 +41,14 @@ public class HistoryDetailServiceImpl implements HistoryDetailService{
 	@Override
 	public boolean existsById(int id) {
 		return repositoryHistoryDetail.existsById(id);
+	}
+
+	@Override
+	public HistoryDetail findById(int id) {
+		Optional<HistoryDetail> optional = repositoryHistoryDetail.findById(id);
+		if(optional.isPresent())
+			return optional.get();
+		return null;
 	}
 	
 }
