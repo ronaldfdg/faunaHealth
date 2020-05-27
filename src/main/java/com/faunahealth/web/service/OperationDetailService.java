@@ -11,6 +11,7 @@ import com.faunahealth.web.entity.OperationDetail;
 public interface OperationDetailService {
 
 	List<OperationDetail> findAll();
+	OperationDetail findById(int id);
 	Page<OperationDetail> findOperationsByPatient(String nickname, String primaryLastName, Pageable page);
 	Page<OperationDetail> findOperationsByPatientName(String nickname, Pageable page);
 	Page<OperationDetail> findOperationsByPatientLastName(String primaryLastName, Pageable page);

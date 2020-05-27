@@ -7,6 +7,12 @@
     <link rel="stylesheet" th:href="@{/css/style.css}">
     <link rel="stylesheet" th:href="@{/bootstrap/css/bootstrap.min.css}">
     
+    <style type="text/css">
+    	.page-navigation {
+    		margin-bottom: 100px;
+    	}
+    </style>
+    
     <title>Fauna Health | Histórico de atenciones</title>
     
 </head>
@@ -27,17 +33,17 @@
 		    	<span aria-hidden="true">&times;</span>
 		  	</button>
 		</div>
-		<div class="card-columns animated fadeIn fast">
-			<div class="card text-center" th:each="attention : ${attentions}">
+		<div class="card-columns animated fadeIn fast" style="margin-bottom: 20px">
+			<div class="card text-center" th:each="attention : ${attentions.content}">
 				<div class="card-body">
 					<i class="fas fa-hand-holding-medical" style="font-size: 20px;"></i>
 					<p class="card-text">Atendido por: [[${attention.user.name}]] [[${attention.user.primaryLastName}]]</p>
 					<p class="card-text">Motivo: [[${attention.reason}]]</p>
 					<p class="card-text">Constantes vitales: [[${attention.vitalSigns}]]</p>
 					<p class="card-text">Diagnostico: [[${attention.diagnostic}]]</p>
-					<p class="card-text" th:if="${!attention.prescription.equals('')}">Receta: [[${attention.prescription}]]</p>
+					<!-- <p class="card-text" th:if="${!attention.prescription.equals('')}" th:utext="${attention.prescription}"></p>  -->
 					<p class="card-text" th:if="${!attention.analysisResult.equals('')}">Resultado: [[${attention.analysisResult}]]</p>
-					<p class="card-text" th:if="${!attention.evolution.equals('')}">Evoluci&oacute;n: [[${attention.evolution}]]</p>
+					<!-- <p class="card-text" th:if="${!attention.evolution.equals('')}">Evoluci&oacute;n: [[${attention.evolution}]]</p>  -->
 					
 					<div class="card-body" th:each="weight : ${weights}" th:if="${weight.registrationDate.compareTo(attention.attentionDate) == 0}">
 						<p class="card-text">Peso: [[${weight.amount}]]</p>
@@ -50,11 +56,26 @@
 					<div class="card-footer bg-transparent border-success">
                     	<a th:href="@{/historyDetails/edit/{patientId} (patientId=${patient.id}, clinicHistory=${clinicHistory.id}, date=${#dates.format(attention.attentionDate, 'dd-MM-yyyy')}) }" 
                     		class="btn btn-secondary btn-sm" role="button">Editar</a>
+                    	<br><br>
+                    	<form th:action="@{/send/{idPatient}/{idAttention} (idPatient = ${patient.id}, idAttention = ${attention.id})}" method="post">
+                    		<button class="btn btn-secondary btn-sm" type="submit">Enviar atenci&oacute;n</button>
+                    	</form>
+                    	<!-- <a th:href="@{/send/{idPatient}/{idAttention} (idPatient = ${patient.id}, idAttention = ${attention.id})}"
+                    		class="btn btn-secondary btn-sm" role="button">Enviar atenci&oacute;n</a> -->
                    	</div>
-                   	
 				</div>
 			</div>
 		</div>
+		<nav aria-label="Page navigation" class="page-navigation">
+					<ul class="pagination">
+						<li th:if="${attentions.number > 0}" class="page-item">
+							<a th:href="@{/historyDetails/{id} (id=${clinicHistory.id},patient=${patient.id},pageNumber=${attentions.number - 1})}" class="page-link">Anterior</a>
+						</li>
+						<li th:if="${attentions.number < attentions.totalPages - 1}" class="page-item">
+							<a th:href="@{/historyDetails/{id} (id=${clinicHistory.id},patient=${patient.id},pageNumber=${attentions.number + 1})}" class="page-link">Siguiente</a>
+						</li>
+					</ul>
+		</nav>
 	</div>
 
 	<footer th:insert="fragments/footer.html :: footer">

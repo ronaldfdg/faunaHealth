@@ -3,10 +3,13 @@ package com.faunahealth.web.controller;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.WebDataBinder;
@@ -50,11 +53,18 @@ public class HistoryDetailController {
 	private SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
 	
 	@GetMapping("/{id}")
-	public String index(@PathVariable("id") int id, @RequestParam("patient") int patientId, RedirectAttributes attribute, Model model) {
-		List<HistoryDetail> attentions = serviceHistoryDetail.findHistoryDetailPerClinicHistory(id);
+	public String index(@PathVariable("id") int id, 
+			@RequestParam("pageNumber") int pageNumber,
+			@RequestParam("patient") int patientId, RedirectAttributes attribute, Model model) {
 		
-		if(attentions.isEmpty()) 
-			model.addAttribute("messageInfo", "El paciente no tiene ninguna atención registrada");
+		Pageable page = PageRequest.of(pageNumber, 5, Sort.by("attentionDate").descending());
+		
+		Page<HistoryDetail> attentions = serviceHistoryDetail.findHistoryDetailsByClinicHistoryAndPage(id, page);
+		
+		//List<HistoryDetail> attentions = serviceHistoryDetail.findHistoryDetailPerClinicHistory(id);
+		
+		if(attentions.isEmpty() || attentions == null) 
+			model.addAttribute("messageInfo", "El paciente no tiene ninguna atención registrada o más atenciones registradas");
 		
 		model.addAttribute("clinicHistory", serviceClinicHistoryService.findById(id));
 		model.addAttribute("attentions", attentions);

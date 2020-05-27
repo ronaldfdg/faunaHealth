@@ -2,6 +2,7 @@ package com.faunahealth.web.service.Impl;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -52,6 +53,14 @@ public class OperationDetailServiceImpl implements OperationDetailService {
 	@Override
 	public Page<OperationDetail> findOperationsBetweenDates(Date startDate, Date endDate, Pageable page) {
 		return repositoryOperationDetail.findOperationsBetweenDates(startDate, endDate, page);
+	}
+
+	@Override
+	public OperationDetail findById(int id) {
+		Optional<OperationDetail> optional = repositoryOperationDetail.findById(id);
+		if(optional.isPresent())
+			return optional.get();
+		return null;
 	}
 
 }
