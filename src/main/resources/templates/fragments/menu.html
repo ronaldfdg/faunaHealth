@@ -36,6 +36,9 @@
 	                </div>
 	            </div>
 	        </li>
+	        <li class="nav-item" sec:authorize="hasAnyAuthority('ADMINISTRACION','GESTION')">
+	        	<a class="nav-link" th:href="@{/appointments/}">Citas</a>
+	        </li>
 	        <li class="nav-item" sec:authorize="hasAnyAuthority('ADMINISTRACION')">
 	        	<a class="nav-link" th:href="@{/users/}">Usuarios</a>
 	        </li>

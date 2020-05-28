@@ -1,4 +1,4 @@
-package com.faunahealth.web.entity;
+package com.faunahealth.web.bean;
 
 import java.util.List;
 import java.util.Map;
@@ -24,14 +24,6 @@ public class EmailMessage {
 		this.to_address = to_address;
 	}
 	
-	public String getSubject() {
-		return subject;
-	}
-	
-	public void setSubject(String subject) {
-		this.subject = subject;
-	}
-	
 	public String getFrom() {
 		return from;
 	}
@@ -46,6 +38,14 @@ public class EmailMessage {
 
 	public void setContentType(String contentType) {
 		this.contentType = contentType;
+	}
+	
+	public String getSubject() {
+		return subject;
+	}
+
+	public void setSubject(String subject) {
+		this.subject = subject;
 	}
 
 	public List<Object> getAttachments() {

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" th:href="@{/images/favicon.ico}">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/bootstrap/css/bootstrap.min.css}">
+    
+	<title>Fauna Health | Citas</title>
+	
+</head>
+<body>
+	<nav th:insert="fragments/menu.html :: navbar">
+	</nav>
+	
+	<main role="main">
+		<hr>
+		<div class="container">
+			<div class="card">
+				<h4 class="card-header" th:text="'Citas de hoy: ' + ${#dates.format(date, 'dd-MM-yyyy')}"></h4>
+				<div class="card-body">
+					<div th:if="${appointments != null}" class="table-responsive animated fadeIn fast">
+						<table class="table table-hover">
+							<thead>
+								<tr>
+									<th scope="col">Paciente</th>
+									<th scope="col">Motivo</th>
+									<!-- <th scope="col">Confirmaci&oacute;n</th>  -->
+								</tr>
+							</thead>
+							<tbody>
+								<tr th:each="appointment : ${appointments}">
+									<td th:text="${appointment.patient.nickname} + ' ' + ${appointment.patient.client.primaryLastName}"></td>
+									<td th:text="${appointment.reason}"></td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+					<div th:unless="${appointments != null}" class="alert alert-info" role="alert">
+						<strong th:text="${messageInfo}"></strong>
+					</div>
+				</div>
+			</div>
+		</div>
+	</main>
+	
+	<footer th:insert="fragments/footer.html :: footer">
+	</footer>
+	
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+</body>
+</html>

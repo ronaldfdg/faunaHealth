@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" th:href="@{/images/favicon.ico}">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/bootstrap/css/bootstrap.min.css}">
+    <link href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" rel="stylesheet">
+    
+	<title>Fauna Health | Registrar cita</title>
+	
+</head>
+<body>
+	<nav th:insert="fragments/menu.html :: navbar">
+	</nav>
+	
+	<main role="main">
+		<hr>
+		<div class="container">
+			<div class="card animated fadeIn fast">
+				<h4 class="card-header">Registro de cita</h4>
+				<div class="card-body">
+					<form name="formAppointment" th:action="@{/appointments/record}" th:object="${appointment}" method="post">
+						<div class="row">
+							<div class="col-md-4">
+								<div class="form-group">
+									<label for="patient">Paciente</label>
+									<input type="hidden" th:name="patient.id" th:value="${patient.id}">
+									<input type="text" class="form-control" th:value="${patient.nickname} + ${patient.client.primaryLastName}" readonly>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-4">
+								<div class="form-group">
+									<label for="nextAppointmentDate">Fecha de la pr&oacute;xima cita</label>
+									<input type="text" th:field="*{nextAppointmentDate}" id="nextAppointmentDate" class="form-control" placeholder="Fecha de la próxima cita" required="required">
+								</div>
+							</div>
+							<div class="col-md-4">
+								<div class="form-group">
+									<label for="reason">Motivo</label>
+									<input type="text" th:field="*{reason}" id="reason" class="form-control" placeholder="Motivo" required="required">
+								</div>
+							</div>
+						</div>
+						<button type="submit" class="btn btn-primary">Registrar</button>
+					</form>
+				</div>
+			</div>
+		</div>
+	</main>
+	
+	<footer th:insert="fragments/footer.html :: footer">
+	</footer>
+	
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+	<script>
+        $(function() {
+            $("#nextAppointmentDate").datepicker({
+                dateFormat: 'dd-mm-yy'
+            });
+        });
+    </script>
+</body>
+</html>
