@@ -23,7 +23,7 @@
 				<h4 class="card-header">
 					Registro de proveedor
 				</h4>
-				<div class="card-body animated fadeIn fast">
+				<div class="card-body">
 					<form name="" th:action="@{/providers/record}" th:object="${provider}" method="post" onsubmit="return validateFormProvider(this)">
 						<div th:if="${#fields.hasErrors('*')}" class="alert alert-danger" role="alert">
 							<strong th:text="${messageError} + ' Los errores fueron los siguientes:'"></strong>

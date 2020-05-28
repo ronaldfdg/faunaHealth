@@ -62,4 +62,10 @@ public interface PatientRepository extends JpaRepository<Patient, Integer>{
 	Page<Patient> findPatientsByPrimaryLastNameAndPage(@Param("primaryLastName") String primaryLastName, Pageable page);
 	List<Patient> findByClient_PrimaryLastNameContaining(String primaryLastName);
 	
+	@Query("select p from Patient p "
+			+ "inner join fetch p.client "
+			+ "where "
+			+ "p.id in :ids")
+	List<Patient> findPatientsByIds(@Param("ids") List<Integer> ids);
+	
 }

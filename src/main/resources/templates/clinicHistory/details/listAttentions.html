@@ -67,14 +67,14 @@
 			</div>
 		</div>
 		<nav aria-label="Page navigation" class="page-navigation">
-					<ul class="pagination">
-						<li th:if="${attentions.number > 0}" class="page-item">
-							<a th:href="@{/historyDetails/{id} (id=${clinicHistory.id},patient=${patient.id},pageNumber=${attentions.number - 1})}" class="page-link">Anterior</a>
-						</li>
-						<li th:if="${attentions.number < attentions.totalPages - 1}" class="page-item">
-							<a th:href="@{/historyDetails/{id} (id=${clinicHistory.id},patient=${patient.id},pageNumber=${attentions.number + 1})}" class="page-link">Siguiente</a>
-						</li>
-					</ul>
+			<ul class="pagination">
+				<li th:if="${attentions.number > 0}" class="page-item">
+					<a th:href="@{/historyDetails/{id} (id=${clinicHistory.id},patient=${patient.id},pageNumber=${attentions.number - 1})}" class="page-link">Anterior</a>
+				</li>
+				<li th:if="${attentions.number < attentions.totalPages - 1}" class="page-item">
+					<a th:href="@{/historyDetails/{id} (id=${clinicHistory.id},patient=${patient.id},pageNumber=${attentions.number + 1})}" class="page-link">Siguiente</a>
+				</li>
+			</ul>
 		</nav>
 	</div>
 

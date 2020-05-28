@@ -8,7 +8,7 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
 
-import com.faunahealth.web.entity.EmailMessage;
+import com.faunahealth.web.bean.EmailMessage;
 import com.faunahealth.web.service.EmailService;
 
 import freemarker.template.Configuration;
@@ -24,7 +24,7 @@ public class EmailServiceImpl implements EmailService {
 	private Configuration freemarkerConfig;
 	
 	@Override
-	public void sendEmail(EmailMessage emailMessage) throws Exception {
+	public void sendEmail(EmailMessage emailMessage, String templateName) throws Exception {
 		
 		MimeMessage mailMessage = mailSender.createMimeMessage();
 		
@@ -32,11 +32,11 @@ public class EmailServiceImpl implements EmailService {
 		
 		freemarkerConfig.setClassForTemplateLoading(this.getClass(), "/templates");
 		
-		Template template = freemarkerConfig.getTemplate("attention-template.ftl");
+		Template template = freemarkerConfig.getTemplate(templateName);
 		String text = FreeMarkerTemplateUtils.processTemplateIntoString(template, emailMessage.getModel());
 		
 		messageHelper.setTo(emailMessage.getTo_address());
-		messageHelper.setSubject("Atención realizada");
+		messageHelper.setSubject(emailMessage.getSubject());
 		messageHelper.setText(text,true);
 		
 		mailSender.send(mailMessage);

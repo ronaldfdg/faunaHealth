@@ -89,4 +89,9 @@ public class PatientServiceImpl implements PatientService {
 		return repositoryPatient.findPatientsByClientAndPage(clientId, page);
 	}
 
+	@Override
+	public List<Patient> findPatientsByIds(List<Integer> ids) {
+		return repositoryPatient.findPatientsByIds(ids);
+	}
+
 }

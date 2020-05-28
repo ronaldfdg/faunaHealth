@@ -23,6 +23,8 @@ public interface PatientService {
 	Page<Patient> findPatientsByPrimaryLastName(String primaryLastName, Pageable page);
 	List<Patient> findByClient_PrimaryLastNameContaining(String primaryLastName);
 	
+	List<Patient> findPatientsByIds(List<Integer> ids);
+	
 	Patient findById(int id);
 	boolean existsById(int id);
 	void save(Patient patient);
