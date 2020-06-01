@@ -86,7 +86,7 @@
           <div class="content" style="box-sizing: border-box; display: block; Margin: 0 auto; max-width: 580px; padding: 10px;">
 
             <!-- START CENTERED WHITE CONTAINER -->
-            <span class="preheader" style="color: transparent; display: none; height: 0; max-height: 0; max-width: 0; opacity: 0; overflow: hidden; mso-hide: all; visibility: hidden; width: 0;">Recordatorio de atenci&oacute;n - Cl&iacute;nica Veterinaria Fauna Health</span>
+            <span class="preheader" style="color: transparent; display: none; height: 0; max-height: 0; max-width: 0; opacity: 0; overflow: hidden; mso-hide: all; visibility: hidden; width: 0;">Cita programada</span>
             <table class="main" style="border-collapse: separate; mso-table-lspace: 0pt; mso-table-rspace: 0pt; width: 100%; background: #ffffff; border-radius: 3px;">
 
               <!-- START MAIN CONTENT AREA -->
@@ -95,12 +95,15 @@
                   <table border="0" cellpadding="0" cellspacing="0" style="border-collapse: separate; mso-table-lspace: 0pt; mso-table-rspace: 0pt; width: 100%;">
                     <tr>
                       <td style="font-family: sans-serif; font-size: 14px; vertical-align: top;">
-                        <p style="font-family: sans-serif; font-size: 14px; font-weight: normal; margin: 0; Margin-bottom: 15px;">Hola ${client},</p>
+                        <p style="font-family: sans-serif; font-size: 14px; font-weight: normal; margin: 0; Margin-bottom: 15px;">Hola ${client.name} ${client.primaryLastName},</p>
                         <p style="font-family: sans-serif; font-size: 14px; font-weight: normal; margin: 0; Margin-bottom: 15px;">
-                        	Su mascota <strong>${patient}</strong> tiene una cita programada para hoy ${appointmentDate}.
+                        	Su mascota <strong>${patient.nickname} ${client.primaryLastName}</strong> tiene una cita programada para el d&iacute;a ${appointmentDate}.
                         </p>
                         <p style="font-family: sans-serif; font-size: 14px; font-weight: normal; margin: 0; Margin-bottom: 15px;">
-                        	Motivo: ${reason}
+                        	Motivo: ${appointment.reason}
+                        </p>
+                        <p style="font-family: sans-serif; font-size: 14px; font-weight: normal; margin: 0; Margin-bottom: 15px;">
+                        	Si desea confirmar su asistencia, darle clic a <a href="http://localhost:8080/appointments/${appointment.id}">Asistir&eacute;</a>
                         </p>
                         <br>
                         <div class="text-align: center;">
@@ -121,13 +124,13 @@
                 <tr>
                   <td class="content-block" style="font-family: sans-serif; vertical-align: top; padding-bottom: 10px; padding-top: 10px; font-size: 12px; color: #999999; text-align: center;">
                     <span class="apple-link" style="color: #999999; font-size: 12px; text-align: center;">Cl&iacute;nica Veterinaria Faulta Health, Av. los Olivos 47, Lima 15109</span>
-                    <br> No quieres seguir recibiendo estos correos? <a href="" style="text-decoration: underline; color: #999999; font-size: 12px; text-align: center;">Dar de baja</a>.
+                    <br> No quieres seguir recibiendo estos correos? <a href="http://localhost:8080/clients/unsuscribe/${client.id}" onclick="return confirm('Esta seguro de cancelar la suscripci&oacute;n?')" style="text-decoration: underline; color: #999999; font-size: 12px; text-align: center;">Dar de baja</a>.
                   </td>
                 </tr>
               </table>
             </div>
             <!-- END FOOTER -->
-
+	<!-- href="http://localhost:8080/clients/unsuscribe/{id} (id=${client.id})" -->
           <!-- END CENTERED WHITE CONTAINER -->
           </div>
         </td>

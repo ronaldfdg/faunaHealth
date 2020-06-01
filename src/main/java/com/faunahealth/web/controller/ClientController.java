@@ -59,14 +59,10 @@ public class ClientController {
 
 	@GetMapping("/searchByDNI")
 	public String searchByDNI(@RequestParam("pageNumber") int pageNumber,
-			@RequestParam("documentNumber") String documentNumber, 
-			RedirectAttributes attribute,
-			Model model) {
+			@RequestParam("documentNumber") String documentNumber, RedirectAttributes attribute, Model model) {
 
 		Pageable page = PageRequest.of(pageNumber, 5);
-		
 		Page<Client> client = null;
-		
 		client = serviceClient.findByDocumentNumber(documentNumber, page);
 
 		if (client.isEmpty()) {
@@ -74,7 +70,6 @@ public class ClientController {
 					"No se encontró ningún cliente con el DNI: " + documentNumber);
 			return "redirect:/clients/";
 		}
-		
 		model.addAttribute("clients", client);
 		return "clients/listClients";
 	}
@@ -82,13 +77,11 @@ public class ClientController {
 	@GetMapping("/searchBy")
 	public String searchBy(@RequestParam(name = "name", required = false) String name,
 			@RequestParam(name = "primaryLastName", required = false) String primaryLastName,
-			@RequestParam(name = "pageNumber", required = false) Integer pageNumber,
-			RedirectAttributes attribute, Model model) {
+			@RequestParam(name = "pageNumber", required = false) Integer pageNumber, RedirectAttributes attribute,
+			Model model) {
 
 		Page<Client> clients = null;
-		
 		Pageable page = PageRequest.of(pageNumber, 5);
-		
 		if (!name.equals("") && primaryLastName.equals("")) {
 			clients = serviceClient.findClientsByNameAndPage(name, page);
 		} else if (name.equals("") && !primaryLastName.equals("")) {
@@ -96,11 +89,11 @@ public class ClientController {
 		} else if (!name.equals("") && !primaryLastName.equals("")) {
 			clients = serviceClient.findClientsByNameAndPrimaryLastNameAndPage(name, primaryLastName, page);
 		} else {
-			attribute.addFlashAttribute("messageWarning", "No ingreso ningún valor para Nombre ni Apellido. Debe ingresar por lo menos uno");
+			attribute.addFlashAttribute("messageWarning",
+					"No ingreso ningún valor para Nombre ni Apellido. Debe ingresar por lo menos uno");
 			return "redirect:/clients/";
 		}
-		
-		if(clients.isEmpty()) {
+		if (clients.isEmpty()) {
 			attribute.addFlashAttribute("messageWarning", "No se obtuvieron resultados");
 			return "redirect:/clients/";
 		}
@@ -108,7 +101,6 @@ public class ClientController {
 		model.addAttribute("clients", clients);
 		model.addAttribute("name", name);
 		model.addAttribute("primaryLastName", primaryLastName);
-		
 		return "clients/listClients";
 	}
 
@@ -126,6 +118,24 @@ public class ClientController {
 
 		serviceClient.save(client);
 		return "redirect:/clients/";
+	}
+
+	@GetMapping("/unsuscribe/{id}")
+	public String unsuscribe(@PathVariable("id") int clientId, RedirectAttributes attribute) {
+		Client client = serviceClient.findById(clientId);
+		if (client.isStatus()) {
+			client.setStatus(false);
+			serviceClient.save(client);
+			attribute.addFlashAttribute("body",
+					"Estimado cliente, acaba de anular su suscripción para recibir atenciones médicas y recordatorio de citas.\r\n"
+							+ "Recuerde que usted puede volver a suscribirse a estos servicios solicitandolo en nuestro local.");
+		} else {
+			attribute.addFlashAttribute("body",
+					"Estimado cliente, usted ya dio de baja el servicio de envío de atenciones y recordatorio de citas.\r\n"
+							+ "Recuerde que usted puede volver a suscribirse a estos servicios solicitandolo en nuestro local.");
+		}
+		attribute.addFlashAttribute("subject", "Cancelando suscripción");
+		return "redirect:/confirmMessage";
 	}
 
 }

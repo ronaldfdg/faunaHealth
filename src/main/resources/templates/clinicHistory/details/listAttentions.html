@@ -7,10 +7,43 @@
     <link rel="stylesheet" th:href="@{/css/style.css}">
     <link rel="stylesheet" th:href="@{/bootstrap/css/bootstrap.min.css}">
     
+    <link href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" rel="stylesheet">
+    
     <style type="text/css">
     	.page-navigation {
     		margin-bottom: 100px;
     	}
+    	.card-container{
+			position: relative;
+			width: 18rem;
+			perspective: 200rem;
+			height: 412px;
+		}
+
+		.card-container:hover .card-front{
+			transform: rotateY(180deg);
+		}
+
+		.card-container:hover .card-back{
+			transform: rotateY(0deg);
+		}
+
+		.card-back{
+			transform: rotateY(180deg);
+		}
+		
+		.card{
+			position: absolute;
+			height: 100%;
+			width: 100%;
+			transition: all 0.9s;
+			backface-visibility: hidden;
+		}
+		
+		.card-back .card-body{
+			position: relative;
+		}
+		
     </style>
     
     <title>Fauna Health | Histórico de atenciones</title>
@@ -33,39 +66,46 @@
 		    	<span aria-hidden="true">&times;</span>
 		  	</button>
 		</div>
-		<div class="card-columns animated fadeIn fast" style="margin-bottom: 20px">
-			<div class="card text-center" th:each="attention : ${attentions.content}">
-				<div class="card-body">
-					<i class="fas fa-hand-holding-medical" style="font-size: 20px;"></i>
-					<p class="card-text">Atendido por: [[${attention.user.name}]] [[${attention.user.primaryLastName}]]</p>
-					<p class="card-text">Motivo: [[${attention.reason}]]</p>
-					<p class="card-text">Constantes vitales: [[${attention.vitalSigns}]]</p>
-					<p class="card-text">Diagnostico: [[${attention.diagnostic}]]</p>
-					<!-- <p class="card-text" th:if="${!attention.prescription.equals('')}" th:utext="${attention.prescription}"></p>  -->
-					<p class="card-text" th:if="${!attention.analysisResult.equals('')}">Resultado: [[${attention.analysisResult}]]</p>
-					<!-- <p class="card-text" th:if="${!attention.evolution.equals('')}">Evoluci&oacute;n: [[${attention.evolution}]]</p>  -->
-					
-					<div class="card-body" th:each="weight : ${weights}" th:if="${weight.registrationDate.compareTo(attention.attentionDate) == 0}">
-						<p class="card-text">Peso: [[${weight.amount}]]</p>
+		<div class="card-deck animated fadeIn fast" style="margin-bottom: 20px">
+			<div class="card-container mx-auto mt-5 text-center" th:each="attention : ${attentions.content}">
+			
+				<div class="card card-front">
+					<div class="card-body">
+						<i class="fas fa-hand-holding-medical" style="font-size: 20px;"></i>
+						<p class="card-text">Atendido por: [[${attention.user.name}]] [[${attention.user.primaryLastName}]]</p>
+						<p class="card-text">Motivo: [[${attention.reason}]]</p>
+						<p class="card-text">Constantes vitales: [[${attention.vitalSigns}]]</p>
+						<p class="card-text">Diagnostico: [[${attention.diagnostic}]]</p>
+						
+						<div th:each="weight : ${weights}" th:if="${weight.registrationDate.compareTo(attention.attentionDate) == 0}">
+							<p class="card-text">Peso: [[${weight.amount}]]</p>
+						</div><br>
+						
+						<p class="card-text">
+							<small class="text-muted" th:text="'Fecha de atención: ' + ${#dates.format(attention.attentionDate, 'dd-MM-yyyy')}"></small>
+						</p>
 					</div>
-					
-					<p class="card-text">
-						<small class="text-muted" th:text="'Fecha de atención: ' + ${#dates.format(attention.attentionDate, 'dd-MM-yyyy')}"></small>
-					</p>
-					
-					<div class="card-footer bg-transparent border-success">
-                    	<a th:href="@{/historyDetails/edit/{patientId} (patientId=${patient.id}, clinicHistory=${clinicHistory.id}, date=${#dates.format(attention.attentionDate, 'dd-MM-yyyy')}) }" 
-                    		class="btn btn-secondary btn-sm" role="button">Editar</a>
-                    	<br><br>
-                    	<form th:action="@{/send/{idPatient}/{idAttention} (idPatient = ${patient.id}, idAttention = ${attention.id})}" method="post">
-                    		<button class="btn btn-secondary btn-sm" type="submit">Enviar atenci&oacute;n</button>
-                    	</form>
-                    	<!-- <a th:href="@{/send/{idPatient}/{idAttention} (idPatient = ${patient.id}, idAttention = ${attention.id})}"
-                    		class="btn btn-secondary btn-sm" role="button">Enviar atenci&oacute;n</a> -->
-                   	</div>
 				</div>
+				
+				<div class="card card-back">
+					<div class="card-body">
+						<p class="card-text" th:if="${!attention.prescription.equals('')}">Receta: [[${attention.prescription}]]</p>
+						<p class="card-text" th:if="${!attention.analysisResult.equals('')}">Resultado: [[${attention.analysisResult}]]</p>
+						<p class="card-text" th:if="${!attention.evolution.equals('')}">Evoluci&oacute;n: [[${attention.evolution}]]</p>
+						<div class="card-footer bg-transparent border-success">
+							<a th:href="@{/historyDetails/edit/{patientId} (patientId=${patient.id}, clinicHistory=${clinicHistory.id}, date=${#dates.format(attention.attentionDate, 'dd-MM-yyyy')}) }" 
+		                    		class="btn btn-secondary btn-sm" role="button">Editar</a>
+		                    	<br><br>
+		                    <form th:action="@{/send/{idPatient}/{idAttention} (idPatient = ${patient.id}, idAttention = ${attention.id})}" method="post">
+	                    		<button th:if="${patient.client.status}" class="btn btn-secondary btn-sm" type="submit">Enviar atenci&oacute;n</button>
+	                    	</form>
+	               		</div>
+                   	</div>
+                 </div>
+                 
 			</div>
-		</div>
+		</div><br>
+		
 		<nav aria-label="Page navigation" class="page-navigation">
 			<ul class="pagination">
 				<li th:if="${attentions.number > 0}" class="page-item">
@@ -76,6 +116,7 @@
 				</li>
 			</ul>
 		</nav>
+		
 	</div>
 
 	<footer th:insert="fragments/footer.html :: footer">

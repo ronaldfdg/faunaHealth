@@ -95,10 +95,10 @@
                   <table border="0" cellpadding="0" cellspacing="0" style="border-collapse: separate; mso-table-lspace: 0pt; mso-table-rspace: 0pt; width: 100%;">
                     <tr>
                       <td style="font-family: sans-serif; font-size: 14px; vertical-align: top;">
-                        <p style="font-family: sans-serif; font-size: 14px; font-weight: normal; margin: 0; Margin-bottom: 15px;">Hola ${client},</p>
+                        <p style="font-family: sans-serif; font-size: 14px; font-weight: normal; margin: 0; Margin-bottom: 15px;">Hola ${client.name} ${client.primaryLastName},</p>
                         <p style="font-family: sans-serif; font-size: 14px; font-weight: normal; margin: 0; Margin-bottom: 15px;">Te saluda la Cl&iacute;nica Veterinaria Fauna Health</p>
                         <p style="font-family: sans-serif; font-size: 14px; font-weight: normal; margin: 0; Margin-bottom: 15px;">
-                        	Su mascota <strong>${patient}</strong> acaba de recibir una atenci&oacute;n m&eacute;dica
+                        	Su mascota <strong>${patient.nickname} ${client.primaryLastName}</strong> acaba de recibir una atenci&oacute;n m&eacute;dica
                         </p>
                         <p style="font-family: sans-serif; font-size: 14px; font-weight: normal; margin: 0; Margin-bottom: 15px;"><strong>Motivo de atenci&oacute;n:</strong> ${reason}</p>
                         <p style="font-family: sans-serif; font-size: 14px; font-weight: normal; margin: 0; Margin-bottom: 15px;"><strong>Diagn&oacute;stico:</strong> ${diagnostic}</p>
@@ -124,7 +124,7 @@
                 <tr>
                   <td class="content-block" style="font-family: sans-serif; vertical-align: top; padding-bottom: 10px; padding-top: 10px; font-size: 12px; color: #999999; text-align: center;">
                     <span class="apple-link" style="color: #999999; font-size: 12px; text-align: center;">Cl&iacute;nica Veterinaria Faulta Health, Av. los Olivos 47, Lima 15109</span>
-                    <br> No quieres seguir recibiendo estos correos? <a href="" style="text-decoration: underline; color: #999999; font-size: 12px; text-align: center;">Dar de baja</a>.
+                    <br> No quieres seguir recibiendo estos correos? <a href="http://localhost:8080/clients/unsuscribe/${client.id}" onclick="return confirm('Esta seguro de cancelar la suscripci&oacute;n?')" style="text-decoration: underline; color: #999999; font-size: 12px; text-align: center;">Dar de baja</a>.
                   </td>
                 </tr>
               </table>
