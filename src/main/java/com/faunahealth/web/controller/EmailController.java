@@ -43,37 +43,40 @@ public class EmailController {
 	private HistoryDetailService serviceHistoryDetail;
 
 	@PostMapping("/send/{idPatient}/{idAttention}")
-	public String send(@PathVariable("idPatient") int idPatient,
-			@PathVariable("idAttention") int idAttention,
+	public String send(@PathVariable("idPatient") int idPatient, @PathVariable("idAttention") int idAttention,
 			RedirectAttributes attribute) throws Exception {
 		
 		Patient patient = servicePatient.findById(idPatient);
+		
 		HistoryDetail attention = serviceHistoryDetail.findById(idAttention);
+		
 		Weight weight = serviceWeight.findByPatientAndDate(idPatient, attention.getAttentionDate());
 		
 		String prescription = "";
 		prescription = attention.getPrescription().equals("") ? "---" : attention.getPrescription();
 		
 		String amountWeight = "";
-		amountWeight = weight != null  ? String.valueOf(weight.getAmount()) + " kg" : "No se pesó al paciente";
+		amountWeight = weight != null ? String.valueOf(weight.getAmount()) + " kg" : "No se pesó al paciente";
 		
 		EmailMessage mailMessage = new EmailMessage();
+		
 		mailMessage.setFrom(from);
 		mailMessage.setTo_address(patient.getClient().getEmailAddress());
-		mailMessage.setSubject("Atención realizada - Clínica Veterinaria Fauna Health");
-		
-		/*mailMessage.setBody("Paciente: "+patient.getNickname()+" "+patient.getClient().getPrimaryLastName()
-				+"\nFecha de atención: "+dateFormat.format(attention.getAttentionDate())
-				+"\nMotivo: "+attention.getReason()
-				+"\nDiagnóstico: "+attention.getDiagnostic()
-				+"\nReceta: " +prescription
-				+"\nPeso: " +amountWeight
-				+"\n\n\nClinica Veterinaria Fauna Health, siempre al cuidado de su mascota.");*/
+		mailMessage.setSubject("\"Fauna Health\" - Atención realizada");
+		/*
+		 * mailMessage.setBody("Paciente: "+patient.getNickname()+" "+patient.getClient(
+		 * ).getPrimaryLastName()
+		 * +"\nFecha de atención: "+dateFormat.format(attention.getAttentionDate())
+		 * +"\nMotivo: "+attention.getReason()
+		 * +"\nDiagnóstico: "+attention.getDiagnostic() +"\nReceta: " +prescription
+		 * +"\nPeso: " +amountWeight
+		 * +"\n\n\nClinica Veterinaria Fauna Health, siempre al cuidado de su mascota."
+		 * );
+		 */
 		
 		Map<String, Object> model = new HashMap<String, Object>();
-		
-		model.put("patient", patient.getNickname()+" "+patient.getClient().getPrimaryLastName());
-		model.put("client", patient.getClient().getName() + " " + patient.getClient().getPrimaryLastName());
+		model.put("patient", patient);
+		model.put("client", patient.getClient());
 		model.put("attentionDate", dateFormat.format(attention.getAttentionDate()));
 		model.put("reason", attention.getReason());
 		model.put("diagnostic", attention.getDiagnostic());
@@ -89,6 +92,7 @@ public class EmailController {
 		attribute.addAttribute("id", patient.getId());
 		
 		return "redirect:/clinicHistory/{id}";
+		
 	}
 	
 }

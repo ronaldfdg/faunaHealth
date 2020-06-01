@@ -30,6 +30,9 @@ public class Appointment {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "idPaciente")
 	private Patient patient;
+	
+	@Column(name = "Confirmacion", nullable = false)
+	private boolean confirmation;
 
 	public int getId() {
 		return id;
@@ -63,10 +66,18 @@ public class Appointment {
 		this.patient = patient;
 	}
 
+	public boolean isConfirmation() {
+		return confirmation;
+	}
+
+	public void setConfirmation(boolean confirmation) {
+		this.confirmation = confirmation;
+	}
+
 	@Override
 	public String toString() {
 		return "Appointment [id=" + id + ", nextAppointmentDate=" + nextAppointmentDate + ", reason=" + reason
-				+ ", patient=" + patient + "]";
+				+ ", patient=" + patient + ", confirmation=" + confirmation + "]";
 	}
 	
 }

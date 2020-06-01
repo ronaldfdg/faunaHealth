@@ -34,30 +34,45 @@ public class AppointmentController {
 	
 	@Autowired
 	private PatientService servicePatient;
-	
+
 	@GetMapping("/")
 	public String index(Model model) throws ParseException {
-		List<Appointment> appointmentsToday = serviceAppointment.appointmentsToday(dateFormat.parse(dateFormat.format(new Date())));
-		
-		if(!appointmentsToday.isEmpty())
+		List<Appointment> appointmentsToday = serviceAppointment
+				.appointmentsByDate(dateFormat.parse(dateFormat.format(new Date())));
+		if (!appointmentsToday.isEmpty())
 			model.addAttribute("appointments", appointmentsToday);
 		else
 			model.addAttribute("messageInfo", "No hay citas programadas para hoy");
-		
 		model.addAttribute("date", new Date());
 		return "appointments/listAppointments";
 	}
-	
+
 	@GetMapping("/{id}/register")
-	public String register(@ModelAttribute Appointment appointment 
-			, @PathVariable("id") int patientId, Model model) {
-		
+	public String register(@ModelAttribute Appointment appointment, @PathVariable("id") int patientId, Model model) {
 		Patient patient = servicePatient.findById(patientId);
 		model.addAttribute("patient", patient);
 		return "appointments/formAppointment";
-		
 	}
-	
+
+	@GetMapping("/{id}")
+	public String confirmation(@PathVariable("id") int id, RedirectAttributes attribute) {
+		Appointment appointment = serviceAppointment.findById(id);
+		if (!appointment.isConfirmation()) {
+			appointment.setConfirmation(true);
+			serviceAppointment.save(appointment);
+			attribute.addFlashAttribute("body",
+					"Estimado cliente, acaba de confirmar la asistencia de su mascota "
+							+ appointment.getPatient().getNickname() + " para la cita programa el día "
+							+ dateFormat.format(appointment.getNextAppointmentDate()) + "\n¡Los esperamos!");
+		} else {
+			attribute.addFlashAttribute("body",
+					"Estimado cliente, usted ya realizó la confirmación de asistencia de su mascota "
+							+ appointment.getPatient().getNickname() + "\n¡Los esperemos!");
+		}
+		attribute.addFlashAttribute("subject", "Confirmación de asistencia");
+		return "redirect:/confirmMessage";
+	}
+
 	@PostMapping("/record")
 	public String record(@ModelAttribute Appointment appointment, RedirectAttributes attribute) {
 		serviceAppointment.save(appointment);
@@ -65,7 +80,7 @@ public class AppointmentController {
 		attribute.addAttribute("id", appointment.getPatient().getId());
 		return "redirect:/clinicHistory/{id}";
 	}
-	
+
 	@InitBinder
 	public void initBinder(WebDataBinder binder) {
 		SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");

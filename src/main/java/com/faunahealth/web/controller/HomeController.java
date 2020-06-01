@@ -15,16 +15,25 @@ public class HomeController {
 
 	@Autowired
 	private UserService serviceUser;
-	
+
 	@GetMapping("/")
 	public String goHome(Authentication authentication, HttpSession session) {
-		
-		if(session.getAttribute("user") == null) {
+		if (session.getAttribute("user") == null) {
 			User user = serviceUser.findByUsername(authentication.getName());
 			user.setPassword(null);
 			session.setAttribute("user", user);
 		}
-		
 		return "home";
 	}
+
+	@GetMapping("/example")
+	public String example() {
+		return "example";
+	}
+
+	@GetMapping("/confirmMessage")
+	public String confirmMessage() {
+		return "confirmMessage";
+	}
+	
 }

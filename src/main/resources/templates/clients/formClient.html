@@ -79,6 +79,14 @@
                             <label for="emailAddress">Correo(*): </label>
                             <input th:field="*{emailAddress}" id="emailAddress" type="email" class="form-control" placeholder="example@gmail.com" required>
                         </div>
+                    </div><br>
+                    <div class="form-group">
+                  		<div class="form-check">
+                  			<input th:field="*{status}" class="form-check-input" type="checkbox" id="status">
+                  			<label class="form-check-label" for="status">
+                  				Acepta nuestra Pol&iacute;tica de privacidad y Condiciones de uso de datos
+                  			</label>
+                  		</div>
                     </div>
                     <button type="submit" class="btn btn-primary">Registrar</button>
                 </form>

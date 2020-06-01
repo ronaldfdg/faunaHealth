@@ -11,16 +11,12 @@ import com.faunahealth.web.entity.Appointment;
 
 public interface AppointmentRepository extends JpaRepository<Appointment, Integer> {
 
-	@Query("select a from Appointment a "
-			+ "inner join fetch a.patient "
-			+ "where "
-			+ "a.nextAppointmentDate = :currentDate "
+	@Query("select a from Appointment a " + "inner join fetch a.patient " + "where " + "a.nextAppointmentDate = :date "
 			+ "order by a.patient.nickname desc")
-	List<Appointment> appointmentsToday(@Param("currentDate") Date currentDate);
+	List<Appointment> appointmentsByDate(@Param("date") Date date);
+
+	@Query("select a from Appointment a " + "inner join fetch a.patient " + "where " + "a.patient.id = :patientId "
+			+ "and " + "a.nextAppointmentDate = :nextAppointmentDate")
+	Appointment findAppointmentByPatient(@Param("patientId") int patientId, @Param("nextAppointmentDate") Date nextAppointmentDate);
 	
-	@Query("select a from Appointment a "
-			+ "inner join fetch a.patient "
-			+ "where "
-			+ "a.patient.id = :patientId")
-	Appointment findAppointmentByPatient(@Param("patientId") int patientId);
 }

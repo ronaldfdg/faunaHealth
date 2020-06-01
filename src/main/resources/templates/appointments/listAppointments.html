@@ -26,13 +26,19 @@
 								<tr>
 									<th scope="col">Paciente</th>
 									<th scope="col">Motivo</th>
-									<!-- <th scope="col">Confirmaci&oacute;n</th>  -->
+									<th scope="col">Asistencia</th>
+									<th scope="col">N° de contacto</th>
 								</tr>
 							</thead>
 							<tbody>
 								<tr th:each="appointment : ${appointments}">
 									<td th:text="${appointment.patient.nickname} + ' ' + ${appointment.patient.client.primaryLastName}"></td>
 									<td th:text="${appointment.reason}"></td>
+									<td>
+										<span th:if="${appointment.confirmation}" class="badge badge-primary">CONFIRMADO</span>
+										<span th:unless="${appointment.confirmation}" class="badge badge-secondary">SIN CONFIRMAR</span>
+									</td>
+									<td th:text="${appointment.patient.client.cellPhone}"></td>
 								</tr>
 							</tbody>
 						</table>

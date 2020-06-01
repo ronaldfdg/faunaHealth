@@ -34,6 +34,8 @@ import com.faunahealth.web.service.WeightService;
 @Controller
 @RequestMapping("/historyDetails")
 public class HistoryDetailController {
+	
+	private SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
 
 	@Autowired
 	private UserService serviceUser;
@@ -51,20 +53,18 @@ public class HistoryDetailController {
 	private WeightService serviceWeight;
 	
 	private SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
-	
+
 	@GetMapping("/{id}")
-	public String index(@PathVariable("id") int id, 
-			@RequestParam("pageNumber") int pageNumber,
+	public String index(@PathVariable("id") int id, @RequestParam("pageNumber") int pageNumber,
 			@RequestParam("patient") int patientId, RedirectAttributes attribute, Model model) {
 		
-		Pageable page = PageRequest.of(pageNumber, 5, Sort.by("attentionDate").descending());
+		Pageable page = PageRequest.of(pageNumber, 6, Sort.by("attentionDate").descending());
 		
 		Page<HistoryDetail> attentions = serviceHistoryDetail.findHistoryDetailsByClinicHistoryAndPage(id, page);
 		
-		//List<HistoryDetail> attentions = serviceHistoryDetail.findHistoryDetailPerClinicHistory(id);
-		
-		if(attentions.isEmpty() || attentions == null) 
-			model.addAttribute("messageInfo", "El paciente no tiene ninguna atención registrada o más atenciones registradas");
+		if (attentions.isEmpty() || attentions == null)
+			model.addAttribute("messageInfo",
+					"El paciente no tiene ninguna atención registrada o más atenciones registradas");
 		
 		model.addAttribute("clinicHistory", serviceClinicHistoryService.findById(id));
 		model.addAttribute("attentions", attentions);
@@ -73,42 +73,48 @@ public class HistoryDetailController {
 		
 		return "clinicHistory/details/listAttentions";
 	}
-	
-	@GetMapping("/{id}/register")
-	public String register(@ModelAttribute HistoryDetail historyDetail, @PathVariable("id") int id, 
-				@RequestParam("patient") int patientId, Model model) {
+
+	@GetMapping("/register/{id}")
+	public String register(@ModelAttribute HistoryDetail historyDetail, @PathVariable("id") int id,
+			@RequestParam("patient") int patientId, Model model) throws ParseException {
 		
-		Weight weight = serviceWeight.findByPatientAndDate(patientId, historyDetail.getAttentionDate());
+		historyDetail.setId(0); // Lo puse debido a que se igualaba el id de la historia clinica con la atencion
+		
+		Weight weight = serviceWeight.findByPatientAndDate(patientId,
+				sdf.parse(sdf.format(historyDetail.getAttentionDate())));
+		
 		model.addAttribute("weight", weight);
-		
 		model.addAttribute("clinicHistory", serviceClinicHistoryService.findById(id));
 		model.addAttribute("patient", servicePatient.findById(patientId));
 		model.addAttribute("users", serviceUser.findAll());
 		
 		return "clinicHistory/details/formAttention";
 	}
-	
+
 	@GetMapping("/edit/{patientId}")
-	public String edit(@PathVariable("patientId") int patientId, @RequestParam("clinicHistory") int clinicHistoryId, @RequestParam("date") Date date, Model model) {
+	public String edit(@PathVariable("patientId") int patientId, @RequestParam("clinicHistory") int clinicHistoryId,
+			@RequestParam("date") Date date, Model model) {
 		
 		HistoryDetail historyDetail = serviceHistoryDetail.findHistoryPerClinicHistoryAndDate(clinicHistoryId, date);
+		
 		model.addAttribute("historyDetail", historyDetail);
 		
 		Patient patient = servicePatient.findById(patientId);
+		
 		model.addAttribute("patient", patient);
 		
 		Weight weight = serviceWeight.findByPatientAndDate(patientId, historyDetail.getAttentionDate());
-		model.addAttribute("weight", weight);
 		
+		model.addAttribute("weight", weight);
 		model.addAttribute("users", serviceUser.findAll());
 		model.addAttribute("clinicHistory", serviceClinicHistoryService.findById(clinicHistoryId));
 		
 		return "clinicHistory/details/formAttention";
 	}
-	
+
 	@PostMapping("/record")
-	public String record(@ModelAttribute HistoryDetail historyDetail, RedirectAttributes attribute, 
-				@RequestParam("patient") int patientId, @RequestParam(name = "amount", required = false) Double amount) {
+	public String record(@ModelAttribute HistoryDetail historyDetail, RedirectAttributes attribute,
+			@RequestParam("patient") int patientId, @RequestParam(name = "amount", required = false) Double amount) {
 		
 		Date date = null;
 		Patient patient = servicePatient.findById(patientId);
@@ -121,14 +127,14 @@ public class HistoryDetailController {
 		
 		Weight weight = serviceWeight.findByPatientAndDate(patientId, date);
 		
-		if(weight == null && amount != null) {
+		if (weight == null && amount != null) {
 			Weight newWeight = new Weight();
 			newWeight.setAmount(amount);
 			newWeight.setPatient(patient);
 			serviceWeight.save(newWeight);
 		}
 		
-		if(serviceHistoryDetail.existsById(historyDetail.getId()))
+		if (serviceHistoryDetail.existsById(historyDetail.getId()))
 			attribute.addFlashAttribute("messageSuccess", "Se actualizó la atención médica");
 		else
 			attribute.addFlashAttribute("messageSuccess", "Se registró una nueva atención");
@@ -138,7 +144,7 @@ public class HistoryDetailController {
 		
 		return "redirect:/clinicHistory/{id}";
 	}
-	
+
 	@InitBinder
 	public void initBinder(WebDataBinder binder) {
 		SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");

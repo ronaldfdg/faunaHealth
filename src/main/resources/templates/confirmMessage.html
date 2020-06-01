@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" th:href="@{/images/favicon.ico}">
+    <link rel="stylesheet" th:href="@{/bootstrap/css/bootstrap.min.css}">
+	
+	<title>Veterinaria Fauna Health | Unsuscribe</title>
+</head>
+<body>
+	<main role="main">
+		<hr>
+		<div class="container">
+			<div class="card">
+				<div class="card-header">Fauna Health</div>
+				 <div class="card-body">
+				 	<h5 class="card-title" th:text="${subject}"></h5>
+				    <p class="card-text" th:text="${body}"></p>
+				</div>
+			</div>
+		</div>
+	</main>
+</body>
+</html>
