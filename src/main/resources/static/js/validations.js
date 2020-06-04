@@ -138,6 +138,24 @@ function validateSearchByPatients(form) {
 	return true
 }
 
+function addItem(){
+	var table = document.getElementById("itemsSale");
+	var item = document.getElementById("item");
+	var clone = item.cloneNode(true);
+	
+		var cloneInputs = clone.getElementsByTagName("input");
+		
+		for(var i = 0; i<cloneInputs.length; i++){
+			cloneInputs[i].value = '';
+		}
+		
+		table.appendChild(clone);
+}
+
+function deleteRow(btn){
+	var row = btn.parentNode.parentNode;
+	row.parentNode.removeChild(row);
+}
 
 
 

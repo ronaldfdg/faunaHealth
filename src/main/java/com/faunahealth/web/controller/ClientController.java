@@ -111,10 +111,10 @@ public class ClientController {
 
 		if (serviceClient.existsById(client.getId()))
 			attribute.addFlashAttribute("messageSuccess",
-					"Se actualizó la información del paciente " + client.getName() + " " + client.getPrimaryLastName());
+					"Se actualizó la información del cliente " + client.getName() + " " + client.getPrimaryLastName());
 		else
 			attribute.addFlashAttribute("messageSuccess",
-					"Se registró al paciente " + client.getName() + " " + client.getPrimaryLastName());
+					"Se registró al cliente " + client.getName() + " " + client.getPrimaryLastName());
 
 		serviceClient.save(client);
 		return "redirect:/clients/";

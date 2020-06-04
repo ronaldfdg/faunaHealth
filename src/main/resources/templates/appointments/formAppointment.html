@@ -27,7 +27,7 @@
 								<div class="form-group">
 									<label for="patient">Paciente</label>
 									<input type="hidden" th:name="patient.id" th:value="${patient.id}">
-									<input type="text" class="form-control" th:value="${patient.nickname} + ${patient.client.primaryLastName}" readonly>
+									<input type="text" class="form-control" th:value="${patient.nickname} + ' ' + ${patient.client.primaryLastName}" readonly>
 								</div>
 							</div>
 						</div>

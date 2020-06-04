@@ -36,8 +36,17 @@
 	                </div>
 	            </div>
 	        </li>
-	        <li class="nav-item" sec:authorize="hasAnyAuthority('ADMINISTRACION','GESTION')">
-	        	<a class="nav-link" th:href="@{/appointments/}">Citas</a>
+	        <li class="nav-item dropdown" sec:authorize="hasAnyAuthority('ADMINISTRACION','GESTION')">
+	            <div class="dropdown">
+	                <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+	                  Productos
+	                </button>
+	                <div class="dropdown-menu">
+	                    <a class="dropdown-item" th:href="@{/products/register}">Registrar producto</a>
+	                    <div class="dropdown-divider"></div>
+	                    <a class="dropdown-item" th:href="@{/products/}">Listado de productos</a>
+	                </div>
+	            </div>
 	        </li>
 	        <li class="nav-item" sec:authorize="hasAnyAuthority('ADMINISTRACION')">
 	        	<a class="nav-link" th:href="@{/users/}">Usuarios</a>
@@ -47,6 +56,9 @@
 	        </li>
 	        <li class="nav-item" sec:authorize="hasAnyAuthority('ADMINISTRACION')">
 	        	<a class="nav-link" th:href="@{/operations/}">Cirugias</a>
+	        </li>
+	        <li class="nav-item" sec:authorize="hasAnyAuthority('ADMINISTRACION','GESTION')">
+	        	<a class="nav-link" th:href="@{/appointments/}">Citas</a>
 	        </li>
 	    </ul>
 	    <div sec:authorize="isAuthenticated()">
