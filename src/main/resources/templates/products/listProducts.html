@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" th:href="@{/images/favicon.ico}">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/bootstrap/css/bootstrap.min.css}">
+    <link href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" rel="stylesheet">
+    
+    <title>Fauna Health | Lista de productos</title>
+    
+</head>
+<body>
+	<nav th:insert="fragments/menu.html :: navbar">
+	</nav>
+	
+	<main role="main">
+		<hr>
+		<div class="container">
+			<div class="card">
+				<h4 class="card-header">Productos</h4>
+				<div class="card-body">
+				
+					<div th:if="${messageSuccess != null}" class="alert alert-success alert-dismissible fade show" role="alert">
+						<strong th:text="${messageSuccess}"></strong>
+						<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+				    		<span aria-hidden="true">&times;</span>
+			  			</button>
+					</div>
+					<div th:if="${messageWarning != null}" class="alert alert-warning alert-dismissible fade show" role="alert">
+						<strong th:text="${messageWarning}"></strong>
+						<br><br>
+						<ul>
+							<li>Nombre de producto - Especie - Tipo de producto</li>
+							<li>Nombre de producto - Especie</li>
+							<li>Nombre de producto - Tipo de producto</li>
+							<li>Nombre de producto</li>
+							<li>Especie - Tipo de producto</li>
+						</ul>
+						<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+				    		<span aria-hidden="true">&times;</span>
+			  			</button>
+					</div>
+					<div th:if="${messageWarningFilter != null}" class="alert alert-warning alert-dismissible fade show" role="alert">
+						<strong th:text="${messageWarningFilter}"></strong>
+						<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+				    		<span aria-hidden="true">&times;</span>
+			  			</button>
+			  		</div>
+					<strong>Puede buscar los productos con los siguientes filtros: </strong>
+					<br><br>
+					<form name="searchBy" th:action="@{/products/searchBy}">
+						<div class="form-row">
+							<div class="col-md-4 mb-3">
+								<label for="name">Nombre</label>
+								<input type="hidden" name="pageNumber" value="0">
+								<input type="text" name="name" class="form-control" id="name" placeholder="Nombre producto">
+							</div>
+							<div class="col-md-4 mb-3">
+								<label for="specie">Especie</label>
+								<select class="form-control" name="idSpecie" id="specie">
+									<option value="">Seleccione una especie</option>
+									<option value="1">Perro</option>
+									<option value="2">Gato</option>
+									<option value="3">Conejo</option>
+								</select>
+							</div>
+							<div class="col-md-4 mb-3">
+								<label for="productKind">Tipo de producto</label>
+								<select name="idProductKind" class="form-control" id="productKind">
+									<option value="">Seleccione un tipo de producto</option>
+									<option th:each="productKind : ${productsKind}" th:text="${productKind.name}"
+										th:value="${productKind.id}"></option>
+								</select>
+							</div>
+						</div>
+						<button class="btn btn-outline-dark" type="submit">Buscar</button>
+					</form>
+					<hr>
+					<div th:if="${products != null}" class="table-responsive animated fadeIn fast">
+						<table class="table table-hover">
+							<thead>
+								<tr>
+									<th scope="col">C&oacute;digo</th>
+									<th scope="col">Nombre</th>
+									<th scope="col">Tipo de producto</th>
+									<th scope="col">Para la especie</th>
+									<th scope="col">Precio de venta</th>
+									<th scope="col">Opciones</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr th:each="product : ${products}">
+									<td th:text="${product.id}"></td>
+									<td th:text="${product.name}"></td>
+									<td th:text="${product.productKind.name}"></td>
+									<td th:text="${product.specie.name}"></td>
+									<td th:text="'S/. ' + ${product.salePrice}"></td>
+									<td>
+										<a th:href="@{/products/edit/{id} ( id=${product.id} ) }" class="btn btn-primary btn-sm" role="button" title="Editar producto"><i class="fas fa-pencil-alt" aria-hidden="true"></i></a>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+						<nav aria-label="Page navigation">
+							<ul class="pagination">
+								<li th:if="${pageNumber > 0}" class="page-item">
+									<a th:href="@{/products/searchBy (pageNumber = ${pageNumber - 1}, name = ${name}, idSpecie = ${idSpecie}, idProductKind = ${idProductKind})}" class="page-link">Anterior</a>
+								</li>
+								<li class="page-item">
+									<a th:href="@{/products/searchBy (pageNumber = ${pageNumber + 1}, name = ${name}, idSpecie = ${idSpecie}, idProductKind = ${idProductKind})}" class="page-link">Siguiente</a>
+								</li>
+							</ul>
+						</nav>
+					</div>
+					<div th:unless="${products != null}" class="alert alert-info" role="alert">
+						<strong th:text="${messageInfo}"></strong>
+					</div>
+				</div>
+			</div>
+		</div>
+	</main>
+	
+	<footer th:insert="fragments/footer.html :: footer">
+	</footer>
+	
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+</body>
+</html>

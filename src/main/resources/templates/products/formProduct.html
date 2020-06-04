@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" th:href="@{/images/favicon.ico}">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/bootstrap/css/bootstrap.min.css}">
+    <link href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" rel="stylesheet">
+    
+    <title>Fauna Health | Registrar producto</title>
+    
+</head>
+<body>
+	<nav th:insert="fragments/menu.html :: navbar">
+	</nav>
+	
+	<main role="main">
+		<hr>
+		<div class="container">
+		
+			<div class="card animated fadeIn fast">
+			
+				<h4 class="card-header">Registro de producto</h4>
+				
+				<div class="card-body">
+					
+					<form name="formProduct" th:action="@{/products/record}" th:object="${product}" method="post">
+						<div th:if="${#fields.hasErrors('*')}" class="alert alert-danger alert-dismissible fade show" role="alert">
+							<strong>Ocurrió un problema. Por favor correjir los siguientes errores: </strong>
+	                		<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+					    		<span aria-hidden="true">&times;</span>
+					  		</button>
+	                		<ul>
+	                			<li th:each="error : ${#fields.errors('*')}" th:text="${error}"></li>
+	                		</ul>
+						</div>
+						<div class="row">
+							<div class="col-md-4">
+								<div class="form-group">
+									<label for="productKind">Tipo de producto (*)</label>
+									<select th:field="*{productKind.id}" id="productKind" class="form-control">
+										<option th:each="productKind : ${productsKind}" th:text="${productKind.name}" 
+											th:value="${productKind.id}"></option>
+									</select>
+								</div>
+							</div>
+							<div class="col-md-4">
+								<div class="form-group">
+									<label for="name">Nombre (*)</label>
+									<input type="hidden" th:field="*{id}">
+									<input th:field="*{name}" id="name" type="text" class="form-control" placeholder="Nombre del producto" required="required">
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-4">
+								<div class="form-group">
+									<label for="provider">Proveedor</label>
+									<select th:field="*{provider.id}" id="provider" class="form-control">
+										<option th:each="provider : ${providers}" th:text=${provider.businessName}
+											th:value="${provider.id}"></option>
+									</select>
+								</div>
+							</div>
+							<div class="col-md-4">
+								<div class="form-group">
+									<label for="purchaseDate">Fecha de compra</label>
+									<input th:field="*{purchaseDate}" id="purchaseDate" type="text" class="form-control" placeholder="Fecha de compra" required="required">
+								</div>
+							</div>
+							<div class="col-md-4">
+								<div class="form-group">
+									<label for="cost">Costo</label>
+									<input th:field="*{cost}" id="cost" type="text" class="form-control" placeholder="Costo" required="required">
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-3">
+								<div class="form-group">
+									<label for="specie">Para la especie</label>
+									<select th:field="*{specie.id}" id="specie" class="form-control">
+										<option value="1">Perro</option>
+										<option value="2">Gato</option>
+										<option value="3">Conejo</option>
+									</select>
+								</div>
+							</div>
+							<div class="col-md-2">
+								<div class="form-group">
+									<label for="salePrice">Precio de venta</label>
+									<input th:field="*{salePrice}" id="salePrice" type="text" class="form-control" placeholder="Precio de venta" required="required">
+								</div>
+							</div>
+						</div>
+						<button type="submit" class="btn btn-primary">Registrar</button>
+					</form>
+					
+				</div>
+				
+			</div>
+			
+		</div>
+	</main>
+	
+	<footer th:insert="fragments/footer.html :: footer">
+	</footer>
+	
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+	<script>
+        $(function() {
+            $("#purchaseDate").datepicker({
+                dateFormat: 'dd-mm-yy'
+            });
+        });
+    </script>
+</body>
+</html>

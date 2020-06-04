@@ -25,7 +25,7 @@
 		<hr>
 		
 		<div th:if="${history != null}">
-			<a th:href="@{/historyDetails/{id}/register (id=${history.id}, patient=${patient.id}) }" class="btn btn-primary" role="button" title="Añadir nuevo registro de atención"><i class="fas fa-notes-medical"></i> Nueva atenci&oacute;n</a>
+			<a th:href="@{/historyDetails/register/{id} (id=${history.id}, patient=${patient.id}) }" class="btn btn-primary" role="button" title="Añadir nuevo registro de atención"><i class="fas fa-notes-medical"></i> Nueva atenci&oacute;n</a>
 			&nbsp;
 			<a th:href="@{/historyDetails/{id} (id=${history.id},patient=${patient.id},pageNumber=0)}" class="btn btn-primary" role="button" title="Ver atenciones realizadas"><i class="fas fa-list"></i> Atenciones realizadas</a>
 			&nbsp;
