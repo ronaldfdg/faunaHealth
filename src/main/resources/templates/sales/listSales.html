@@ -6,7 +6,8 @@
     <link rel="icon" th:href="@{/images/favicon.ico}">
     <link rel="stylesheet" th:href="@{/css/style.css}">
     <link rel="stylesheet" th:href="@{/bootstrap/css/bootstrap.min.css}">
-    <!-- <link href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" rel="stylesheet">  -->
+    <link href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" rel="stylesheet">
+    <link href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" rel="stylesheet">
     
     <title>Fauna Health | Lista de Ventas</title>
 </head>
@@ -16,6 +17,114 @@
 	
 	<main role="main">
 		<hr>
+		<div class="container">
+			<div class="card">
+				<h4 class="card-header"><i class="fas fa-search-dollar"></i> Ventas</h4>
+				<div class="card-body">
+					<div th:if="${messageWarningDates != null}" class="alert alert-warning alert-dismissible fade show" role="alert">
+						<strong th:text="${messageWarningDates}"></strong>
+						<ul>
+							<li>Fecha inicio - Fecha fin</li>
+							<li>Solo fecha inicio</li>		
+						</ul>
+						<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+				    		<span aria-hidden="true">&times;</span>
+				  		</button>
+					</div>
+					<div th:if="${messageWarning != null}" class="alert alert-warning alert-dismissible fade show" role="alert">
+						<strong th:text="${messageWarning}"></strong>
+						<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+				    		<span aria-hidden="true">&times;</span>
+				  		</button>
+					</div>
+					<div th:if="${messageSuccess != null}" class="alert alert-success alert-dismissible fade show" role="alert">
+						<strong th:text="${messageSuccess}"></strong>
+						<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+				    		<span aria-hidden="true">&times;</span>
+				  		</button>
+					</div>
+					<strong>Puede encontrar las ventas realizadas con los siguientes filtros:</strong>
+					<br><br>
+					<form name="searchByClient" th:action="@{/sales/searchByClient}">
+						<div class="form-row">
+							<div class="col-md-4 mb-3">
+								<label for="clientId">C&oacute;digo del cliente: </label>
+								<input type="hidden" name="pageNumber" value="0">
+								<input type="text" name="clientId" class="form-control" id="clientId" placeholder="Código cliente" onkeypress="return checkNumbers(event)" required="required">
+							</div>
+						</div>
+						<button class="btn btn-outline-dark" type="submit">Buscar</button>
+					</form>
+					<hr>
+					<form name="searchByDates" th:action="@{/sales/searchByDates}">
+						<div class="form-row">
+							<div class="col-md-3 mb-3">
+								<label for="startDate">Fecha inicio:</label>
+								<input type="hidden" name="pageNumber" value="0">
+								<input type="text" name="startDate" id="startDate" class="form-control date" placeholder="Rango inicial" maxlength="10" required="required">
+							</div>
+							<div class="col-md-3 mb-3">
+								<label for="endDate">Fecha fin:</label>
+								<input type="text" name="endDate" id="endDate" class="form-control date" placeholder="Rando final" maxlength="10">
+							</div>
+						</div>
+						<button class="btn btn-outline-dark" type="submit">Buscar</button>
+					</form>
+					<hr>
+					<div th:if="${sales != null}" class="table-responsive animated fadeIn fast">
+						<table class="table table-hover">
+							<thead>
+								<tr>
+									<th scope="col">Cliente</th>
+									<th scope="col">N&uacute;mero de boleta</th>
+									<th scope="col">Fecha de venta</th>
+									<th scope="col">Monto de venta</th>
+									<th scope="col">Ver detalle</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr th:each="sale : ${sales}">
+									<td th:text="${sale.client.name} + ' ' + ${sale.client.primaryLastName}"></td>
+									<td th:text="${sale.ticketNumber}"></td>
+									<td th:text="${#dates.format(sale.saleDate, 'dd-MM-yyyy')}"></td>
+									<td th:text="'S/ ' + ${sale.total}"></td>
+									<td>
+										<a th:href="@{/sales/viewDetail/{id} ( id=${sale.id} ) }" class="btn btn-primary btn-sm" role="button" title="Información completa de la venta"><i class="fas fa-eye"></i></a>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+						<div th:if="${clientId != null}">
+							<nav aria-label="Page navigation">
+								<ul class="pagination">
+									<li th:if="${pageNumber > 0}" class="page-item">
+										<a th:href="@{/sales/searchByClient (pageNumber = ${pageNumber - 1}, clientId = ${clientId})}" class="page-link">Anterior</a>
+									</li>
+									<li class="page-item">
+										<a th:href="@{/sales/searchByClient (pageNumber = ${pageNumber + 1}, clientId = ${clientId})}" class="page-link">Siguiente</a>
+									</li>
+								</ul>
+							</nav>
+						</div>
+						<div th:unless="${clientId != null}">
+							<nav aria-label="Page navigation">
+								<ul class="pagination">
+									<li th:if="${pageNumber > 0}" class="page-item">
+										<a th:href="@{/sales/searchByDates (pageNumber = ${pageNumber - 1}, startDate = ${#dates.format(startDate, 'dd-MM-yyyy')}, endDate = ${#dates.format(endDate, 'dd-MM-yyyy')})}" class="page-link">Anterior</a>
+									</li>
+									<li class="page-item">
+										<a th:href="@{/sales/searchByDates (pageNumber = ${pageNumber + 1}, startDate = ${#dates.format(startDate, 'dd-MM-yyyy')}, endDate = ${#dates.format(endDate, 'dd-MM-yyyy')})}" class="page-link">Siguiente</a>
+									</li>
+								</ul>
+							</nav>
+						</div>
+					</div>
+					<div th:unless="${sales != null}" class="alert alert-info" role="alert">
+						<strong th:text="${messageInfo}"></strong>
+					</div>
+				</div>
+			</div>
+		</div>
 	</main>
 	
 	<footer th:insert="fragments/footer.html :: footer">
@@ -24,5 +133,15 @@
 	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    
+	<script>
+        $(function() {
+            $(".date").datepicker({
+                dateFormat: 'dd-mm-yy'
+            });
+        });
+    </script>
 </body>
 </html>

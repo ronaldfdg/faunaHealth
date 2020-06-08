@@ -14,9 +14,9 @@
 	                  Clientes
 	                </button>
 	                <div class="dropdown-menu">
-	                    <a class="dropdown-item" th:href="@{/clients/record}">Registrar</a>
+	                    <a class="dropdown-item" th:href="@{/clients/record}">Registrar cliente</a>
 	                    <div class="dropdown-divider"></div>
-	                    <a class="dropdown-item" th:href="@{/clients/}">Listado</a>
+	                    <a class="dropdown-item" th:href="@{/clients/}">Listado de clientes</a>
 	                </div>
 	            </div>
 	        </li>
@@ -32,7 +32,7 @@
 	                    <div class="dropdown-divider"></div>
 	                    <a class="dropdown-item" th:href="@{/patient/record/rabbit}">Registrar conejo</a>
 	                    <div class="dropdown-divider"></div>
-	                    <a class="dropdown-item" th:href="@{/patient/}">Listado</a>
+	                    <a class="dropdown-item" th:href="@{/patient/}">Listado de pacientes</a>
 	                </div>
 	            </div>
 	        </li>
@@ -45,6 +45,18 @@
 	                    <a class="dropdown-item" th:href="@{/products/register}">Registrar producto</a>
 	                    <div class="dropdown-divider"></div>
 	                    <a class="dropdown-item" th:href="@{/products/}">Listado de productos</a>
+	                </div>
+	            </div>
+	        </li>
+	        <li class="nav-item dropdown" sec:authorize="hasAnyAuthority('ADMINISTRACION','GESTION')">
+	            <div class="dropdown">
+	                <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+	                  Ventas
+	                </button>
+	                <div class="dropdown-menu">
+	                    <a class="dropdown-item" th:href="@{/sales/register}">Registrar venta</a>
+	                    <div class="dropdown-divider"></div>
+	                    <a class="dropdown-item" th:href="@{/sales/}">Listado de ventas</a>
 	                </div>
 	            </div>
 	        </li>

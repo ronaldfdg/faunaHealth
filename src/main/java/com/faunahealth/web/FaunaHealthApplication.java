@@ -46,7 +46,7 @@ public class FaunaHealthApplication {
 		SpringApplication.run(FaunaHealthApplication.class, args);
 	}
 
-	@Scheduled(cron = "0 05 23 * * ?")
+	@Scheduled(cron = "0 22 21 * * ?")
 	void sendReminder() throws Exception {
 		List<Appointment> appointments = serviceAppointment.appointmentsByDate(Utileria.getTomorrowDate()); // Obtengo
 																											// las citas

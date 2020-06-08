@@ -1,9 +1,10 @@
-package com.faunahealth.web.service.Impl;
+	package com.faunahealth.web.service.Impl;
 
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.faunahealth.web.entity.Product;
@@ -15,6 +16,11 @@ public class ProductServiceImpl implements ProductService {
 
 	@Autowired
 	private ProductRepository repositoryProduct;
+	
+	@Override
+	public List<Product> findAll(){
+		return repositoryProduct.findAll(Sort.by("name"));
+	}
 	
 	@Override
 	public void save(Product product) {

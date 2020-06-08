@@ -8,6 +8,7 @@ import com.faunahealth.web.entity.Product;
 
 public interface ProductService {
 
+	List<Product> findAll();
 	List<Product> productsByKindAndSpecieAndName(int idProductKind, int idSpecie, String name, Pageable page);
 	List<Product> productsBySpecieAndName(int idSpecie, String name, Pageable page);
 	List<Product> productsByKindAndName(int idProductKind, String name, Pageable page);
