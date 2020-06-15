@@ -45,23 +45,34 @@ public class FaunaHealthApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(FaunaHealthApplication.class, args);
 	}
-
-	@Scheduled(cron = "0 22 21 * * ?")
-	void sendReminder() throws Exception {
-		List<Appointment> appointments = serviceAppointment.appointmentsByDate(Utileria.getTomorrowDate()); // Obtengo
-																											// las citas
-																											// de hoy
-		EmailMessage emailMessage = new EmailMessage(); // Correo a enviar
-		Map<String, Object> model = new HashMap<String, Object>(); // Para los datos del cuerpo del mensaje
-		List<Integer> patientsIds = null;
-		patientsIds = new ArrayList<>(); // Para almacenar los codigos de los pacientes que tienen citas
-		for (Appointment appointment : appointments)
-			patientsIds.add(appointment.getPatient().getId());
-		List<Patient> patients = servicePatient.findPatientsByIds(patientsIds); // Obtengo toda la info de los pacientes
-																				// junto con la de sus dueños
-		Appointment appointment = null;
-		if (!patients.isEmpty()) {
+	
+	@Scheduled(cron = "0 0/3 20 * * ?")
+	void sendReminderEmailAddress() throws Exception {
+		List<Appointment> appointments = serviceAppointment.appointmentsByDate(Utileria.getTomorrowDate());
+																											 
+		List<Patient> patients = null;
+		
+		EmailMessage emailMessage = null;
+		Map<String, Object> model = null;
+		
+		if(!appointments.isEmpty()) {
+			
+			List<Integer> patientsIds = new ArrayList<>(); // Para almacenar los codigos de los pacientes que tienen citas
+			for (Appointment appointment : appointments) {
+				if(!appointment.isConfirmation())
+					patientsIds.add(appointment.getPatient().getId());
+			}
+				
+			
+			patients = servicePatient.findPatientsByIds(patientsIds); // Obtengo toda la info de los pacientes
+																					// junto con la de sus dueños
+			
+			emailMessage = new EmailMessage();
+			model = new HashMap<String, Object>();
+			
 			for (Patient patient : patients) {
+				Appointment appointment = null;
+				
 				emailMessage.setFrom(from);
 				emailMessage.setTo_address(patient.getClient().getEmailAddress());
 				emailMessage.setSubject("\"Fauna Health\" - Recordatorio de cita");
@@ -73,8 +84,10 @@ public class FaunaHealthApplication {
 				model.put("byeMessage", "Fauna Health, siempre al cuidado de su mascota.");
 				emailMessage.setModel(model);
 				serviceMail.sendEmail(emailMessage, templateName);
+				
 			}
 		}
+
 	}
 
 	@Configuration

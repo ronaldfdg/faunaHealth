@@ -62,5 +62,10 @@ public class OperationDetailServiceImpl implements OperationDetailService {
 			return optional.get();
 		return null;
 	}
+	
+	@Override
+	public boolean existsById(int id) {
+		return repositoryOperationDetail.existsById(id);
+	}
 
 }

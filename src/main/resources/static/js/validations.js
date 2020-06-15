@@ -20,7 +20,33 @@ function checkNumbers(event) {
 		return true
 }
 
-/* Validate clients form */
+function validateFormClient(form){
+	var name = document.getElementById("name")
+	if(!validateText(name.value)) {
+		alert('No pueden ingresar valores numericos en el campo "Nombre"')
+		document.getElementById("name").focus()
+		return false
+	}
+	
+	var primaryLastName = document.getElementById("primaryLastName")
+	if(!validateText(primaryLastName.value)) {
+		alert('No pueden ingresar valores numericos en el campo "Apellido Paterno"')
+		document.getElementById("primaryLastName").focus()
+		return false
+	}
+	
+	var secondLastName = document.getElementById("secondLastName")
+	if(!validateText(secondLastName.value)) {
+		alert('No pueden ingresar valores numericos en el campo "Apellido Materno"')
+		document.getElementById("secondLastName").focus()
+		return false
+	}
+	
+	alert('Guardando datos...')
+	return true
+}
+
+/* Validate clients and patients form */
 function validateFormClientAndPatient(form) {
 	var name = document.getElementById("name")
 	if(!validateText(name.value)) {
@@ -132,6 +158,24 @@ function validateSearchByPatients(form) {
 	if(!validateText(primaryLastName.value)) {
 		alert('No se pueden ingresar valores numericos en el campo "Apellido"')
 		document.getElementById("primaryLastName").focus()
+		return false
+	}
+	
+	return true
+}
+
+function validateSearchByOperation(form) {
+	var nickname = document.getElementById("patientNickname")
+	if(!validateText(nickname.value)) {
+		alert('No se pueden ingresar valores numericos en el campo "Paciente"')
+		document.getElementById("patientNickname").focus()
+		return false
+	}
+	
+	var primaryLastName = document.getElementById("patientLastName")
+	if(!validateText(primaryLastName.value)) {
+		alert('No se pueden ingresar valores numericos en el campo "Apellido"')
+		document.getElementById("patientLastName").focus()
 		return false
 	}
 	

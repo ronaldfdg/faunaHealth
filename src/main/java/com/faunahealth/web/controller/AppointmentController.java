@@ -16,12 +16,14 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.faunahealth.web.entity.Appointment;
 import com.faunahealth.web.entity.Patient;
 import com.faunahealth.web.service.AppointmentService;
 import com.faunahealth.web.service.PatientService;
+import com.faunahealth.web.util.Utileria;
 
 @Controller
 @RequestMapping("/appointments")
@@ -39,11 +41,32 @@ public class AppointmentController {
 	public String index(Model model) throws ParseException {
 		List<Appointment> appointmentsToday = serviceAppointment
 				.appointmentsByDate(dateFormat.parse(dateFormat.format(new Date())));
+		
 		if (!appointmentsToday.isEmpty())
 			model.addAttribute("appointments", appointmentsToday);
 		else
-			model.addAttribute("messageInfo", "No hay citas programadas para hoy");
-		model.addAttribute("date", new Date());
+			model.addAttribute("messageWarning", "No hay citas programadas");
+		
+		model.addAttribute("date", dateFormat.format(new Date()));
+		model.addAttribute("nextDaysFromToday", Utileria.getNextDays());
+		
+		return "appointments/listAppointments";
+	}
+	
+	@GetMapping("/searchBy")
+	public String searchBy(@RequestParam("searchDate") String searchDate, Model model) 
+		throws ParseException {
+		
+		List<Appointment> appointments = serviceAppointment.appointmentsByDate(dateFormat.parse(searchDate));
+		
+		if(!appointments.isEmpty())
+			model.addAttribute("appointments", appointments);
+		else 
+			model.addAttribute("messageWarning", "No hay citas programadas");
+		
+		model.addAttribute("nextDaysFromToday", Utileria.getNextDays());
+		model.addAttribute("date", searchDate);
+		
 		return "appointments/listAppointments";
 	}
 
@@ -83,7 +106,6 @@ public class AppointmentController {
 
 	@InitBinder
 	public void initBinder(WebDataBinder binder) {
-		SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
 		binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, false));
 	}
 	

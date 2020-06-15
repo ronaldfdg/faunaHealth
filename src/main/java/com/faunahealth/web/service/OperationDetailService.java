@@ -18,5 +18,6 @@ public interface OperationDetailService {
 	Page<OperationDetail> findOperationsByDate(Date date, Pageable page);
 	Page<OperationDetail> findOperationsBetweenDates(Date startDate, Date endDate, Pageable page);
 	void save(OperationDetail operationDetail);
+	boolean existsById(int id);
 	
 }

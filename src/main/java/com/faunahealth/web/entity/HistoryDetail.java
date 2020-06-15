@@ -22,7 +22,7 @@ public class HistoryDetail {
 	private int id;
 	
 	@Column(name = "FechaAtencion", nullable = false)
-	private Date attentionDate = new Date();
+	private Date attentionDate;
 	
 	@Column(name = "MotivoAtencion", nullable = false)
 	private String reason;

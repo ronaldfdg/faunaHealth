@@ -139,7 +139,7 @@ public class SaleController {
 	@PostMapping("/record")
 	public String record(@RequestParam("productId") Integer[] productsId, @RequestParam("amount") Integer[] amount
 			, @RequestParam("clientId") Integer clientId, @RequestParam("ticketNumber") String ticketNumber
-			, @RequestParam("cash") double cash, Model model, RedirectAttributes attribute) {
+			, @RequestParam("saleDate") Date saleDate, @RequestParam("cash") double cash, Model model, RedirectAttributes attribute) {
 		
 		Client client = null;
 		
@@ -152,7 +152,7 @@ public class SaleController {
 			model.addAttribute("messageError", "No existe ningún cliente con el código " + clientId);
 			return "sales/formSale";
 		} else 
-			sale = serviceSale.processSale(client, ticketNumber, cash, products, amount);
+			sale = serviceSale.processSale(client, saleDate, ticketNumber, cash, products, amount);
 		
 		serviceSaleDetail.processSaleDetails(products, amount, sale);
 		attribute.addFlashAttribute("messageSuccess", "Se registró la venta correctamente");

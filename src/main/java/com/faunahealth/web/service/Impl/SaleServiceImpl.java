@@ -21,10 +21,11 @@ public class SaleServiceImpl implements SaleService {
 	private SaleRepository repositorySale;
 	
 	@Override
-	public Sale processSale(Client client, String ticketNumber, double cash, List<Product> products, Integer[] amount) {
+	public Sale processSale(Client client, Date saleDate, String ticketNumber, double cash, List<Product> products, Integer[] amount) {
 		
 		Sale sale = new Sale();
 		sale.setClient(client);
+		sale.setSaleDate(saleDate);
 		sale.setTicketNumber(ticketNumber);
 		sale.setCash(cash);
 		

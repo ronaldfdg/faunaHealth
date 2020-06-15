@@ -22,7 +22,7 @@ public class ClinicHistory {
 	private int id;
 	
 	@Column(name = "FechaRegistro", nullable = false)
-	private Date registrationDate = new Date();
+	private Date registrationDate;
 	
 	@Column(name = "Comportamiento")
 	private String behavior;

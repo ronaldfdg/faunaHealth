@@ -6,6 +6,7 @@
     <link rel="icon" th:href="@{/images/favicon.ico}">
     <link rel="stylesheet" th:href="@{/css/style.css}">
     <link rel="stylesheet" th:href="@{/bootstrap/css/bootstrap.min.css}">
+    <link href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" rel="stylesheet">
     <link href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" rel="stylesheet">
     
     <title>Fauna Health | Registro de Venta</title>
@@ -30,6 +31,12 @@
 						<div class="row">
 							<div class="col-md-4">
 								<div class="form-group">
+									<label for="saleDate">Fecha de venta </label>
+									<input class="form-control mb-2" type="text" name="saleDate" id="saleDate" placeholder="Fecha de la venta" required="required">
+								</div>
+							</div>
+							<div class="col-md-4">
+								<div class="form-group">
 									<label for="clientId">C&oacute;digo del cliente: </label>
 									<input class="form-control mb-2" onkeypress="return checkNumbers(event)" type="text" name="clientId" id="clientId" placeholder="Código cliente">
 								</div>
@@ -49,7 +56,7 @@
 										<div class="input-group-prepend">
 	    									<span class="input-group-text">S/</span>
 										</div>
-										<input class="form-control" onkeypress="return checkNumbers(event)" type="text" name="cash" id="cash" maxlength="3" size="3">
+										<input class="form-control" type="text" name="cash" id="cash" maxlength="3" size="3">
 									</div>
 								</div>
 							</div>
@@ -94,6 +101,15 @@
 	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 	<script th:src="@{/js/validations.js}"></script>
+	<script>
+        $(function() {
+            $("#saleDate").datepicker({
+                dateFormat: 'dd-mm-yy'
+            });
+        });
+    </script>
 </body>
 </html>
