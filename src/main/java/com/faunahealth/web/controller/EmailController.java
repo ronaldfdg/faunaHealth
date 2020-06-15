@@ -63,16 +63,6 @@ public class EmailController {
 		mailMessage.setFrom(from);
 		mailMessage.setTo_address(patient.getClient().getEmailAddress());
 		mailMessage.setSubject("\"Fauna Health\" - Atención realizada");
-		/*
-		 * mailMessage.setBody("Paciente: "+patient.getNickname()+" "+patient.getClient(
-		 * ).getPrimaryLastName()
-		 * +"\nFecha de atención: "+dateFormat.format(attention.getAttentionDate())
-		 * +"\nMotivo: "+attention.getReason()
-		 * +"\nDiagnóstico: "+attention.getDiagnostic() +"\nReceta: " +prescription
-		 * +"\nPeso: " +amountWeight
-		 * +"\n\n\nClinica Veterinaria Fauna Health, siempre al cuidado de su mascota."
-		 * );
-		 */
 		
 		Map<String, Object> model = new HashMap<String, Object>();
 		model.put("patient", patient);

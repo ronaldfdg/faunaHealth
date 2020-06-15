@@ -60,7 +60,7 @@
 							<div class="col-md-4 mb-3">
 								<label for="specie">Especie</label>
 								<select class="form-control" name="idSpecie" id="specie">
-									<option value="">Seleccione una especie</option>
+									<option th:value="${null}">Seleccione una especie</option>
 									<option value="1">Perro</option>
 									<option value="2">Gato</option>
 									<option value="3">Conejo</option>
@@ -69,7 +69,7 @@
 							<div class="col-md-4 mb-3">
 								<label for="productKind">Tipo de producto</label>
 								<select name="idProductKind" class="form-control" id="productKind">
-									<option value="">Seleccione un tipo de producto</option>
+									<option th:value="${null}">Seleccione un tipo de producto</option>
 									<option th:each="productKind : ${productsKind}" th:text="${productKind.name}"
 										th:value="${productKind.id}"></option>
 								</select>

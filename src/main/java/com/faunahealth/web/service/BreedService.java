@@ -6,8 +6,6 @@ import com.faunahealth.web.entity.Breed;
 
 public interface BreedService {
 
-	List<Breed> getBreedsDog();
-	List<Breed> getBreedsCat();
-	List<Breed> getBreedsRabbit();
+	List<Breed> getBreedsBySpecie(int specieId);
 	
 }

@@ -27,7 +27,7 @@ public class Patient {
 	@Column(name="ColorPelo", nullable = false)
 	private String hairColor;
 	
-	@Column(name="Señas", nullable = false)
+	@Column(name="Señas")
 	private String signs;
 	
 	@Column(name="FechaNac", nullable = false)

@@ -5,6 +5,7 @@ import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
+import org.springframework.beans.propertyeditors.StringTrimmerEditor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -50,37 +51,17 @@ public class PatientController {
 		return "patients/listPatients";
 	}
 
-	@GetMapping("/record/dog")
-	public String recordDog(@ModelAttribute Patient patient, @RequestParam(name = "clientId", required = false) Integer clientId, Model model) {
-		model.addAttribute("breeds", serviceBreed.getBreedsDog());
+	@GetMapping("/record/{id}")
+	public String recordRabbit(@ModelAttribute Patient patient, @PathVariable("id") int specieId
+			, @RequestParam(name = "clientId", required = false) Integer clientId, Model model) {
+		
+		model.addAttribute("breeds", serviceBreed.getBreedsBySpecie(specieId));
 		model.addAttribute("districts", serviceDistrict.findAll());
 		
 		if(clientId != null)
 			patient.setClient(serviceClient.findById(clientId));
 		
-		return "patients/dog/formDog";
-	}
-	
-	@GetMapping("/record/cat")
-	public String recordCat(@ModelAttribute Patient patient, @RequestParam(name = "clientId", required = false) Integer clientId, Model model) {
-		model.addAttribute("breeds", serviceBreed.getBreedsCat());
-		model.addAttribute("districts", serviceDistrict.findAll());
-		
-		if(clientId != null)
-			patient.setClient(serviceClient.findById(clientId));
-		
-		return "patients/cat/formCat";
-	}
-
-	@GetMapping("/record/rabbit")
-	public String recordRabbit(@ModelAttribute Patient patient, @RequestParam(name = "clientId", required = false) Integer clientId, Model model) {
-		model.addAttribute("breeds", serviceBreed.getBreedsRabbit());
-		model.addAttribute("districts", serviceDistrict.findAll());
-		
-		if(clientId != null)
-			patient.setClient(serviceClient.findById(clientId));
-		
-		return "patients/rabbit/formRabbit";
+		return "patients/formPatient";
 	}
 
 	@PostMapping("/savePatient")
@@ -88,28 +69,16 @@ public class PatientController {
 			Model model) {
 
 		if (result.hasErrors()) {
-			
-			switch(patient.getBreed().getSpecie().getId()) {
-				case 1:
-					model.addAttribute("breeds", serviceBreed.getBreedsDog());
-					break;
-				case 2:
-					model.addAttribute("breeds", serviceBreed.getBreedsCat());
-					break;
-				case 3:
-					model.addAttribute("breeds", serviceBreed.getBreedsRabbit());
-					break;
-			}
-			
+			model.addAttribute("breeds", serviceBreed.getBreedsBySpecie(patient.getBreed().getSpecie().getId()));
 			model.addAttribute("districts", serviceDistrict.findAll());
-			return "patients/dog/formDog";
+			return "patients/formPatient";
 		}
 
 		if (servicePatient.existsById(patient.getId()))
-			attribute.addFlashAttribute("messageSuccess", "Se actualizó al paciente: " + patient.getNickname() 
+			attribute.addFlashAttribute("messageSuccess", "Se actualizó la información del paciente: " + patient.getNickname() 
 				+ " " + patient.getClient().getPrimaryLastName());
 		else
-			attribute.addFlashAttribute("messageSuccess", "Se registró al paciente: " + patient.getNickname() 
+			attribute.addFlashAttribute("messageSuccess", "Se registró la información del nuevo paciente: " + patient.getNickname() 
 				+ " " + patient.getClient().getPrimaryLastName());
 
 		serviceClient.save(patient.getClient());
@@ -123,22 +92,12 @@ public class PatientController {
 
 		Patient patient = servicePatient.findById(id);
 
-		String page = null;
-
-		if (patient.getBreed().getSpecie().getId() == 1) {
-			model.addAttribute("breeds", serviceBreed.getBreedsDog());
-			page = "patients/dog/formDog";
-		} else if (patient.getBreed().getSpecie().getId() == 2) {
-			model.addAttribute("breeds", serviceBreed.getBreedsCat());
-			page = "patients/cat/formCat";
-		} else {
-			model.addAttribute("breeds", serviceBreed.getBreedsRabbit());
-			page = "patients/rabbit/formRabbit";
-		}
-
+		model.addAttribute("breeds", serviceBreed.getBreedsBySpecie(patient.getBreed().getSpecie().getId()));
 		model.addAttribute("patient", patient);
 		model.addAttribute("districts", serviceDistrict.findAll());
-		return page;
+		
+		
+		return "patients/formPatient";
 	}
 
 	@GetMapping("/delete/{id}")
@@ -168,7 +127,7 @@ public class PatientController {
 
 		if (patients.isEmpty()) {
 			attribute.addFlashAttribute("messageWarning", "El cliente " + client.getName() + " " + client.getPrimaryLastName()
-			+ " no tiene ninguna mascota registrada");
+			+ " no tiene una o más mascotas registradas");
 			return "redirect:/patient/";
 		}
 
@@ -186,11 +145,11 @@ public class PatientController {
 		
 		Pageable page = PageRequest.of(pageNumber, 10);
 		
-		if(!nickname.equals("") && !primaryLastName.equals(""))
+		if(nickname != null && primaryLastName != null)
 			patients =servicePatient.findPatientsByNicknameAndPrimaryLastNameAndPage(nickname, primaryLastName, page);
-		else if(!nickname.equals("") && primaryLastName.equals(""))
+		else if(nickname != null)
 			patients = servicePatient.findPatientsByNicknameAndPage(nickname, page);
-		else if(nickname.equals("") && !primaryLastName.equals(""))
+		else if(primaryLastName != null)
 			patients = servicePatient.findPatientsByPrimaryLastName(primaryLastName, page);
 		else {
 			attribute.addFlashAttribute("messageWarning", "No ingreso ningún valor para Alias ni Apellido. Debe ingresar por lo menos uno");
@@ -198,7 +157,7 @@ public class PatientController {
 		}
 			
 		if(patients.isEmpty()) {
-			attribute.addFlashAttribute("messageWarning", "No se encontraron resultados con el Alias: "+nickname+" y el Apellido: "+primaryLastName);
+			attribute.addFlashAttribute("messageWarning", "No se encontraron uno o más resultados");
 			return "redirect:/patient/";
 		}
 		
@@ -208,17 +167,12 @@ public class PatientController {
 		
 		return "patients/listPatients";
 	}
-	
-	@GetMapping("/view/{id}")
-	public String view(@PathVariable("id") int id, Model model) {
-		model.addAttribute("patient", servicePatient.findById(id));
-		return "patients/viewPatient";
-	}
 
 	@InitBinder
 	public void initBinder(WebDataBinder binder) {
 		SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
 		binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, false));
+		binder.registerCustomEditor(String.class, new StringTrimmerEditor(true));
 	}
 
 }

@@ -31,7 +31,7 @@
 					<div class="table-responsive">
 						<table class="table table-hover">
 							<thead class="thead-light">
-								<tr>
+								<tr align="center">
 									<th scope="col">Nombre</th>
 									<th scope="col">Apellido Paterno</th>
 									<th scope="col">Apellido Materno</th>
@@ -41,7 +41,7 @@
 								</tr>
 							</thead>
 							<tbody>
-								<tr th:each="user : ${users}">
+								<tr th:each="user : ${users}" align="center">
 									<td th:text="${user.name}"></td>
 									<td th:text="${user.primaryLastName}"></td>
 									<td th:text="${user.secondLastName}"></td>

@@ -5,6 +5,7 @@ import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
+import org.springframework.beans.propertyeditors.StringTrimmerEditor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -52,7 +53,6 @@ public class OperationDetailController {
 	
 	@GetMapping("/register/{id}")
 	public String register(@ModelAttribute OperationDetail operationDetail, @PathVariable("id") int id, Model model) {
-		
 		model.addAttribute("patient", servicePatient.findById(id));
 		model.addAttribute("users", serviceUser.findAll());
 		model.addAttribute("operationTypes", serviceOperation.findAll());
@@ -68,19 +68,19 @@ public class OperationDetailController {
 		
 		Pageable page = PageRequest.of(pageNumber, 10, Sort.by("operationDate").descending());
 		
-		if(!nickname.equals("") && !lastName.equals(""))
+		if(nickname != null && lastName != null)
 			operations = serviceOperationDetail.findOperationsByPatient(nickname, lastName, page);
-		else if(!nickname.equals("") && lastName.equals(""))
+		else if(nickname != null)
 			operations = serviceOperationDetail.findOperationsByPatientName(nickname, page);
-		else if(nickname.equals("") && !lastName.equals(""))
+		else if(lastName != null)
 			operations = serviceOperationDetail.findOperationsByPatientLastName(lastName, page);
 		else {
-			attribute.addFlashAttribute("messageWarning", "Debe ingresar el nombre y/o el apellido!");
+			attribute.addFlashAttribute("messageWarning", "No puede realizar una busqueda de esa manera. Debe ingresar el nombre y/o el apellido");
 			return "redirect:/operations/";
 		}
 		
 		if(operations.isEmpty()) {
-			attribute.addFlashAttribute("messageWarning", "No se encontraron resultados");
+			attribute.addFlashAttribute("messageWarning", "No se encontraron uno o más resultados");
 			return "redirect:/operations/";
 		}
 			
@@ -100,17 +100,17 @@ public class OperationDetailController {
 		
 		Pageable page = PageRequest.of(pageNumber, 10, Sort.by("operationDate").descending());
 		
-		if(startDate != null && endDate == null)
-			operations = serviceOperationDetail.findOperationsByDate(startDate, page);
-		else if(startDate != null && endDate != null)
+		if(startDate != null && endDate != null)
 			operations = serviceOperationDetail.findOperationsBetweenDates(startDate, endDate, page);
+		else if(startDate != null)
+			operations = serviceOperationDetail.findOperationsByDate(startDate, page);
 		else {
-			attribute.addFlashAttribute("messageWarning", "Debe igresar una fecha exacta o un rango de fechas!");
+			attribute.addFlashAttribute("messageWarningDates", "No puede realizar una busqueda de esa manera. Estas son las combinaciones de filtro:");
 			return "redirect:/operations/";
 		}
 		
 		if(operations.isEmpty()) {
-			attribute.addFlashAttribute("messageWarning", "No se encontraron resultados");
+			attribute.addFlashAttribute("messageWarning", "No se encontraron uno o más resultados");
 			return "redirect:/operations/";
 		}
 		
@@ -121,6 +121,24 @@ public class OperationDetailController {
 		return "operations/listOperations";
 	}
 	
+	@GetMapping("/edit/{id}")
+	public String edit(@PathVariable("id") int id, @RequestParam("patientId") int patientId, Model model) {
+		OperationDetail operationDetail = serviceOperationDetail.findById(id);
+		model.addAttribute("operationDetail", operationDetail);
+		model.addAttribute("patient", servicePatient.findById(patientId));
+		model.addAttribute("users", serviceUser.findAll());
+		model.addAttribute("operationTypes", serviceOperation.findAll());
+		
+		return "operations/formOperation";
+	}
+	
+	@GetMapping("/viewDetail/{id}")
+	public String viewDetail(@PathVariable("id") int id, Model model) {
+		OperationDetail operationDetail = serviceOperationDetail.findById(id);
+		model.addAttribute("operationDetail", operationDetail);
+		return "operations/detail";
+	}
+	
 	@PostMapping("/record")
 	public String record(@ModelAttribute OperationDetail operationDetail, BindingResult result, RedirectAttributes attribute) {
 		
@@ -129,8 +147,12 @@ public class OperationDetailController {
 			return "operations/formOperation";
 		}
 		
+		if(serviceOperationDetail.existsById(operationDetail.getId()))
+			attribute.addFlashAttribute("messageSuccess", "Se actualizó la información de la cirugía");
+		else
+			attribute.addFlashAttribute("messageSuccess", "Se registró una nueva cirugía");
+		
 		serviceOperationDetail.save(operationDetail);
-		attribute.addFlashAttribute("messageSuccess", "Se registró una nueva cirugía");
 		return "redirect:/operations/";
 			
 	}
@@ -139,6 +161,7 @@ public class OperationDetailController {
 	public void initBinder(WebDataBinder binder) {
 		SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
 		binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, true));
+		binder.registerCustomEditor(String.class, new StringTrimmerEditor(true));
 	}
 	
 }

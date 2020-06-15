@@ -14,7 +14,7 @@ public interface SaleService {
 	List<Sale> findByClient(int clientId, Pageable page);
 	List<Sale> findByDate(Date startDate, Pageable page);
 	List<Sale> findBetweenDates(Date startDate, Date endDate, Pageable page);
-	Sale processSale(Client client, String ticketNumber, double cash, List<Product> products, Integer[] amount);
+	Sale processSale(Client client, Date saleDate, String ticketNumber, double cash, List<Product> products, Integer[] amount);
 	Sale findById(int id);
 	
 }

@@ -35,7 +35,7 @@
 					<div class="table-responsive animated fadeIn fast">
 						<table class="table table-hover">
 							<thead class="thead-light">
-								<tr>
+								<tr align="center">
 									<th scope="col">Raz&oacute;n Social</th>
 									<th scope="col">Fecha de registo</th>
 									<th scope="col">Tel&eacute;fono</th>
@@ -45,12 +45,12 @@
 								</tr>
 							</thead>
 							<tbody>
-								<tr th:each="provider : ${providers}">
+								<tr th:each="provider : ${providers}" align="center">
 									<td th:text="${provider.businessName}"></td>
 									<td th:text="${#dates.format(provider.registrationDate, 'dd-MM-yyyy')}"></td>
-									<td th:text="${provider.phone}"></td>
-									<td th:text="${provider.cellPhone}"></td>
-									<td th:text="${provider.address}"></td>
+									<td th:text="${provider.phone != null} ? ${provider.phone} : '---'"></td>
+									<td th:text="${provider.cellPhone != null} ? ${provider.cellPhone} : '---'"></td>
+									<td th:text="${provider.address != null} ? ${provider.address} : '---'"></td>
 									<td>
 										<a th:href="@{/providers/edit/{id} ( id = ${provider.id} )}" class="btn btn-primary btn-sm" title="Editar proveedor" role="button"><i class="fas fa-pencil-alt" aria-hidden="true"></i></a>
 									</td>

@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
+import org.springframework.beans.propertyeditors.StringTrimmerEditor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -58,18 +59,18 @@ public class ProductController {
 		
 		List<Product> products = null;
 		
-		if(!name.equals("")) {
+		if(name != null) {
 			   
-			if(!idSpecie.equals("") && !idProductKind.equals(""))
+			if(idSpecie != null && idProductKind != null)
 				products = serviceProduct.productsByKindAndSpecieAndName(Integer.parseInt(idProductKind), Integer.parseInt(idSpecie), name, page);
-			else if (!idSpecie.equals(""))
+			else if (idSpecie != null)
 				products = serviceProduct.productsBySpecieAndName(Integer.parseInt(idSpecie), name, page);
-			else if (!idProductKind.equals(""))
+			else if (idProductKind != null)
 				products = serviceProduct.productsByKindAndName(Integer.parseInt(idProductKind), name, page);
 			else
 				products = serviceProduct.productsByName(name, page);
 			
-		} else if (!idSpecie.equals("") && !idProductKind.equals("")) {
+		} else if (idSpecie != null && idProductKind != null) {
 			products = serviceProduct.productsBySpecieAndKind(Integer.parseInt(idSpecie), Integer.parseInt(idProductKind), page);
 		} else {
 			attribute.addFlashAttribute("messageWarning", "Tiene que completar un campo, los filtros de busqueda se pueden hacer con las siguientes combinaciones: ");
@@ -77,7 +78,7 @@ public class ProductController {
 		}
 		
 		if(products.isEmpty()) {
-			attribute.addFlashAttribute("messageWarningFilter", "No se encontraron resultados");
+			attribute.addFlashAttribute("messageWarningFilter", "No se uno o más resultados");
 			return "redirect:/products/";
 		}
 		
@@ -116,6 +117,7 @@ public class ProductController {
 	@InitBinder
 	public void initBinder(WebDataBinder binder) {
 		binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, false));
+		binder.registerCustomEditor(String.class, new StringTrimmerEditor(true));
 	}
 	
 }

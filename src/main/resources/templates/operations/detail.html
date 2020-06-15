@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" th:href="@{/images/favicon.ico}">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" th:href="@{/bootstrap/css/bootstrap.min.css}">
+    
+	<title>Fauna Health | Detalle de cirug&iacute;a</title>
+	
+	<style type="text/css">
+		.jumbotron{
+			margin-bottom: 80px;
+		}
+	</style>
+	
+</head>
+<body>
+	<nav th:insert="fragments/menu.html :: navbar">
+	</nav>
+	<hr>
+	<div class="container">
+		<div class="jumbotron animated fadeIn fast">
+			
+			<h3 class="text-center">Detalle de la cirug&iacute;a</h3>
+			<p class="lead" th:text="'Paciente: '+ ${operationDetail.patient.nickname} + ' ' + ${operationDetail.patient.client.primaryLastName}"></p>
+			<p class="lead" th:text="'Tipo de cirugía: ' + ${operationDetail.operation.name}"></p>
+			<p class="lead" th:text="'Fecha de operación: ' + ${#dates.format(operationDetail.operationDate, 'dd-MM-yyyy')}"></p>
+			<p class="lead" th:text="'Temperatura: ' + ${operationDetail.temperature}"></p>
+			<p class="lead" th:text="'Frecuencia cardiaca: ' + ${operationDetail.heartRate}"></p>
+			<p class="lead" th:text="'Frecuencia respiratoria: ' + ${operationDetail.breathingFrequency}"></p>
+			
+			<hr class="my-4">
+			
+			<div class="card">
+			  <h4 class="card-header">Anamnesis</h4>
+			  <div class="card-body">
+			    [[${operationDetail.anamnesis}]]
+			  </div>
+			</div>
+			
+			<hr class="my-4">
+			
+			<div class="card">
+			  <h4 class="card-header">Tratamiento</h4>
+			  <div class="card-body">
+			    [[${operationDetail.treatment}]]
+			  </div>
+			</div>
+			
+		</div>
+	</div>
+	
+	<footer th:insert="fragments/footer.html :: footer">
+	</footer>
+	
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+</body>
+</html>

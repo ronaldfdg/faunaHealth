@@ -22,7 +22,7 @@ public class OperationDetail {
 	private int id;
 	
 	@Column(name = "FechaCirugia", nullable = false)
-	private Date operationDate = new Date();
+	private Date operationDate;
 	
 	@Column(name = "Temperatura")
 	private double temperature;

@@ -74,7 +74,7 @@
 					<div th:if="${sales != null}" class="table-responsive animated fadeIn fast">
 						<table class="table table-hover">
 							<thead>
-								<tr>
+								<tr align="center">
 									<th scope="col">Cliente</th>
 									<th scope="col">N&uacute;mero de boleta</th>
 									<th scope="col">Fecha de venta</th>
@@ -83,7 +83,7 @@
 								</tr>
 							</thead>
 							<tbody>
-								<tr th:each="sale : ${sales}">
+								<tr th:each="sale : ${sales}" align="center">
 									<td th:text="${sale.client.name} + ' ' + ${sale.client.primaryLastName}"></td>
 									<td th:text="${sale.ticketNumber}"></td>
 									<td th:text="${#dates.format(sale.saleDate, 'dd-MM-yyyy')}"></td>
