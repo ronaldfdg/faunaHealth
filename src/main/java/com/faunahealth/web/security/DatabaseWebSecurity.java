@@ -38,6 +38,9 @@ public class DatabaseWebSecurity extends WebSecurityConfigurerAdapter {
 					 "/css/**",
 					 "/images/**",
 					 "/js/**").permitAll()
+		.antMatchers("/users/**").hasAnyAuthority("ADMINISTRACION")
+		.antMatchers("/providers/**").hasAnyAuthority("ADMINISTRACION")
+		.antMatchers("/operations/**").hasAnyAuthority("ADMINISTRACION")
 		.anyRequest().authenticated()
 		.and().formLogin().loginPage("/login").defaultSuccessUrl("/", true).permitAll()
 		.and().logout().deleteCookies("JSESSIONID");
