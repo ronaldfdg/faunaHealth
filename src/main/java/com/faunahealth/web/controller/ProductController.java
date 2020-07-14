@@ -44,7 +44,6 @@ public class ProductController {
 	
 	@GetMapping("/")
 	public String index(Model model) {
-		model.addAttribute("productsKind", serviceProductKind.kindsOfProduct());
 		model.addAttribute("messageInfo", "Realice una busqueda para poder visualizar la información");
 		return "products/listProducts";
 	}
@@ -59,42 +58,31 @@ public class ProductController {
 		
 		List<Product> products = null;
 		
-		if(name != null) {
-			   
-			if(idSpecie != null && idProductKind != null)
-				products = serviceProduct.productsByKindAndSpecieAndName(Integer.parseInt(idProductKind), Integer.parseInt(idSpecie), name, page);
-			else if (idSpecie != null)
-				products = serviceProduct.productsBySpecieAndName(Integer.parseInt(idSpecie), name, page);
-			else if (idProductKind != null)
-				products = serviceProduct.productsByKindAndName(Integer.parseInt(idProductKind), name, page);
-			else
-				products = serviceProduct.productsByName(name, page);
+		products = serviceProduct.productsByKindAndSpecieAndName(idProductKind, idSpecie, name, page);
+		
+		return setResponseAttributesAndRedirectSearchBy(name, idSpecie, idProductKind, pageNumber, model, attribute,
+				products);
+		
+	}
+
+	protected String setResponseAttributesAndRedirectSearchBy(String name, String idSpecie, String idProductKind,
+			int pageNumber, Model model, RedirectAttributes attribute, List<Product> products) {
+		if(products != null && !products.isEmpty()) {
+			model.addAttribute("products", products);
+			model.addAttribute("name", name);
+			model.addAttribute("idSpecie", idSpecie);
+			model.addAttribute("idProductKind", idProductKind);
+			model.addAttribute("pageNumber", pageNumber);
+			return "products/listProducts";
 			
-		} else if (idSpecie != null && idProductKind != null) {
-			products = serviceProduct.productsBySpecieAndKind(Integer.parseInt(idSpecie), Integer.parseInt(idProductKind), page);
 		} else {
-			attribute.addFlashAttribute("messageWarning", "Tiene que completar un campo, los filtros de busqueda se pueden hacer con las siguientes combinaciones: ");
+			attribute.addFlashAttribute("messageWarningFilter", "No se obtuvieron uno o más resultados");
 			return "redirect:/products/";
 		}
-		
-		if(products.isEmpty()) {
-			attribute.addFlashAttribute("messageWarningFilter", "No se uno o más resultados");
-			return "redirect:/products/";
-		}
-		
-		model.addAttribute("products", products);
-		model.addAttribute("name", name);
-		model.addAttribute("idSpecie", idSpecie);
-		model.addAttribute("idProductKind", idProductKind);
-		model.addAttribute("pageNumber", pageNumber);
-		model.addAttribute("productsKind", serviceProductKind.kindsOfProduct());
-		
-		return "products/listProducts";
 	}
 	
 	@GetMapping("/register")
 	public String register(@ModelAttribute Product product, Model model) {
-		model.addAttribute("productsKind", serviceProductKind.kindsOfProduct());
 		model.addAttribute("providers", serviceProvider.findAll());
 		return "products/formProduct";
 	}
@@ -104,7 +92,6 @@ public class ProductController {
 				RedirectAttributes attribute) {
 		
 		if(result.hasErrors()) {
-			model.addAttribute("productsKind", serviceProductKind.kindsOfProduct());
 			model.addAttribute("providers", serviceProvider.findAll());
 			return "products/formProduct";
 		}
@@ -112,6 +99,11 @@ public class ProductController {
 		serviceProduct.save(product);
 		attribute.addFlashAttribute("messageSuccess", "Se registró el producto correctamente");
 		return "redirect:/products/";
+	}
+	
+	@ModelAttribute
+	public void setGenerics(Model model) {
+		model.addAttribute("productsKind", serviceProductKind.kindsOfProduct());
 	}
 	
 	@InitBinder

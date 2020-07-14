@@ -150,6 +150,7 @@ public class SaleController {
 		client = serviceClient.findById(clientId);
 		if(client == null) {
 			model.addAttribute("messageError", "No existe ningún cliente con el código " + clientId);
+			model.addAttribute("products", serviceProduct.findAll());
 			return "sales/formSale";
 		} else 
 			sale = serviceSale.processSale(client, saleDate, ticketNumber, cash, products, amount);

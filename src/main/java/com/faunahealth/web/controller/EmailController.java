@@ -72,6 +72,8 @@ public class EmailController {
 		model.put("diagnostic", attention.getDiagnostic());
 		model.put("prescription", prescription);
 		model.put("weight", amountWeight);
+		model.put("warning", "Nota: Esta cuenta de correo electrónico solo es utilizada para envíar esta notificación; "
+				+ "le agradeceremos no responder con consultas personales.");
 		model.put("byeMessage", "Fauna Health, siempre al cuidado de su mascota.");
 		
 		mailMessage.setModel(model);

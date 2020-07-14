@@ -42,15 +42,19 @@ public class AppointmentController {
 		List<Appointment> appointmentsToday = serviceAppointment
 				.appointmentsByDate(dateFormat.parse(dateFormat.format(new Date())));
 		
-		if (!appointmentsToday.isEmpty())
-			model.addAttribute("appointments", appointmentsToday);
-		else
-			model.addAttribute("messageWarning", "No hay citas programadas");
+		setAttribute(model, appointmentsToday);
 		
 		model.addAttribute("date", dateFormat.format(new Date()));
 		model.addAttribute("nextDaysFromToday", Utileria.getNextDays());
 		
 		return "appointments/listAppointments";
+	}
+
+	protected void setAttribute(Model model, List<Appointment> appointmentsToday) {
+		if (!appointmentsToday.isEmpty())
+			model.addAttribute("appointments", appointmentsToday);
+		else
+			model.addAttribute("messageWarning", "No hay citas programadas");
 	}
 	
 	@GetMapping("/searchBy")
@@ -59,10 +63,7 @@ public class AppointmentController {
 		
 		List<Appointment> appointments = serviceAppointment.appointmentsByDate(dateFormat.parse(searchDate));
 		
-		if(!appointments.isEmpty())
-			model.addAttribute("appointments", appointments);
-		else 
-			model.addAttribute("messageWarning", "No hay citas programadas");
+		setAttribute(model, appointments);
 		
 		model.addAttribute("nextDaysFromToday", Utileria.getNextDays());
 		model.addAttribute("date", searchDate);
@@ -80,6 +81,14 @@ public class AppointmentController {
 	@GetMapping("/{id}")
 	public String confirmation(@PathVariable("id") int id, RedirectAttributes attribute) {
 		Appointment appointment = serviceAppointment.findById(id);
+		
+		confirmationAppointment(attribute, appointment);
+		
+		attribute.addFlashAttribute("subject", "Confirmación de asistencia");
+		return "redirect:/confirmMessage";
+	}
+
+	protected void confirmationAppointment(RedirectAttributes attribute, Appointment appointment) {
 		if (!appointment.isConfirmation()) {
 			appointment.setConfirmation(true);
 			serviceAppointment.save(appointment);
@@ -92,8 +101,6 @@ public class AppointmentController {
 					"Estimado cliente, usted ya realizó la confirmación de asistencia de su mascota "
 							+ appointment.getPatient().getNickname() + "\n¡Los esperemos!");
 		}
-		attribute.addFlashAttribute("subject", "Confirmación de asistencia");
-		return "redirect:/confirmMessage";
 	}
 
 	@PostMapping("/record")

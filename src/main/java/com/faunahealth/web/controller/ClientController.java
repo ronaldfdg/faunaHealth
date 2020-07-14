@@ -68,13 +68,20 @@ public class ClientController {
 		Page<Client> client = null;
 		client = serviceClient.findByDocumentNumber(documentNumber, page);
 
-		if (client.isEmpty()) {
+		return setResponseAttributesAndRedirectByDNI(documentNumber, attribute, model, client);
+		
+	}
+
+	protected String setResponseAttributesAndRedirectByDNI(String documentNumber, RedirectAttributes attribute,
+			Model model, Page<Client> client) {
+		if (client != null && !client.isEmpty()) {
+			model.addAttribute("clients", client);
+			return "clients/listClients";
+		} else {
 			attribute.addFlashAttribute("messageWarning",
 					"No se encontró ningún cliente con el DNI: " + documentNumber);
 			return "redirect:/clients/";
 		}
-		model.addAttribute("clients", client);
-		return "clients/listClients";
 	}
 
 	@GetMapping("/searchBy")
@@ -85,26 +92,24 @@ public class ClientController {
 
 		Page<Client> clients = null;
 		Pageable page = PageRequest.of(pageNumber, 5);
-		if (name != null && primaryLastName != null) {
-			clients = serviceClient.findClientsByNameAndPrimaryLastNameAndPage(name, primaryLastName, page);
-		} else if (name != null) {
-			clients = serviceClient.findClientsByNameAndPage(name, page);
-		} else if (primaryLastName != null) {
-			clients = serviceClient.findClientsByPrimaryLastNameAndPage(primaryLastName, page);
+		
+		clients = serviceClient.findClientsByPage(name, primaryLastName, page);
+		
+		return setResponseAttributesAndRedirectByInfo(name, primaryLastName, attribute, model, clients);
+		
+	}
+
+	protected String setResponseAttributesAndRedirectByInfo(String name, String primaryLastName, RedirectAttributes attribute,
+			Model model, Page<Client> clients) {
+		if(clients != null && !clients.isEmpty()) {
+			model.addAttribute("clients", clients);
+			model.addAttribute("name", name);
+			model.addAttribute("primaryLastName", primaryLastName);
+			return "clients/listClients";
 		} else {
-			attribute.addFlashAttribute("messageWarning",
-					"No ingreso ningún valor para Nombre ni Apellido. Debe ingresar por lo menos uno");
-			return "redirect:/clients/";
-		}
-		if (clients.isEmpty()) {
 			attribute.addFlashAttribute("messageWarning", "No se obtuvieron resultados");
 			return "redirect:/clients/";
 		}
-
-		model.addAttribute("clients", clients);
-		model.addAttribute("name", name);
-		model.addAttribute("primaryLastName", primaryLastName);
-		return "clients/listClients";
 	}
 
 	@PostMapping("/save")

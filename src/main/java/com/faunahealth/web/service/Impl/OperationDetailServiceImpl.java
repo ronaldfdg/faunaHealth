@@ -32,27 +32,29 @@ public class OperationDetailServiceImpl implements OperationDetailService {
 	
 	@Override
 	public Page<OperationDetail> findOperationsByPatient(String nickname, String primaryLastName, Pageable page) {
-		return repositoryOperationDetail.findOperationsByPatient(nickname, primaryLastName, page);
+
+		if(nickname != null && primaryLastName != null)
+			return repositoryOperationDetail.findOperationsByPatient(nickname, primaryLastName, page);
+		else if(nickname != null)
+			return repositoryOperationDetail.findOperationsByPatientName(nickname, page);
+		else if(primaryLastName != null)
+			return repositoryOperationDetail.findOperationsByPatientLastName(primaryLastName, page);
+		else {
+			return null;
+		}
 	}
 
 	@Override
-	public Page<OperationDetail> findOperationsByPatientName(String nickname, Pageable page) {
-		return repositoryOperationDetail.findOperationsByPatientName(nickname, page);
-	}
-
-	@Override
-	public Page<OperationDetail> findOperationsByPatientLastName(String primaryLastName, Pageable page) {
-		return repositoryOperationDetail.findOperationsByPatientLastName(primaryLastName, page);
-	}
-
-	@Override
-	public Page<OperationDetail> findOperationsByDate(Date date, Pageable page) {
-		return repositoryOperationDetail.findOperationsByDate(date, page);
-	}
-
-	@Override
-	public Page<OperationDetail> findOperationsBetweenDates(Date startDate, Date endDate, Pageable page) {
-		return repositoryOperationDetail.findOperationsBetweenDates(startDate, endDate, page);
+	public Page<OperationDetail> findOperationsByDate(Date startDate, Date endDate, Pageable page) {
+		
+		if(startDate != null && endDate != null)
+			return repositoryOperationDetail.findOperationsBetweenDates(startDate, endDate, page);
+		else if(startDate != null)
+			return repositoryOperationDetail.findOperationsByDate(startDate, page);
+		else {
+			return null;
+		}
+		
 	}
 
 	@Override

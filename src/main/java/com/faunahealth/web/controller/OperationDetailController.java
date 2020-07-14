@@ -62,33 +62,31 @@ public class OperationDetailController {
 	@GetMapping("/searchByPatient")
 	public String searchByPatient(@RequestParam("pageNumber") int pageNumber,
 			@RequestParam(name = "nickname", required = false) String nickname, 
-			@RequestParam(name = "lastName", required = false) String lastName, RedirectAttributes attribute, Model model) {
+			@RequestParam(name = "lastName", required = false) String primaryLastName, RedirectAttributes attribute, Model model) {
 		
 		Page<OperationDetail> operations = null;
 		
 		Pageable page = PageRequest.of(pageNumber, 10, Sort.by("operationDate").descending());
 		
-		if(nickname != null && lastName != null)
-			operations = serviceOperationDetail.findOperationsByPatient(nickname, lastName, page);
-		else if(nickname != null)
-			operations = serviceOperationDetail.findOperationsByPatientName(nickname, page);
-		else if(lastName != null)
-			operations = serviceOperationDetail.findOperationsByPatientLastName(lastName, page);
-		else {
-			attribute.addFlashAttribute("messageWarning", "No puede realizar una busqueda de esa manera. Debe ingresar el nombre y/o el apellido");
-			return "redirect:/operations/";
-		}
+		operations = serviceOperationDetail.findOperationsByPatient(nickname, primaryLastName, page);
 		
-		if(operations.isEmpty()) {
+		return setResponseAttributesAndRedirectByInfo(nickname, primaryLastName, attribute, model, operations);
+		
+	}
+
+	protected String setResponseAttributesAndRedirectByInfo(String nickname, String lastName, RedirectAttributes attribute,
+			Model model, Page<OperationDetail> operations) {
+		
+		if(operations != null && !operations.isEmpty()) {
+			model.addAttribute("operations", operations);
+			model.addAttribute("nickname", nickname);
+			model.addAttribute("lastName", lastName);
+			return "operations/listOperations";
+		} else {
 			attribute.addFlashAttribute("messageWarning", "No se encontraron uno o más resultados");
 			return "redirect:/operations/";
 		}
-			
 		
-		model.addAttribute("operations", operations);
-		model.addAttribute("nickname", nickname);
-		model.addAttribute("lastName", lastName);
-		return "operations/listOperations";
 	}
 	
 	@GetMapping("/searchByDates")
@@ -100,25 +98,25 @@ public class OperationDetailController {
 		
 		Pageable page = PageRequest.of(pageNumber, 10, Sort.by("operationDate").descending());
 		
-		if(startDate != null && endDate != null)
-			operations = serviceOperationDetail.findOperationsBetweenDates(startDate, endDate, page);
-		else if(startDate != null)
-			operations = serviceOperationDetail.findOperationsByDate(startDate, page);
-		else {
-			attribute.addFlashAttribute("messageWarningDates", "No puede realizar una busqueda de esa manera. Estas son las combinaciones de filtro:");
-			return "redirect:/operations/";
-		}
+		operations = serviceOperationDetail.findOperationsByDate(startDate, endDate, page);
 		
-		if(operations.isEmpty()) {
+		return setResponseAttributesAndRedirectByDate(startDate, endDate, attribute, model, operations);
+		
+		
+	}
+
+	protected String setResponseAttributesAndRedirectByDate(Date startDate, Date endDate, RedirectAttributes attribute,
+			Model model, Page<OperationDetail> operations) {
+		if(operations != null && !operations.isEmpty()) {
+			model.addAttribute("operations", operations);
+			model.addAttribute("startDate", startDate);
+			model.addAttribute("endDate", endDate);
+			
+			return "operations/listOperations";
+		} else {
 			attribute.addFlashAttribute("messageWarning", "No se encontraron uno o más resultados");
 			return "redirect:/operations/";
 		}
-		
-		model.addAttribute("operations", operations);
-		model.addAttribute("startDate", startDate);
-		model.addAttribute("endDate", endDate);
-		
-		return "operations/listOperations";
 	}
 	
 	@GetMapping("/edit/{id}")

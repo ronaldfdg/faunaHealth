@@ -28,28 +28,25 @@ public class ProductServiceImpl implements ProductService {
 	}
 	
 	@Override
-	public List<Product> productsByKindAndSpecieAndName(int idProductKind, int idSpecie, String name, Pageable page){
-		return repositoryProduct.productsByKindAndSpecieAndName(idProductKind, idSpecie, name, page);
-	}
-	
-	@Override
-	public List<Product> productsBySpecieAndName(int idSpecie, String name, Pageable page){
-		return repositoryProduct.productsBySpecieAndName(idSpecie, name, page);
-	}
-	
-	@Override
-	public List<Product> productsByKindAndName(int idProductKind, String name, Pageable page){
-		return repositoryProduct.productsByKindAndName(idProductKind, name, page);
-	}
-	
-	@Override
-	public List<Product> productsBySpecieAndKind(int idSpecie, int idProductKind, Pageable page){
-		return repositoryProduct.productsBySpecieAndKind(idSpecie, idProductKind, page);
-	}
-	
-	@Override
-	public List<Product> productsByName(String name, Pageable page){
-		return repositoryProduct.productsByName(name, page);
+	public List<Product> productsByKindAndSpecieAndName(String idProductKind, String idSpecie, String name, Pageable page){
+		
+		if(name != null) {
+			   
+			if(idSpecie != null && idProductKind != null) {
+				return repositoryProduct.productsByKindAndSpecieAndName(Integer.parseInt(idProductKind), Integer.parseInt(idSpecie), name, page);
+			} else if (idSpecie != null) {
+				return repositoryProduct.productsBySpecieAndName(Integer.parseInt(idSpecie), name, page);
+			} else if (idProductKind != null) {
+				return repositoryProduct.productsByKindAndName(Integer.parseInt(idProductKind), name, page);
+			} else {
+				return repositoryProduct.productsByName(name, page);
+			}
+			
+		} else if (idSpecie != null && idProductKind != null) {
+			return repositoryProduct.productsBySpecieAndKind(Integer.parseInt(idSpecie), Integer.parseInt(idProductKind), page);
+		} else {
+			return null;
+		}
 	}
 	
 	@Override

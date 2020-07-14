@@ -35,8 +35,6 @@ import com.faunahealth.web.service.WeightService;
 @Controller
 @RequestMapping("/historyDetails")
 public class HistoryDetailController {
-	
-	private SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
 
 	@Autowired
 	private UserService serviceUser;
@@ -61,16 +59,19 @@ public class HistoryDetailController {
 		
 		Pageable page = PageRequest.of(pageNumber, 6, Sort.by("attentionDate").descending());
 		
+		Patient patient = servicePatient.findById(patientId);
+		
 		Page<HistoryDetail> attentions = serviceHistoryDetail.findHistoryDetailsByClinicHistoryAndPage(id, page);
 		
-		if (attentions.isEmpty() || attentions == null)
-			model.addAttribute("messageInfo",
-					"El paciente no tiene ninguna atención registrada o más atenciones registradas");
+		if (!attentions.isEmpty()) {
+			model.addAttribute("clinicHistory", serviceClinicHistoryService.findById(id));
+			model.addAttribute("weights", serviceWeight.findByPatient_Id(patientId));
+		} else {
+			model.addAttribute("messageInfo", "El paciente no tiene ninguna atención registrada o más atenciones registradas");	
+		}
 		
-		model.addAttribute("clinicHistory", serviceClinicHistoryService.findById(id));
+		model.addAttribute("patient", patient);
 		model.addAttribute("attentions", attentions);
-		model.addAttribute("weights", serviceWeight.findByPatient_Id(patientId));
-		model.addAttribute("patient", servicePatient.findById(patientId));
 		
 		return "clinicHistory/details/listAttentions";
 	}
@@ -81,10 +82,7 @@ public class HistoryDetailController {
 		
 		historyDetail.setId(0); // Lo puse debido a que se igualaba el id de la historia clinica con la atencion
 		
-		Weight weight = serviceWeight.findByPatientAndDate(patientId,
-				sdf.parse(sdf.format(historyDetail.getAttentionDate())));
-		
-		model.addAttribute("weight", weight);
+		model.addAttribute("weight", null);
 		model.addAttribute("clinicHistory", serviceClinicHistoryService.findById(id));
 		model.addAttribute("patient", servicePatient.findById(patientId));
 		model.addAttribute("users", serviceUser.findAll());

@@ -66,7 +66,7 @@
 		    	<span aria-hidden="true">&times;</span>
 		  	</button>
 		</div>
-		<div class="card-deck animated fadeIn fast" style="margin-bottom: 20px">
+		<div class="card-deck animated fadeIn fast" style="margin-bottom: 20px" th:if="${!attentions.isEmpty()}">
 			<div class="card-container mx-auto mt-5 text-center" th:each="attention : ${attentions.content}">
 			
 				<div class="card card-front">

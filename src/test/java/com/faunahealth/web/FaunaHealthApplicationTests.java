@@ -1,4 +1,4 @@
-package com.faunahealth.web.faunaHealth;
+package com.faunahealth.web;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

@@ -41,14 +41,12 @@ public class SchedulingConfiguration {
 	@Autowired
 	private EmailService serviceMail;
 	
-	
-	
 	@Value("${spring.mail.username}")
 	private String from;
 	
 	private SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
-	
-	@Scheduled(cron = "0 0 20 * * ?")
+
+	@Scheduled(cron = "0 0 10,15,20 * * ?")
 	void sendReminderEmailAddress() throws Exception {
 		
 		List<Appointment> appointments = serviceAppointment.appointmentsByDate(Utileria.getTomorrowDate());
@@ -72,30 +70,37 @@ public class SchedulingConfiguration {
 			model = new HashMap<String, Object>();
 			
 			for (Patient patient : patients) {
-				Appointment appointment = null;
-				
-				emailMessage.setFrom(from);
-				emailMessage.setTo_address(patient.getClient().getEmailAddress());
-				emailMessage.setSubject("\"Fauna Health\" - Recordatorio de cita");
-				model.put("patient", patient);
-				model.put("client", patient.getClient());
-				appointment = serviceAppointment.findAppointmentByPatient(patient.getId(), Utileria.getTomorrowDate());
-				model.put("appointmentDate", dateFormat.format(appointment.getNextAppointmentDate()));
-				model.put("appointment", appointment);
-				model.put("byeMessage", "Fauna Health, siempre al cuidado de su mascota.");
-				emailMessage.setModel(model);
-				serviceMail.sendEmail(emailMessage, templateName);
-				
+				if(patient.getClient().isStatus()) {
+					Appointment appointment = null;
+					
+					emailMessage.setFrom(from);
+					emailMessage.setTo_address(patient.getClient().getEmailAddress());
+					emailMessage.setSubject("\"Fauna Health\" - Recordatorio de cita");
+					model.put("patient", patient);
+					model.put("client", patient.getClient());
+					appointment = serviceAppointment.findAppointmentByPatient(patient.getId(), Utileria.getTomorrowDate());
+					model.put("appointmentDate", dateFormat.format(appointment.getNextAppointmentDate()));
+					model.put("appointment", appointment);
+					model.put("warning", "Nota: Esta cuenta de correo electrónico solo es utilizada para envíar esta notificación; "
+							+ "le agradeceremos no responder con consultas personales.");
+					
+					model.put("byeMessage", "Fauna Health, siempre al cuidado de su mascota.");
+					
+					emailMessage.setModel(model);
+					serviceMail.sendEmail(emailMessage, templateName);	
+				}
 			}
+			
 		}
 
 	}
 	
-	@Scheduled(cron = "0 30-40 20 * * ?")
+	@Scheduled(cron = "0 05 10,15,20 * * ?")
 	void sendReminderWhatsApp() throws Exception {
 		
 		List<Appointment> appointments = serviceAppointment.appointmentsByDate(Utileria.getTomorrowDate());
 		List<Patient> patients = null;
+		String[] messages = new String[2];
 		
 		if(!appointments.isEmpty()) {
 			
@@ -110,14 +115,27 @@ public class SchedulingConfiguration {
 			patients = servicePatient.findPatientsByIds(patientsIds);
 			
 			for (Patient patient : patients) {
-				Appointment appointment = null;
-				String appointmentMessage = null;
-				appointment = serviceAppointment.findAppointmentByPatient(patient.getId(), Utileria.getTomorrowDate());
-				
-				appointmentMessage = "Estimado " + patient.getClient().getName() + ", su mascota tiene una cita programada para el día "
-						+ dateFormat.format(appointment.getNextAppointmentDate());
-				serviceWhatsApp.sendReminder(patient.getClient().getCellPhone(), appointmentMessage);
+				if(patient.getClient().isStatus()) {
+					Appointment appointment = null;
+					String appointmentMessage = null;
+					String confirmationMessage = null;
+					
+					appointment = serviceAppointment.findAppointmentByPatient(patient.getId(), Utileria.getTomorrowDate());
+					
+					appointmentMessage = "Estimado " + patient.getClient().getName() + ", su mascota tiene una cita programada para el día "
+							+ dateFormat.format(appointment.getNextAppointmentDate()) + ".";
+					
+					confirmationMessage = "Por favor revisar su correo para confirmar su asistencia.";
+					
+					messages[0] = appointmentMessage;
+					messages[1] = confirmationMessage;
+					
+					for(int i = 0; i < 2; i++) {
+						serviceWhatsApp.sendReminder(patient.getClient().getCellPhone(), messages[i]);
+					}
+				}
 			}
+			
 		}
 
 	}

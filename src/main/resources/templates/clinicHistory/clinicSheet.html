@@ -30,7 +30,7 @@
 			&nbsp;
 			<a th:href="@{/historyDetails/{id} (id=${history.id},patient=${patient.id},pageNumber=0)}" class="btn btn-primary" role="button" title="Ver atenciones realizadas"><i class="fas fa-list"></i> Atenciones realizadas</a>
 			&nbsp;
-			<a th:if="${patient.client.status}" th:href="@{/appointments/{id}/register (id=${patient.id}) }" class="btn btn-primary" role="button" title="Registrar nueva cita"><i class="fas fa-calendar-alt"></i> Nueva cita</a>
+			<a th:href="@{/appointments/{id}/register (id=${patient.id}) }" class="btn btn-primary" role="button" title="Registrar nueva cita"><i class="fas fa-calendar-alt"></i> Nueva cita</a>
 		</div>
 		
 		<br><br>

@@ -15,14 +15,6 @@ public interface PatientService {
 	List<Patient> getPatientsByClient(int clientId);
 	
 	Page<Patient> findPatientsByNicknameAndPrimaryLastNameAndPage(String nickname, String primaryLastName, Pageable page);
-	List<Patient> getPatientsByNicknameAndLastNameClient(String nickname, String primaryLastName);
-	
-	Page<Patient> findPatientsByNicknameAndPage(String nickname, Pageable page);
-	List<Patient> findByNicknameContaining(String nickname);
-	
-	Page<Patient> findPatientsByPrimaryLastName(String primaryLastName, Pageable page);
-	List<Patient> findByClient_PrimaryLastNameContaining(String primaryLastName);
-	
 	List<Patient> findPatientsByIds(List<Integer> ids);
 	
 	Patient findById(int id);

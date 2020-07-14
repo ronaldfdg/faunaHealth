@@ -11,7 +11,9 @@
 	<groupId>com.faunahealth.web</groupId>
 	<artifactId>faunaHealth</artifactId>
 	<version>0.1.0</version>
+	
 	<packaging>war</packaging>
+	
 	<name>faunaHealth</name>
 	<description>Project for a veterinary clinic</description>
 

@@ -122,17 +122,26 @@ public class PatientController {
 
 		Client client = serviceClient.findById(clientId);
 		
+		Page<Patient> patients = null;
+		
 		Pageable page = PageRequest.of(pageNumber, 10);
-		Page<Patient> patients = servicePatient.findPatientsByClientAndPage(clientId, page);
+		
+		patients = servicePatient.findPatientsByClientAndPage(clientId, page);
 
-		if (patients.isEmpty()) {
+		return setResponseAttributesAndRedirectByOwner(attribute, model, client, patients);
+		
+	}
+
+	protected String setResponseAttributesAndRedirectByOwner(RedirectAttributes attribute, Model model, Client client,
+			Page<Patient> patients) {
+		if (patients != null && !patients.isEmpty()) {
+			model.addAttribute("patients", patients);
+			return "patients/listPatients";
+		} else {
 			attribute.addFlashAttribute("messageWarning", "El cliente " + client.getName() + " " + client.getPrimaryLastName()
 			+ " no tiene una o más mascotas registradas");
 			return "redirect:/patient/";
 		}
-
-		model.addAttribute("patients", patients);
-		return "patients/listPatients";
 	}
 
 	@GetMapping("/searchBy")
@@ -145,27 +154,25 @@ public class PatientController {
 		
 		Pageable page = PageRequest.of(pageNumber, 10);
 		
-		if(nickname != null && primaryLastName != null)
-			patients =servicePatient.findPatientsByNicknameAndPrimaryLastNameAndPage(nickname, primaryLastName, page);
-		else if(nickname != null)
-			patients = servicePatient.findPatientsByNicknameAndPage(nickname, page);
-		else if(primaryLastName != null)
-			patients = servicePatient.findPatientsByPrimaryLastName(primaryLastName, page);
-		else {
-			attribute.addFlashAttribute("messageWarning", "No ingreso ningún valor para Alias ni Apellido. Debe ingresar por lo menos uno");
-			return "redirect:/patient/";
-		}
-			
-		if(patients.isEmpty()) {
+		patients = servicePatient.findPatientsByNicknameAndPrimaryLastNameAndPage(nickname, primaryLastName, page);
+		
+		return setResponseAttributesAndRedirectByInfo(nickname, primaryLastName, attribute, model, patients);
+		
+	}
+
+	protected String setResponseAttributesAndRedirectByInfo(String nickname, String primaryLastName,
+			RedirectAttributes attribute, Model model, Page<Patient> patients) {
+		
+		if(patients != null && !patients.isEmpty()) {
+			model.addAttribute("patients", patients);
+			model.addAttribute("nickname", nickname);
+			model.addAttribute("primaryLastName", primaryLastName);
+			return "patients/listPatients";
+		} else {
 			attribute.addFlashAttribute("messageWarning", "No se encontraron uno o más resultados");
 			return "redirect:/patient/";
 		}
 		
-		model.addAttribute("patients", patients);
-		model.addAttribute("nickname", nickname);
-		model.addAttribute("primaryLastName", primaryLastName);
-		
-		return "patients/listPatients";
 	}
 
 	@InitBinder

@@ -54,34 +54,19 @@ public class PatientServiceImpl implements PatientService {
 	}
 
 	@Override
-	public List<Patient> getPatientsByNicknameAndLastNameClient(String nickname, String primaryLastName) {
-		return repositoryPatient.getPatientsByNicknameAndLastNameClient(nickname, primaryLastName);
-	}
-
-	@Override
-	public List<Patient> findByNicknameContaining(String nickname) {
-		return repositoryPatient.findByNicknameContaining(nickname);
-	}
-
-	@Override
-	public List<Patient> findByClient_PrimaryLastNameContaining(String primaryLastName) {
-		return repositoryPatient.findByClient_PrimaryLastNameContaining(primaryLastName);
-	}
-
-	@Override
 	public Page<Patient> findPatientsByNicknameAndPrimaryLastNameAndPage(String nickname, String primaryLastName,
 			Pageable page) {
-		return repositoryPatient.findPatientsByNicknameAndPrimaryLastNameAndPage(nickname, primaryLastName, page);
-	}
-
-	@Override
-	public Page<Patient> findPatientsByNicknameAndPage(String nickname, Pageable page) {
-		return repositoryPatient.findPatientsByNicknameAndPage(nickname, page);
-	}
-
-	@Override
-	public Page<Patient> findPatientsByPrimaryLastName(String primaryLastName, Pageable page) {
-		return repositoryPatient.findPatientsByPrimaryLastNameAndPage(primaryLastName, page);
+		
+		if(nickname != null && primaryLastName != null) {
+			return repositoryPatient.findPatientsByNicknameAndPrimaryLastNameAndPage(nickname, primaryLastName, page);
+		} else if(nickname != null) {
+			return repositoryPatient.findPatientsByNicknameAndPage(nickname, page);
+		} else if(primaryLastName != null) {
+			return repositoryPatient.findPatientsByPrimaryLastNameAndPage(primaryLastName, page);
+		} else {
+			return null;
+		}
+		
 	}
 
 	@Override
