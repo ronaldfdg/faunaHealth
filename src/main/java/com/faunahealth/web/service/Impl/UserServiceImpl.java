@@ -1,5 +1,8 @@
 package com.faunahealth.web.service.Impl;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,6 +18,8 @@ public class UserServiceImpl implements UserService {
 
 	@Autowired
 	private UserRepository repositoryUser;
+	
+	private SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
 	
 	@Override
 	public List<User> findAll() {
@@ -39,6 +44,23 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public User findByUsername(String username) {
 		return repositoryUser.findByUsername(username);
+	}
+	
+	@Override
+	public boolean validateExpirationDate(Date currentDate, Date userExpirationDate) {
+		
+		try {
+			currentDate = dateFormat.parse(dateFormat.format(currentDate));
+		} catch(ParseException e) {
+			System.out.println(e.getMessage());
+		}
+		
+		if(currentDate.after(userExpirationDate)) {
+			return true;
+		} else {
+			return false;
+		}
+		
 	}
 
 }

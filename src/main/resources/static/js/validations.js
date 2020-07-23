@@ -123,7 +123,6 @@ function validateFormUser(form) {
 		return false
 	}
 	
-	alert('Guardando datos...')
 	return true
 }
 

@@ -1,5 +1,8 @@
 package com.faunahealth.web.controller;
 
+import java.text.ParseException;
+import java.util.Date;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -14,6 +17,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.faunahealth.web.entity.User;
 import com.faunahealth.web.service.UserService;
+import com.faunahealth.web.util.Utileria;
 
 @Controller
 @RequestMapping("/users")
@@ -60,7 +64,15 @@ public class UserController {
 		if(result.hasErrors())
 			return "users/formUser";
 		
+		user.setUsername(passwordEncoder.encode(user.getUsername()));
 		user.setPassword(passwordEncoder.encode(user.getPassword()));
+		
+		try {
+			user.setExpirationDate(Utileria.addThreeMonths(new Date()));
+		} catch(ParseException e) {
+			System.out.println(e.getMessage());
+		}
+		
 		serviceUser.save(user);
 		attribute.addFlashAttribute("messageSuccess", "Se registró al usuario: " + user.getName().toUpperCase() 
 							+ " " + user.getPrimaryLastName().toUpperCase());

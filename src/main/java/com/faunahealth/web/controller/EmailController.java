@@ -53,7 +53,7 @@ public class EmailController {
 		Weight weight = serviceWeight.findByPatientAndDate(idPatient, attention.getAttentionDate());
 		
 		String prescription = "";
-		prescription = attention.getPrescription().equals("") ? "---" : attention.getPrescription();
+		prescription = attention.getPrescription() == null ? "---" : attention.getPrescription();
 		
 		String amountWeight = "";
 		amountWeight = weight != null ? String.valueOf(weight.getAmount()) + " kg" : "No se pesó al paciente";

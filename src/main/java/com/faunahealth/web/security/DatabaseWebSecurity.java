@@ -37,7 +37,9 @@ public class DatabaseWebSecurity extends WebSecurityConfigurerAdapter {
 		.antMatchers("/bootstrap/**",
 					 "/css/**",
 					 "/images/**",
-					 "/js/**").permitAll()
+					 "/js/**",
+					 "/changePassword",
+					 "/updatePassword").permitAll()
 		.antMatchers("/clients/**").hasAnyAuthority("ADMINISTRACION","GESTION")
 		.antMatchers("/patient/**").hasAnyAuthority("ADMINISTRACION", "GESTION")
 		.antMatchers("/products/**").hasAnyAuthority("ADMINISTRACION", "GESTION")
