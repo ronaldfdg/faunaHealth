@@ -1,5 +1,7 @@
 package com.faunahealth.web.entity;
 
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -39,6 +41,9 @@ public class User {
 	
 	@Column(name = "Estado", nullable = false)
 	private boolean status = true;
+	
+	@Column(name = "fecha_expiracion", nullable = false)
+	private Date expirationDate;
 	
 	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "idRol")
@@ -116,6 +121,14 @@ public class User {
 		this.status = status;
 	}
 
+	public Date getExpirationDate() {
+		return expirationDate;
+	}
+
+	public void setExpirationDate(Date expirationDate) {
+		this.expirationDate = expirationDate;
+	}
+
 	public Role getRole() {
 		return role;
 	}
@@ -128,7 +141,8 @@ public class User {
 	public String toString() {
 		return "User [id=" + id + ", name=" + name + ", primaryLastName=" + primaryLastName + ", secondLastName="
 				+ secondLastName + ", username=" + username + ", password=" + password + ", secretQuestion="
-				+ secretQuestion + ", answerQuestion=" + answerQuestion + ", status=" + status + "]";
+				+ secretQuestion + ", answerQuestion=" + answerQuestion + ", status=" + status + ", expirationDate="
+				+ expirationDate + "]";
 	}
 	
 }

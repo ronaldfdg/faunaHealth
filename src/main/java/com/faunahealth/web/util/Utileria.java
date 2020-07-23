@@ -57,4 +57,13 @@ public class Utileria {
 		
 	}
 	
+	public static Date addThreeMonths(Date date) throws ParseException {
+		
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(date);
+		calendar.add(Calendar.MONTH, 3);
+		
+		return dateFormat.parse(dateFormat.format(calendar.getTime()));
+	}
+	
 }

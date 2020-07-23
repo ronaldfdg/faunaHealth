@@ -46,7 +46,7 @@ public class SchedulingConfiguration {
 	
 	private SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
 
-	@Scheduled(cron = "0 0 10,15,20 * * ?")
+	@Scheduled(cron = "0 50-52 01 * * ?")
 	void sendReminderEmailAddress() throws Exception {
 		
 		List<Appointment> appointments = serviceAppointment.appointmentsByDate(Utileria.getTomorrowDate());
@@ -95,7 +95,7 @@ public class SchedulingConfiguration {
 
 	}
 	
-	@Scheduled(cron = "0 05 10,15,20 * * ?")
+	@Scheduled(cron = "0 53-55 01 * * ?")
 	void sendReminderWhatsApp() throws Exception {
 		
 		List<Appointment> appointments = serviceAppointment.appointmentsByDate(Utileria.getTomorrowDate());
