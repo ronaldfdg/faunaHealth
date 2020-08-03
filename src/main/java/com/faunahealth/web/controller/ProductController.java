@@ -17,6 +17,7 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -87,6 +88,27 @@ public class ProductController {
 		return "products/formProduct";
 	}
 	
+	@GetMapping("/edit/{id}")
+	public String edit(@PathVariable("id") int id, Model model) {
+		Product product = serviceProduct.findById(id);
+		model.addAttribute("product", product);
+		model.addAttribute("providers", serviceProvider.findAll());
+		return "products/formProduct";
+	}
+	
+	@GetMapping("/delete/{id}")
+	public String delete(@PathVariable("id") int id, RedirectAttributes attribute) {
+		try{
+			serviceProduct.deleteById(id);
+			attribute.addFlashAttribute("messageSuccess", "Se eliminó el producto correctamente");
+		} catch(Exception e) {
+			attribute.addFlashAttribute("messageError", "No se puede eliminar el producto porque tiene ventas registradas");
+		}
+		
+		return "redirect:/products/";
+		
+	}
+	
 	@PostMapping("/record")
 	public String record(@ModelAttribute Product product, BindingResult result, Model model, 
 				RedirectAttributes attribute) {
@@ -96,9 +118,22 @@ public class ProductController {
 			return "products/formProduct";
 		}
 		
+		String nextUrl = validateIfProductExists(product, attribute);
+		
 		serviceProduct.save(product);
-		attribute.addFlashAttribute("messageSuccess", "Se registró el producto correctamente");
-		return "redirect:/products/";
+		
+		return nextUrl;
+		
+	}
+
+	private String validateIfProductExists(Product product, RedirectAttributes attribute) {
+		if(serviceProduct.existsById(product.getId())) {
+			attribute.addFlashAttribute("messageSuccess", "Se actualizó la información del producto");
+			return "redirect:/products/";
+		} else {
+			attribute.addFlashAttribute("messageSuccess", "Se registró el producto correctamente");
+			return "redirect:/products/register";
+		}
 	}
 	
 	@ModelAttribute

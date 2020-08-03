@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.faunahealth.web.entity.Breed;
 import com.faunahealth.web.entity.Client;
 import com.faunahealth.web.entity.Patient;
 import com.faunahealth.web.service.BreedService;
@@ -55,36 +56,71 @@ public class PatientController {
 	public String recordRabbit(@ModelAttribute Patient patient, @PathVariable("id") int specieId
 			, @RequestParam(name = "clientId", required = false) Integer clientId, Model model) {
 		
+		boolean newClient = true;
+		
 		model.addAttribute("breeds", serviceBreed.getBreedsBySpecie(specieId));
 		model.addAttribute("districts", serviceDistrict.findAll());
 		
-		if(clientId != null)
+		if(clientId != null) {
 			patient.setClient(serviceClient.findById(clientId));
+			newClient = false;
+		}
+		
+		model.addAttribute("newClient", newClient);
 		
 		return "patients/formPatient";
 	}
 
 	@PostMapping("/savePatient")
 	public String saveDog(@ModelAttribute Patient patient, BindingResult result, RedirectAttributes attribute,
-			Model model) {
+			Model model) throws Exception { /**/
 
+		Breed breed = null;
+		
 		if (result.hasErrors()) {
-			model.addAttribute("breeds", serviceBreed.getBreedsBySpecie(patient.getBreed().getSpecie().getId()));
+			breed = serviceBreed.findById(patient.getBreed().getId());
+			model.addAttribute("breeds", serviceBreed.getBreedsBySpecie(breed.getSpecie().getId()));
 			model.addAttribute("districts", serviceDistrict.findAll());
 			return "patients/formPatient";
 		}
+		
+		if(!serviceClient.existsById(patient.getClient().getId())) {
+			try {
+				serviceClient.save(patient.getClient());
+			} catch(Exception e) {
+				breed = serviceBreed.findById(patient.getBreed().getId());
+				model.addAttribute("breeds", serviceBreed.getBreedsBySpecie(breed.getSpecie().getId()));
+				model.addAttribute("districts", serviceDistrict.findAll());
+				validateIfDniOrEmailDuplicated(patient.getClient(), model);
+				return "patients/formPatient";
+			}
+		}
 
-		if (servicePatient.existsById(patient.getId()))
-			attribute.addFlashAttribute("messageSuccess", "Se actualizó la información del paciente: " + patient.getNickname() 
-				+ " " + patient.getClient().getPrimaryLastName());
-		else
-			attribute.addFlashAttribute("messageSuccess", "Se registró la información del nuevo paciente: " + patient.getNickname() 
-				+ " " + patient.getClient().getPrimaryLastName());
+		validateIfPatientExists(patient, attribute);
 
-		serviceClient.save(patient.getClient());
 		servicePatient.save(patient);
 		
 		return "redirect:/patient/";
+	}
+
+	private void validateIfPatientExists(Patient patient, RedirectAttributes attribute) {
+		if (servicePatient.existsById(patient.getId())) {
+			attribute.addFlashAttribute("messageSuccess", "Se actualizó la información del paciente: " + patient.getNickname() 
+			+ " " + patient.getClient().getPrimaryLastName());
+		}
+		else {
+			attribute.addFlashAttribute("messageSuccess", "Se registró la información del nuevo paciente: " + patient.getNickname() 
+			+ " " + patient.getClient().getPrimaryLastName());
+		}
+	}
+	
+	private void validateIfDniOrEmailDuplicated(Client client, Model model) {
+		Client validateClient = serviceClient.findByDocumentNumberLike(client.getDocumentNumber());
+		if(validateClient != null) {
+			model.addAttribute("messageError", "Ya existe registrado un DNI con el número: "+client.getDocumentNumber());
+		} else {
+			model.addAttribute("messageError", "Ya existe un cliente registrado con el correo: "+client.getEmailAddress());
+		}
 	}
 
 	@GetMapping("/edit/{id}")
@@ -104,9 +140,14 @@ public class PatientController {
 	public String delete(@PathVariable("id") int id, RedirectAttributes attribute) {
 
 		Patient patient = servicePatient.findById(id);
-		servicePatient.deleteById(id);
-		attribute.addFlashAttribute("messageSuccess",
-				"Se eliminó al paciente: " + patient.getNickname() + " " + patient.getClient().getPrimaryLastName());
+		try {
+			servicePatient.deleteById(id);
+			attribute.addFlashAttribute("messageSuccess",
+					"Se eliminó al paciente: " + patient.getNickname() + " " + patient.getClient().getPrimaryLastName());
+		} catch(Exception e) {
+			attribute.addFlashAttribute("messageWarning", "No se puede eliminar al paciente porque tiene un historial clínico");
+		}
+		
 		return "redirect:/patient/";
 	}
 

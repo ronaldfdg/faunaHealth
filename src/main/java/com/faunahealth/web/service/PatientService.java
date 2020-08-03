@@ -20,5 +20,5 @@ public interface PatientService {
 	Patient findById(int id);
 	boolean existsById(int id);
 	void save(Patient patient);
-	void deleteById(int id);
+	void deleteById(int id) throws Exception;
 }

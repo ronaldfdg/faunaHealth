@@ -33,7 +33,7 @@
 						        	<strong th:text="${messageInfo}"></strong>
 						        </div>
 								<div th:if="${param.error != null}" style="text-align: center;" class="alert alert-danger" role="alert">
-									<strong>Acceso denegado</strong>
+									<strong>Acceso denegado. Por favor verificar credenciales</strong>
 								</div>
 								<h4 class="h3 mb-3 font-weight-normal">Ingresar</h4>
 								<label for="username" class="sr-only">Username</label>
@@ -41,7 +41,6 @@
 								<label for="password" class="sr-only">Password</label>
 								<input type="password" name="password" id="password" class="form-control" placeholder="Password" required><br>
 								<button class="btn btn-lg btn-primary btn-block" type="submit">Entrar</button>
-								<p class="text-primary" style="font-size: medium;">¿Olvidaste tu contraseña?</p>
 							</div>
 							<div class="col-md-4">
 							</div>

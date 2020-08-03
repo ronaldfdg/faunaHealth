@@ -3,7 +3,7 @@
  */
 
 function validateText(parameter) {
-	var patron = /^[a-zA-Z\s]*$/;
+	var patron = /^[a-zA-Z\s\u00E0-\u00FC]*$/;
 	if(parameter.search(patron))
 		return false
 	else
@@ -13,7 +13,7 @@ function validateText(parameter) {
 function checkNumbers(event) {
 	event = (event) ? event : window.event
 	var charCode = (event.which) ? event.which : event.keyCode
-	if(charCode > 31 & (charCode < 48 || charCode > 57)) {
+	if(charCode > 31 & (charCode < 46 || charCode > 57)) {
 		alert('Solo se aceptan valores numericos en este campo')
 		return false
 	} else 
@@ -42,7 +42,6 @@ function validateFormClient(form){
 		return false
 	}
 	
-	alert('Guardando datos...')
 	return true
 }
 
@@ -83,7 +82,6 @@ function validateFormClientAndPatient(form) {
 		return false
 	}
 	
-	alert('Guardando datos...')
 	return true
 	
 }
@@ -96,7 +94,6 @@ function validateFormProvider(form) {
 		return false
 	}
 	
-	alert('Guardando datos...')
 	return true
 }
 

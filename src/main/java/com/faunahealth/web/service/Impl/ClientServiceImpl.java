@@ -18,12 +18,12 @@ public class ClientServiceImpl implements ClientService {
 	private ClientRepository repositoryClient;
 
 	@Override
-	public void save(Client client) {
+	public void save(Client client) throws Exception {
 		repositoryClient.save(client);
 	}
 
 	@Override
-	public void deleteById(int id) {
+	public void deleteById(int id) throws Exception {
 		repositoryClient.deleteById(id);
 	}
 
@@ -34,6 +34,26 @@ public class ClientServiceImpl implements ClientService {
 			return optional.get();
 		
 		return null;
+	}
+	
+	@Override
+	public Client findByDocumentNumberLike(String documentNumber) {
+		Optional<Client> optional = repositoryClient.findByDocumentNumberLike(documentNumber);
+		if(optional.isPresent()) {
+			return optional.get();
+		} else {
+			return null;
+		}
+	}
+	
+	@Override
+	public Client findByEmailAddressLike(String emailAddress) {
+		Optional<Client> optional = repositoryClient.findByEmailAddressLike(emailAddress);
+		if(optional.isPresent()) {
+			return optional.get();
+		} else {
+			return null;
+		}
 	}
 
 	@Override

@@ -32,7 +32,12 @@
                 			<li th:each="error : ${#fields.errors('*')}" th:text="${error}"></li>
                 		</ul>
                 	</div>
-                	
+                	<div th:if="${messageError!=null}" class="alert alert-danger alert-dismissible fade show" role="alert">
+                		<strong th:text="${messageError}"></strong>
+                		<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+				    		<span aria-hidden="true">&times;</span>
+				  		</button>
+                	</div>
                 	<h4 class="card-header">
                 		<i class="fas fa-male"></i>|<i class="fas fa-female"></i> Datos del cliente
             		</h4>
@@ -41,61 +46,76 @@
                         <div class="form-group col-md-3">
                             <label for="documentType">Tipo de documento(*): </label>
                             <input type="hidden" th:field="*{client.id}">
-                            <select th:field="*{client.documentType.id}" id="documentType" class="form-control">
+                            <select th:if="${newClient}" th:field="*{client.documentType.id}" id="documentType" class="form-control">
+                                <option value="1">DNI</option>
+                            </select>
+                            <select th:unless="${newClient}" th:field="*{client.documentType.id}" id="documentType" class="form-control" disabled>
                                 <option value="1">DNI</option>
                             </select>
                         </div>
                         <div class="form-group col-md-4">
                             <label for="documentNumber">N&uacute;mero de documento(*): </label>
-                            <input th:field="*{client.documentNumber}" id="documentNumber" type="text" class="form-control" 
+                            <input th:if="${newClient}" th:field="*{client.documentNumber}" id="documentNumber" type="text" class="form-control" 
                             	maxlength="8" size="8" placeholder="N&uacute;mero DNI" onkeypress="return checkNumbers(event)" required>
+                           	<input th:unless="${newClient}" th:field="*{client.documentNumber}" id="documentNumber" type="text" class="form-control" readonly="readonly">
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="form-group col-md-3">
                             <label for="name">Nombre(*): </label>
-                            <input th:field="*{client.name}" id="name" type="text" class="form-control" placeholder="Nombre cliente" required>
+                            <input th:if="${newClient}" th:field="*{client.name}" id="name" type="text" class="form-control" placeholder="Nombre cliente" required>
+                            <input th:unless="${newClient}" th:field="*{client.name}" id="name" type="text" class="form-control" readonly="readonly">
                         </div>
                         <div class="form-group col-md-3">
                             <label for="primaryLastName">Apellido Paterno(*): </label>
-                            <input th:field="*{client.primaryLastName}" id="primaryLastName" type="text" class="form-control" placeholder="Primer apellido" required>
+                            <input th:if="${newClient}" th:field="*{client.primaryLastName}" id="primaryLastName" type="text" class="form-control" placeholder="Primer apellido" required>
+                            <input th:unless="${newClient}" th:field="*{client.primaryLastName}" id="primaryLastName" type="text" class="form-control" readonly="readonly">
                         </div>
                         <div class="form-group col-md-3">
                             <label for="secondLastName">Apellido Materno(*): </label>
-                            <input th:field="*{client.secondLastName}" id="secondLastName" type="text" class="form-control" placeholder="Segundo apellido" required>
+                            <input th:if="${newClient}" th:field="*{client.secondLastName}" id="secondLastName" type="text" class="form-control" placeholder="Segundo apellido" required>
+                            <input th:unless="${newClient}" th:field="*{client.secondLastName}" id="secondLastName" type="text" class="form-control" readonly="readonly">
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="form-group col-md-5">
                             <label for="district">Distrito(*): </label>
-                            <select th:field="*{client.district.id}" id="district" class="form-control">
+                            <select th:if="${newClient}" th:field="*{client.district.id}" id="district" class="form-control">
+                                <option th:each="district : ${districts}" th:value="${district.id}" th:text="${district.name}"></option>
+                            </select>
+                            <select th:unless="${newClient}" th:field="*{client.district.id}" id="district" class="form-control" disabled>
                                 <option th:each="district : ${districts}" th:value="${district.id}" th:text="${district.name}"></option>
                             </select>
                         </div>
                         <div class="form-group col-md-5">
                             <label for="address">Direcci&oacute;n(*): </label>
-                            <input th:field="*{client.address}" id="address" type="text" class="form-control" placeholder="Urbanizaci&oacute;n, calle, manzana, lote" required>
+                            <input th:if="${newClient}" th:field="*{client.address}" id="address" type="text" class="form-control" placeholder="Urbanizaci&oacute;n, calle, manzana, lote" required>
+                            <input th:unless="${newClient}" th:field="*{client.address}" id="address" type="text" class="form-control" readonly="readonly">
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="form-group col-md-3">
                             <label for="phone">Tel&eacute;fono: </label>
-                            <input th:field="*{client.phone}" id="phone" type="text" class="form-control" placeholder="N&uacute;mero fijo(Opcional)" 
+                            <input th:if="${newClient}" th:field="*{client.phone}" id="phone" type="text" class="form-control" placeholder="N&uacute;mero fijo(Opcional)" 
                             	maxlength="7" size="7" onkeypress="return checkNumbers(event)">
+                           	<input th:unless="${newClient}" th:field="*{client.phone}" id="phone" type="text" class="form-control" readonly="readonly">
                         </div>
                         <div class="form-group col-md-3">
                             <label for="cellPhone">Celular(*): </label>
-                            <input th:field="*{client.cellPhone}" id="cellPhone" type="text" class="form-control" placeholder="Celular personal" 
+                            <input th:if="${newClient}" th:field="*{client.cellPhone}" id="cellPhone" type="text" class="form-control" placeholder="Celular personal" 
                             	maxlength="9" size="9" onkeypress="return checkNumbers(event)" required>
+                            <input th:unless="${newClient}" th:field="*{client.cellPhone}" id="cellPhone" type="text" class="form-control" readonly="readonly">
                         </div>
                         <div class="form-group col-md-3">
                             <label for="emailAddress">Correo(*): </label>
-                            <input th:field="*{client.emailAddress}" id="emailAddress" type="email" class="form-control" placeholder="example@gmail.com" required>
+                            <input th:if="${newClient}" th:field="*{client.emailAddress}" id="emailAddress" type="email" class="form-control" placeholder="example@gmail.com" required>
+                            <input th:unless="${newClient}" th:field="*{client.emailAddress}" id="emailAddress" type="email" class="form-control" readonly="readonly">
                         </div>
                     </div><br>
                     <div class="form-group">
                 		<div class="form-check">
-                			<input th:field="*{client.status}" class="form-check-input" type="checkbox" id="status">
+                			<input th:if="${newClient}" th:field="*{client.status}" class="form-check-input" type="checkbox" id="status">
+                			<input th:unless="${newClient}" th:field="*{client.status}" class="form-check-input" type="checkbox" id="status" disabled>
                 			<label class="form-check-label" for="status">
                 				Acepta nuestra Pol&iacute;tica de privacidad y Condiciones de uso de datos
                 			</label>

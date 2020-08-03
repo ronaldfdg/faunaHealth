@@ -17,7 +17,7 @@
    		<div class="jumbotron animated fadeIn fast">
    			<h3 class="text-center" th:text="'Venta realizada el día: ' + ${#dates.format(sale.saleDate, 'dd-MM-yyyy')}"></h3>
    			<p class="lead" th:text="'Cliente: ' + ${sale.client.name} + ' ' + ${sale.client.primaryLastName}"></p>
-   			<p class="lead" th:text="'Número de boleta: ' + ${sale.ticketNumber}"></p>
+   			<p class="lead" th:text="'Número de boleta: ' + ${#strings.concat('000',sale.id)}"></p>
    			<p class="lead" th:text="'Monto pagado por el cliente: S/ ' + ${sale.cash}"></p>
    			<p class="lead" th:text="'Monto total de la venta: S/ ' + ${sale.total}"></p>
    			<p class="lead" th:text="'Vuelto: S/ ' +${sale.change}"></p>

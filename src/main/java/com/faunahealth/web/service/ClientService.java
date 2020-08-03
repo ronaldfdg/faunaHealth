@@ -12,8 +12,10 @@ public interface ClientService {
 	Page<Client> findByDocumentNumber(String documentNumber, Pageable page);
 	
 	Client findById(int id);
+	Client findByDocumentNumberLike(String documentNumber);
+	Client findByEmailAddressLike(String emailAddress);
 	boolean existsById(int id);
-	void save(Client client);
-	void deleteById(int id);
+	void save(Client client) throws Exception;
+	void deleteById(int id) throws Exception;
 
 }

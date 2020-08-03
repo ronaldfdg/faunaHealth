@@ -74,8 +74,7 @@ public class SaleDetail {
 
 	@Override
 	public String toString() {
-		return "SaleDetail [id=" + id + ", amount=" + amount + ", subtotal=" + subtotal + ", sale=" + sale
-				+ ", product=" + product + "]";
+		return "SaleDetail [id=" + id + ", amount=" + amount + ", subtotal=" + subtotal;
 	}
 	
 }

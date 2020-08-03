@@ -39,15 +39,22 @@ public class DatabaseWebSecurity extends WebSecurityConfigurerAdapter {
 					 "/images/**",
 					 "/js/**",
 					 "/changePassword",
-					 "/updatePassword").permitAll()
-		.antMatchers("/clients/**").hasAnyAuthority("ADMINISTRACION","GESTION")
-		.antMatchers("/patient/**").hasAnyAuthority("ADMINISTRACION", "GESTION")
-		.antMatchers("/products/**").hasAnyAuthority("ADMINISTRACION", "GESTION")
-		.antMatchers("/sales/**").hasAnyAuthority("ADMINISTRACION", "GESTION")
+					 "/updatePassword",
+					 "/clients/unsuscribe/**",
+					 "/appointments/confirm/**",
+					 "/confirmMessage").permitAll()
+		.antMatchers("/clients/", "/clients/record", "/clients/edit/**", "/clients/searchByDNI", "/clients/searchBy", "/clients/save").hasAnyAuthority("ADMINISTRACION", "GESTION")
+		.antMatchers("/clients/delete/**").hasAuthority("ADMINISTRACION")
+		.antMatchers("/patient/", "/patient/record/**", "/patient/savePatient", "/patient/edit/**", "/patient/searchByOwner", "/patient/searchBy").hasAnyAuthority("ADMINISTRACION", "GESTION")
+		.antMatchers("/patient/delete/**").hasAnyAuthority("ADMINISTRACION")
+		.antMatchers("/products/", "/products/searchBy", "/products/register", "/products/edit/**", "/products/record").hasAnyAuthority("ADMINISTRACION", "GESTION")
+		.antMatchers("/products/delete/**").hasAnyAuthority("ADMINISTRACION")
+		.antMatchers("/sales/", "/sales/register", "/sales/searchByClient", "/sales/searchByDates", "/sales/edit/**", "/sales/viewDetail/**", "/sales/record").hasAnyAuthority("ADMINISTRACION", "GESTION")
+		.antMatchers("/sales/delete/**").hasAnyAuthority("ADMINISTRACION")
+		.antMatchers("/appointments/**").hasAnyAuthority("ADMINISTRACION", "GESTION")
 		.antMatchers("/users/**").hasAnyAuthority("ADMINISTRACION")
 		.antMatchers("/providers/**").hasAnyAuthority("ADMINISTRACION")
 		.antMatchers("/operations/**").hasAnyAuthority("ADMINISTRACION")
-		.antMatchers("/appointments/**").hasAnyAuthority("ADMINISTRACION", "GESTION")
 		.anyRequest().authenticated()
 		.and().formLogin().loginPage("/login").defaultSuccessUrl("/", true).permitAll()
 		.and().logout().deleteCookies("JSESSIONID");

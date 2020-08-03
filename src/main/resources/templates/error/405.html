@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
+  <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" th:href="@{/images/favicon.ico}">
@@ -8,8 +8,8 @@
     <link rel="stylesheet" th:href="@{/css/style.css}">
 
     <title>Fauna Health | Error</title>
-    	
-</head>
+    
+  </head>
 
   <body>
 
@@ -22,29 +22,29 @@
 
         <div class="card">
           <h4 class="card-header"><strong>Ocurri&oacute; un error en la aplicaci&oacute;n</strong> </h4>              
-          <div class="card-body">            
-			<img th:src="@{/images/error-404.jpg}" class="rounded " title="Ha ocurrido un error">
-			
-			<div class="col-md-12 order-md-2 mb-4">      
+          <div class="card-body">
+            <img th:src="@{/images/error-405.jpg}" class="rounded " title="Ha ocurrido un error" width="350px" height="200px">
+            <div class="col-md-12 order-md-2 mb-4">      
               <ul class="list-group mb-3">                                               
                 <li class="list-group-item d-flex justify-content-between lh-condensed">
                   <div>
-                    <small class="text-muted">ERROR HTTP 404 - EL RECURSO SOLICITADO NO EXISTE.</small>
+                    <small class="text-muted">ERROR HTTP 405 - Método HTTP no permitido</small>
                   </div>
-                </li>                                                                                                              
+                </li>
                 <li class="list-group-item d-flex justify-content-between lh-condensed">
                   <div>
-                    <small class="text-muted">Acaba de ingresar una URL que no existe. Por favor verifique y vuelva a intentarlo</small>
+                    <small class="text-muted">La manera en que quiso acceder al recurso no es la correcta.</small>
                   </div>
-                </li>      
+                </li>                                                                                          
                 <li class="list-group-item d-flex justify-content-between lh-condensed">
                   <div>
                     <small class="text-muted" th:text="'FECHA: ' + ${#dates.format(timestamp, 'dd-MM-yyyy HH:mm')}"></small>
                   </div>
-                </li>                                                                                                                 
+                </li>                                                                                             
               </ul>
               <button class="btn btn-primary" onclick="goBack()" role="button">Regresar a la p&aacute;gina anterior</button>
-            </div>			
+            </div>
+            
           </div>
         </div>
       </div> <!-- /container -->
@@ -52,17 +52,17 @@
     </main>
 
 	<footer th:insert="fragments/footer.html :: footer">
-	</footer>
+	</footer>	
 
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>  
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
     
     <script>
 		function goBack(){
 			window.history.back();
 		}
 	</script>
-    
+       
   </body>
 </html>

@@ -10,9 +10,9 @@
 	</parent>
 	<groupId>com.faunahealth.web</groupId>
 	<artifactId>faunaHealth</artifactId>
-	<version>0.1.0</version>
+	<version>0.4.0</version>
 	
-	<packaging>jar</packaging>
+	<packaging>war</packaging>
 	
 	<name>faunaHealth</name>
 	<description>Project for a veterinary clinic</description>

@@ -64,7 +64,6 @@ public class UserController {
 		if(result.hasErrors())
 			return "users/formUser";
 		
-		user.setUsername(passwordEncoder.encode(user.getUsername()));
 		user.setPassword(passwordEncoder.encode(user.getPassword()));
 		
 		try {

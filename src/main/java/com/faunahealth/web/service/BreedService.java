@@ -7,5 +7,6 @@ import com.faunahealth.web.entity.Breed;
 public interface BreedService {
 
 	List<Breed> getBreedsBySpecie(int specieId);
+	Breed findById(int id);
 	
 }

@@ -54,9 +54,14 @@ public class ClientController {
 	@GetMapping("/delete/{id}")
 	public String delete(@PathVariable("id") int id, RedirectAttributes attribute) {
 		Client client = serviceClient.findById(id);
-		serviceClient.deleteById(id);
-		attribute.addFlashAttribute("messageSuccess",
-				"Se eliminó al paciente " + client.getName() + " " + client.getPrimaryLastName());
+		try {
+			serviceClient.deleteById(id);
+			attribute.addFlashAttribute("messageSuccess",
+					"Se eliminó al cliente " + client.getName() + " " + client.getPrimaryLastName());
+		} catch(Exception e) {
+			attribute.addFlashAttribute("messageWarning", "No puede eliminar al cliente porque tiene mascotas registradas");
+		}
+		
 		return "redirect:/clients/";
 	}
 
@@ -113,23 +118,52 @@ public class ClientController {
 	}
 
 	@PostMapping("/save")
-	public String save(@ModelAttribute Client client, BindingResult result, RedirectAttributes attribute) {
-		if (result.hasErrors())
+	public String save(@ModelAttribute Client client, BindingResult result, RedirectAttributes attribute, Model model) {
+		if (result.hasErrors()) {
+			model.addAttribute("districts", serviceDistrict.findAll());
 			return "clients/formClient";
+		}
+		
+		String nextURL = validateIfClientExists(client, attribute);
+		
+		try {
+			serviceClient.save(client);
+		} catch(Exception e) {
+			model.addAttribute("districts", serviceDistrict.findAll());
+			validateIfDniOrEmailDuplicated(client, model);
+			return "clients/formClient";
+		}
+		
+		return nextURL;
+		
+	}
 
-		if (serviceClient.existsById(client.getId()))
+	private void validateIfDniOrEmailDuplicated(Client client, Model model) {
+		Client validateClient = serviceClient.findByDocumentNumberLike(client.getDocumentNumber());
+		if(validateClient != null) {
+			model.addAttribute("messageError", "Ya existe registrado un DNI con el número: "+client.getDocumentNumber());
+		} else {
+			model.addAttribute("messageError", "Ya existe un cliente registrado con el correo: "+client.getEmailAddress());
+		}
+	}
+
+	private String validateIfClientExists(Client client, RedirectAttributes attribute) {
+		if (serviceClient.existsById(client.getId())) {
 			attribute.addFlashAttribute("messageSuccess",
 					"Se actualizó la información del cliente " + client.getName() + " " + client.getPrimaryLastName());
-		else
+			return "redirect:/clients/";
+		} else {
 			attribute.addFlashAttribute("messageSuccess",
 					"Se registró al cliente " + client.getName() + " " + client.getPrimaryLastName());
-
-		serviceClient.save(client);
-		return "redirect:/clients/";
+			return "redirect:/clients/record";
+		}
+		
 	}
 
 	@GetMapping("/unsuscribe/{id}")
-	public String unsuscribe(@PathVariable("id") int clientId, RedirectAttributes attribute) {
+	public String unsuscribe(@PathVariable("id") int clientId, RedirectAttributes attribute) 
+		throws Exception {
+		
 		Client client = serviceClient.findById(clientId);
 		if (client.isStatus()) {
 			client.setStatus(false);

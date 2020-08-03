@@ -128,8 +128,8 @@
                 <tr>
                   <td class="content-block" style="font-family: sans-serif; vertical-align: top; padding-bottom: 10px; padding-top: 10px; font-size: 12px; color: #999999; text-align: center;">
                     <span class="apple-link" style="color: #999999; font-size: 12px; text-align: center;">Cl&iacute;nica Veterinaria Faulta Health, Av. los Olivos 47, Lima 15109</span>
-                    <br> No quieres seguir recibiendo estos correos? <a href="http://localhost:8080/clients/unsuscribe/${client.id}" style="text-decoration: underline; color: #999999; font-size: 12px; text-align: center;">Dar de baja</a>.
-                    <!-- <br> No quieres seguir recibiendo estos correos? <a href="http://ronaldfdg.com/clients/unsuscribe/${client.id}" style="text-decoration: underline; color: #999999; font-size: 12px; text-align: center;">Dar de baja</a>. -->
+                    <!-- <br> No quieres seguir recibiendo estos correos? <a href="http://localhost:8080/clients/unsuscribe/${client.id}" style="text-decoration: underline; color: #999999; font-size: 12px; text-align: center;">Dar de baja</a>. -->
+                    <br> No quieres seguir recibiendo estos correos? <a href="http://ronaldfdg.com/clients/unsuscribe/${client.id}" style="text-decoration: underline; color: #999999; font-size: 12px; text-align: center;">Dar de baja</a>.
                   </td>
                 </tr>
               </table>

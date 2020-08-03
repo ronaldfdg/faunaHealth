@@ -46,7 +46,7 @@ public class SchedulingConfiguration {
 	
 	private SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
 
-	@Scheduled(cron = "0 50-52 01 * * ?")
+	@Scheduled(cron = "0 51 20 * * ?")
 	void sendReminderEmailAddress() throws Exception {
 		
 		List<Appointment> appointments = serviceAppointment.appointmentsByDate(Utileria.getTomorrowDate());
@@ -81,10 +81,7 @@ public class SchedulingConfiguration {
 					appointment = serviceAppointment.findAppointmentByPatient(patient.getId(), Utileria.getTomorrowDate());
 					model.put("appointmentDate", dateFormat.format(appointment.getNextAppointmentDate()));
 					model.put("appointment", appointment);
-					model.put("warning", "Nota: Esta cuenta de correo electrónico solo es utilizada para envíar esta notificación; "
-							+ "le agradeceremos no responder con consultas personales.");
 					
-					model.put("byeMessage", "Fauna Health, siempre al cuidado de su mascota.");
 					
 					emailMessage.setModel(model);
 					serviceMail.sendEmail(emailMessage, templateName);	
@@ -95,7 +92,7 @@ public class SchedulingConfiguration {
 
 	}
 	
-	@Scheduled(cron = "0 53-55 01 * * ?")
+	@Scheduled(cron = "0 41-43 18 * * ?")
 	void sendReminderWhatsApp() throws Exception {
 		
 		List<Appointment> appointments = serviceAppointment.appointmentsByDate(Utileria.getTomorrowDate());

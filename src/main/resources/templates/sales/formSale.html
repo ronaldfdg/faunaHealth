@@ -19,7 +19,7 @@
 		<hr>
 		<div class="container">
 			<div class="card animated fadeIn fast">
-				<h4 class="card-header"><i class="fas fa-money-bill-alt"></i> Registro de Venta</h4>
+				<h4 class="card-header"><i class="fas fa-money-bill-alt" th:text="${sale != null} ? ' Actualización de venta' : ' Registro de Venta'"></i></h4>
 				<div class="card-body">
 					<form name="formSale" th:action="@{/sales/record}" method="post">
 						<div th:if="${messageError != null}" class="alert alert-danger alert-dismissible fade show" role="alert">
@@ -28,35 +28,44 @@
 					    		<span aria-hidden="true">&times;</span>
 					  		</button>
 						</div>
+						<div th:if="${messageSuccess != null}" class="alert alert-success alert-dismissible fade show" role="alert">
+							<strong th:text="${messageSuccess}"></strong>
+							<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+					    		<span aria-hidden="true">&times;</span>
+					  		</button>
+						</div>
+						<div class="row" th:if="${sale != null}">
+							<div class="col-md-3">
+								<div class="form-group">
+									<label for="ticketNumber" th:text="'N° de boleta: ' + ${#strings.concat('000',sale.id)}"></label>
+								</div>
+							</div>
+						</div>
 						<div class="row">
 							<div class="col-md-4">
 								<div class="form-group">
 									<label for="saleDate">Fecha de venta </label>
-									<input class="form-control mb-2" type="text" name="saleDate" id="saleDate" placeholder="Fecha de la venta" required="required">
+									<input th:if="${sale != null}" type="hidden" name="saleId" th:value="${sale.id}">
+									<input th:if="${sale==null}" class="form-control mb-2" type="text" name="saleDate" id="saleDate" placeholder="Fecha de la venta" required="required">
+									<input th:unless="${sale==null}" class="form-control mb-2" type="text" name="saleDate" th:value="${#dates.format(sale.saleDate, 'dd-MM-yyyy')}" id="saleDate" placeholder="Fecha de la venta" required="required">
 								</div>
 							</div>
 							<div class="col-md-4">
 								<div class="form-group">
 									<label for="clientId">C&oacute;digo del cliente: </label>
-									<input class="form-control mb-2" onkeypress="return checkNumbers(event)" type="text" name="clientId" id="clientId" placeholder="Código cliente" required="required">
+									<input th:if="${sale==null}" class="form-control mb-2" onkeypress="return checkNumbers(event)" type="text" name="clientId" id="clientId" placeholder="Código cliente" required="required">
+									<input th:unless="${sale==null}" class="form-control mb-2" onkeypress="return checkNumbers(event)" type="text" name="clientId" th:value="${sale.client.id}" id="clientId" placeholder="Código cliente" required="required">
 								</div>
 							</div>
-						</div>
-						<div class="row">
-							<div class="col-md-3">
-								<div class="form-group">
-									<label for="ticketNumber">N° de boleta: </label>
-									<input class="form-control" onkeypress="return checkNumbers(event)" type="text" name="ticketNumber" id="ticketNumber" placeholder="Numero de boleta" required="required">
-								</div>
-							</div>
-							<div class="col-md-3">
+							<div class="col-md-4">
 								<div class="form-group">
 									<label for="cash">Monto pagado: </label>
 									<div class="input-group mb-3">
 										<div class="input-group-prepend">
 	    									<span class="input-group-text">S/</span>
 										</div>
-										<input class="form-control" type="text" name="cash" id="cash" maxlength="3" size="3" required="required">
+										<input th:if="${sale==null}" class="form-control" type="text" name="cash" id="cash" maxlength="6" size="6" onkeypress="return checkNumbers(event)" required="required" placeholder="00.00">
+										<input th:unless="${sale==null}" class="form-control" type="text" name="cash" th:value="${sale.cash}" id="cash" maxlength="6" size="6" onkeypress="return checkNumbers(event)" required="required" placeholder="00.00">
 									</div>
 								</div>
 							</div>
@@ -71,6 +80,21 @@
 								<td align="center">C&oacute;digo del producto</td>
 								<td align="center">Cantidad</td>
 							</tr>
+							<div th:if="${sale != null}">
+								<tr id="item" th:each="saleDetail : ${sale.saleDetails}">
+									<td>
+										<select class="form-control" name="productId">
+											<option th:each="product : ${products}" th:value="${product.id}" th:text="${product.name}" th:selected="${#strings.equals(saleDetail.product.name, product.name)}"></option>
+										</select>
+									</td>
+									<td>
+										<input name="amount" th:value="${saleDetail.amount}" class="form-control" onkeypress="return checkNumbers(event)" type="text" maxlength="3" size="3" placeholder="Unidades" required="required">
+									</td>
+									<td>
+										<button class="btn btn-dark" type="button" onclick="deleteRow(this)">Eliminar producto</button>
+									</td>
+								</tr>
+							</div>
 							<tr id="item">
 								<td>
 									<select class="form-control" name="productId">
@@ -87,7 +111,7 @@
 							</tr>
 						</table><br>
 						<div style="text-align: center;">
-							<button class="btn btn-primary" type="submit">Registrar venta</button>
+							<button class="btn btn-primary" type="submit"><span th:text="${sale != null} ? 'Actualizar venta' : 'Registrar Venta'"></span></button>
 						</div>
 					</form>
 				</div>

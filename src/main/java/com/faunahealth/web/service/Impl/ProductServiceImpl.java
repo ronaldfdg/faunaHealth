@@ -1,6 +1,7 @@
 	package com.faunahealth.web.service.Impl;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -47,6 +48,26 @@ public class ProductServiceImpl implements ProductService {
 		} else {
 			return null;
 		}
+	}
+	
+	@Override
+	public Product findById(int id) {
+		Optional<Product> optional = repositoryProduct.findById(id);
+		if(optional.isPresent()) {
+			return optional.get();
+		} else {
+			return null;
+		}
+	}
+	
+	@Override
+	public boolean existsById(int id) {
+		return repositoryProduct.existsById(id);
+	}
+	
+	@Override
+	public void deleteById(int id) throws Exception {
+		repositoryProduct.deleteById(id);
 	}
 	
 	@Override

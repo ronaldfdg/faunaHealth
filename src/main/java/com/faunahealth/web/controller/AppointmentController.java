@@ -78,7 +78,7 @@ public class AppointmentController {
 		return "appointments/formAppointment";
 	}
 
-	@GetMapping("/{id}")
+	@GetMapping("/confirm/{id}")
 	public String confirmation(@PathVariable("id") int id, RedirectAttributes attribute) {
 		Appointment appointment = serviceAppointment.findById(id);
 		
