@@ -35,6 +35,12 @@
 	                			<li th:each="error : ${#fields.errors('*')}" th:text="${error}"></li>
 	                		</ul>
 						</div>
+						<div th:if="${messageSuccess != null}" class="alert alert-success alert-dismissible fade show" role="alert">
+							<strong th:text="${messageSuccess}"></strong>
+							<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+					    		<span aria-hidden="true">&times;</span>
+				  			</button>
+						</div>
 						<div class="row">
 							<div class="col-md-4">
 								<div class="form-group">
@@ -72,7 +78,7 @@
 							<div class="col-md-4">
 								<div class="form-group">
 									<label for="cost">Costo</label>
-									<input th:field="*{cost}" id="cost" type="text" class="form-control" placeholder="Costo" required="required">
+									<input th:field="*{cost}" id="cost" type="text" class="form-control" placeholder="Costo" required="required" onkeypress="return checkNumbers(event)">
 								</div>
 							</div>
 						</div>
@@ -90,7 +96,7 @@
 							<div class="col-md-2">
 								<div class="form-group">
 									<label for="salePrice">Precio de venta</label>
-									<input th:field="*{salePrice}" id="salePrice" type="text" class="form-control" placeholder="Precio de venta" required="required">
+									<input th:field="*{salePrice}" id="salePrice" type="text" class="form-control" placeholder="Precio de venta" required="required" onkeypress="return checkNumbers(event)">
 								</div>
 							</div>
 						</div>
@@ -112,6 +118,7 @@
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script th:src="@{/js/validations.js}"></script>
 	<script>
         $(function() {
             $("#purchaseDate").datepicker({

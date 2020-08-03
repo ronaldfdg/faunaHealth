@@ -20,23 +20,23 @@
 			<div class="card">
 				<h4 class="card-header" th:text="'Citas programadas para el día ' + ${date}"></h4>
 				<div class="card-body">
-					<div th:if="${messageWarning != null}" class="alert alert-warning alert-dismissible fade show" role="alert">
-						<strong th:text="${messageWarning}"></strong>
-						<button type="button" class="close" data-dismiss="alert" aria-label="Close">
-				    		<span aria-hidden="true">&times;</span>
-			  			</button>
-					</div>
 					<strong>Puede encontrar las citas registradas utilizando el siguiente filtro: </strong>
 					<br><br>
 					<form name="searchBy" class="form-inline" th:action="@{/appointments/searchBy}">
 						<div class="form-group">
 							<label for="searchDate">Fecha de cita </label>&nbsp;&nbsp;
 							<select name="searchDate" class="form-control">
-								<option th:each="day : ${nextDaysFromToday}" th:value="${day}" th:text="${day}"></option>
+								<option th:each="day : ${nextDaysFromToday}" th:value="${day}" th:text="${day}" th:selected="${#strings.equals(day, date)}"></option>
 							</select>
 						</div>&nbsp;&nbsp;&nbsp;
 						<button class="btn btn-outline-dark" type="submit">Buscar</button>
-					</form>
+					</form><br>
+					<div th:if="${messageWarning != null}" class="alert alert-warning alert-dismissible fade show" role="alert">
+						<strong th:text="${messageWarning}"></strong>
+						<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+				    		<span aria-hidden="true">&times;</span>
+			  			</button>
+					</div>
 					<hr><br>
 					<div th:if="${appointments != null}" class="table-responsive animated fadeIn fast">
 						<table class="table table-hover">

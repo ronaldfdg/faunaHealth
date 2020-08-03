@@ -103,16 +103,16 @@
                         	Motivo: ${appointment.reason}
                         </p>
                         <p style="font-family: sans-serif; font-size: 14px; font-weight: normal; margin: 0; Margin-bottom: 15px;">
-                        	<!--Si desea confirmar su asistencia, darle clic a <a href="http://localhost:8080/appointments/${appointment.id}">Asistir&eacute;</a>-->
-                        	Si desea confirmar su asistencia, darle clic a <a href="http://ronaldfdg.com/faunaHealth/appointments/${appointment.id}">Asistir&eacute;</a>
+                        	Si desea confirmar su asistencia, darle clic a <a href="http://localhost:8080/appointments/confirm/${appointment.id}">Asistir&eacute;</a>
+                        	<!-- Si desea confirmar su asistencia, darle clic a <a href="http://ronaldfdg.com/faunaHealth/appointments/confirm/${appointment.id}">Asistir&eacute;</a> -->
                         </p>
                         <br>
                         <div class="text-align: center;">
-                        	<i style="font-family: sans-serif; font-size: 14px;">${warning}</i>
+                        	<i style="font-family: sans-serif; font-size: 14px;">Nota: Esta cuenta de correo electrónico solo es utilizada para envíar esta notificación; le agradeceremos no responder con consultas personales.</i>
                         </div>
                         <br>
                         <div class="text-align: center;">
-                        	<i style="font-family: sans-serif; font-size: 14px;">${byeMessage}</i>
+                        	<i style="font-family: sans-serif; font-size: 14px;">Fauna Health, siempre al cuidado de su mascota.</i>
                         </div>
                       </td>
                     </tr>

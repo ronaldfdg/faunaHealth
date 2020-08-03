@@ -15,5 +15,6 @@ public interface BreedRepository extends JpaRepository<Breed, Integer> {
 			+ "b.specie.id = :specieId "
 			+ "order by b.name")
 	List<Breed> getBreedsBySpecie(@Param("specieId") int specieId);
+	Breed findById(int id);
 	
 }

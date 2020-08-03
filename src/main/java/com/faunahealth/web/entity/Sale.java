@@ -1,6 +1,7 @@
 package com.faunahealth.web.entity;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -10,6 +11,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -21,11 +23,8 @@ public class Sale {
 	@Column(name = "idVenta")
 	private int id;
 	
-	@Column(name = "Num_Boleta", nullable = false)
-	private String ticketNumber;
-	
 	@Column(name = "FechaVenta", nullable = false)
-	private Date saleDate = new Date();
+	private Date saleDate;
 	
 	private double total;
 	
@@ -38,6 +37,10 @@ public class Sale {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "idCliente")
 	private Client client;
+	
+	@OneToMany
+	@JoinColumn(name = "idVenta")
+	private List<SaleDetail> saleDetails;
 
 	public int getId() {
 		return id;
@@ -46,15 +49,7 @@ public class Sale {
 	public void setId(int id) {
 		this.id = id;
 	}
-
-	public String getTicketNumber() {
-		return ticketNumber;
-	}
-
-	public void setTicketNumber(String ticketNumber) {
-		this.ticketNumber = ticketNumber;
-	}
-
+	
 	public Date getSaleDate() {
 		return saleDate;
 	}
@@ -95,10 +90,18 @@ public class Sale {
 		this.client = client;
 	}
 
+	public List<SaleDetail> getSaleDetails() {
+		return saleDetails;
+	}
+
+	public void setSaleDetails(List<SaleDetail> saleDetails) {
+		this.saleDetails = saleDetails;
+	}
+
 	@Override
 	public String toString() {
-		return "Sale [id=" + id + ", ticketNumber=" + ticketNumber + ", saleDate=" + saleDate + ", total=" + total
-				+ ", cash=" + cash + ", change=" + change + "]";
+		return "Sale [id=" + id + ", saleDate=" + saleDate + ", total=" + total
+				+ ", cash=" + cash + ", change=" + change;
 	}
 	
 }

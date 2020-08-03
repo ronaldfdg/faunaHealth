@@ -16,6 +16,11 @@ public class BreedServiceImpl implements BreedService {
 	private BreedRepository repositoryBreed;
 
 	@Override
+	public Breed findById(int id) {
+		return repositoryBreed.findById(id);
+	}
+	
+	@Override
 	public List<Breed> getBreedsBySpecie(int specieId) {
 		return repositoryBreed.getBreedsBySpecie(specieId);
 	}

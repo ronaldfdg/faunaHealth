@@ -21,13 +21,18 @@
 			<div class="card">
 				<h4 class="card-header">Productos</h4>
 				<div class="card-body">
-				
 					<div th:if="${messageSuccess != null}" class="alert alert-success alert-dismissible fade show" role="alert">
 						<strong th:text="${messageSuccess}"></strong>
 						<button type="button" class="close" data-dismiss="alert" aria-label="Close">
 				    		<span aria-hidden="true">&times;</span>
 			  			</button>
-					</div>
+			  		</div>
+			  		<div th:if="${messageError != null}" class="alert alert-danger alert-dismissible fade show" role="alert">
+						<strong th:text="${messageError}"></strong>
+						<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+				    		<span aria-hidden="true">&times;</span>
+			  			</button>
+			  		</div>
 					<div th:if="${messageWarning != null}" class="alert alert-warning alert-dismissible fade show" role="alert">
 						<strong th:text="${messageWarning}"></strong>
 						<br><br>
@@ -81,7 +86,7 @@
 					<div th:if="${products != null}" class="table-responsive animated fadeIn fast">
 						<table class="table table-hover">
 							<thead>
-								<tr>
+								<tr align="center">
 									<th scope="col">C&oacute;digo</th>
 									<th scope="col">Nombre</th>
 									<th scope="col">Tipo de producto</th>
@@ -91,7 +96,7 @@
 								</tr>
 							</thead>
 							<tbody>
-								<tr th:each="product : ${products}">
+								<tr th:each="product : ${products}" align="center">
 									<td th:text="${product.id}"></td>
 									<td th:text="${product.name}"></td>
 									<td th:text="${product.productKind.name}"></td>
@@ -99,6 +104,7 @@
 									<td th:text="'S/. ' + ${product.salePrice}"></td>
 									<td>
 										<a th:href="@{/products/edit/{id} ( id=${product.id} ) }" class="btn btn-primary btn-sm" role="button" title="Editar producto"><i class="fas fa-pencil-alt" aria-hidden="true"></i></a>
+										<a th:href="@{/products/delete/{id} ( id=${product.id} ) }" sec:authorize="hasAnyAuthority('ADMINISTRACION')" onclick="return confirm('Esta seguro de eliminar el producto registrado?')" class="btn btn-primary btn-sm" role="button" title="Eliminar producto"><i class="fas fa-trash" aria-hidden="true"></i></a>
 									</td>
 								</tr>
 							</tbody>

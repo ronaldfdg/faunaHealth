@@ -90,7 +90,6 @@
 				<div class="card card-back">
 					<div class="card-body">
 						<p class="card-text" th:if="${attention.prescription != null}">Receta: [[${attention.prescription}]]</p>
-						<p class="card-text" th:if="${attention.analysisResult != null}">Resultado: [[${attention.analysisResult}]]</p>
 						<p class="card-text" th:if="${attention.evolution != null}">Evoluci&oacute;n: [[${attention.evolution}]]</p>
 						<div class="card-footer bg-transparent border-success">
 							<a th:href="@{/historyDetails/edit/{patientId} (patientId=${patient.id}, clinicHistory=${clinicHistory.id}, date=${#dates.format(attention.attentionDate, 'dd-MM-yyyy')}) }" 

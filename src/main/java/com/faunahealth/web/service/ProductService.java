@@ -10,7 +10,10 @@ public interface ProductService {
 
 	List<Product> findAll();
 	List<Product> productsByKindAndSpecieAndName(String idProductKind, String idSpecie, String name, Pageable page);
+	Product findById(int id);
 	List<Product> findByIdIn(List<Integer> productsId);
+	boolean existsById(int id);
+	void deleteById(int id) throws Exception;
 	void save(Product product);
 	
 }

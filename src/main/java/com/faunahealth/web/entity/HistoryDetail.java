@@ -36,9 +36,6 @@ public class HistoryDetail {
 	@Column(name = "Receta")
 	private String prescription;
 	
-	@Column(name = "ResultadoAnalisis")
-	private String analysisResult;
-	
 	@Column(name = "Evolucion")
 	private String evolution;
 	
@@ -98,14 +95,6 @@ public class HistoryDetail {
 		this.prescription = prescription;
 	}
 
-	public String getAnalysisResult() {
-		return analysisResult;
-	}
-
-	public void setAnalysisResult(String analysisResult) {
-		this.analysisResult = analysisResult;
-	}
-
 	public String getEvolution() {
 		return evolution;
 	}
@@ -133,8 +122,8 @@ public class HistoryDetail {
 	@Override
 	public String toString() {
 		return "HistoryDetail [id=" + id + ", attentionDate=" + attentionDate + ", reason=" + reason + ", vitalSigns="
-				+ vitalSigns + ", diagnostic=" + diagnostic + ", prescription=" + prescription + ", analysisResult="
-				+ analysisResult + ", evolution=" + evolution + "]";
+				+ vitalSigns + ", diagnostic=" + diagnostic + ", prescription=" + prescription + ", evolution="
+				+ evolution + "]";
 	}
 	
 }

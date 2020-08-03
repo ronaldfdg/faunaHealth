@@ -29,8 +29,6 @@
 			<a th:href="@{/historyDetails/register/{id} (id=${history.id}, patient=${patient.id}) }" class="btn btn-primary" role="button" title="Añadir nuevo registro de atención"><i class="fas fa-notes-medical"></i> Nueva atenci&oacute;n</a>
 			&nbsp;
 			<a th:href="@{/historyDetails/{id} (id=${history.id},patient=${patient.id},pageNumber=0)}" class="btn btn-primary" role="button" title="Ver atenciones realizadas"><i class="fas fa-list"></i> Atenciones realizadas</a>
-			&nbsp;
-			<a th:href="@{/appointments/{id}/register (id=${patient.id}) }" class="btn btn-primary" role="button" title="Registrar nueva cita"><i class="fas fa-calendar-alt"></i> Nueva cita</a>
 		</div>
 		
 		<br><br>
@@ -79,14 +77,16 @@
         		<p class="lead" th:text="'Correo: ' + ${patient.client.emailAddress}"></p>
         		
         		<h3 class="text-center">Datos del paciente</h3>
+        		
+        		<p class="lead" th:text="'Fecha de ingreso: ' + ${#dates.format(history.registrationDate, 'dd-MM-yyyy')}">
+        		
         		<p class="lead" th:text="'Especie: ' + ${patient.breed.specie.name}"></p>
         		<p class="lead" th:text="'Raza: ' + ${patient.breed.name}"></p>
         		
-        		<p class="lead" th:if="${patient.gender == 'M'}" th:text=""></p>
-        		<p class="lead" th:unless="${patient.gender == 'M'}" th:text="'Sexo: Hembra'"></p>
+        		<p class="lead" th:text="${#strings.startsWith(patient.gender, 'M')} ? 'Sexo: Macho' : 'Sexo: Hembra'"></p>
         		
+        		<p class="lead" th:text="'Fecha de nacimiento: ' + ${#dates.format(patient.birthday, 'dd-MM-yyyy')}"></p>
         		<p class="lead" th:text="'Edad: ' + ${years} + ' años'">
-        		<p class="lead" th:text="'Fecha de ingreso: ' + ${#dates.format(history.registrationDate, 'dd-MM-yyyy')}">
         		
         		<p class="lead" th:if="${history.behavior == null}" th:text="'Comportamiento: ---'"></p>
         		<p class="lead" th:unless="${history.behavior == null}" th:text="'Comportamiento: ' + ${history.behavior}"></p>

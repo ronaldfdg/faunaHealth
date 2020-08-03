@@ -9,6 +9,8 @@ import com.faunahealth.web.entity.SaleDetail;
 public interface SaleDetailService {
 
 	void processSaleDetails(List<Product> products, Integer[] amount, Sale sale);
+	void processSaleDetails(List<SaleDetail> saleDetails, List<Product> products, Integer[] amount, Sale sale);
+	void deleteSaleDetails(List<SaleDetail> saleDetails);
 	List<SaleDetail> findBySale_Id(int saleId);
 	
 }

@@ -31,14 +31,14 @@
 				    		<span aria-hidden="true">&times;</span>
 				  		</button>
 					</div>
-					<div th:if="${messageWarning != null}" class="alert alert-warning alert-dismissible fade show" role="alert">
-						<strong th:text="${messageWarning}"></strong>
+					<div th:if="${messageSuccess != null}" class="alert alert-success alert-dismissible fade show" role="alert">
+						<strong th:text="${messageSuccess}"></strong>
 						<button type="button" class="close" data-dismiss="alert" aria-label="Close">
 				    		<span aria-hidden="true">&times;</span>
 				  		</button>
 					</div>
-					<div th:if="${messageSuccess != null}" class="alert alert-success alert-dismissible fade show" role="alert">
-						<strong th:text="${messageSuccess}"></strong>
+					<div th:if="${messageWarning != null}" class="alert alert-warning alert-dismissible fade show" role="alert">
+						<strong th:text="${messageWarning}"></strong>
 						<button type="button" class="close" data-dismiss="alert" aria-label="Close">
 				    		<span aria-hidden="true">&times;</span>
 				  		</button>
@@ -65,7 +65,7 @@
 							</div>
 							<div class="col-md-3 mb-3">
 								<label for="endDate">Fecha fin:</label>
-								<input type="text" name="endDate" id="endDate" class="form-control date" placeholder="Rando final" maxlength="10">
+								<input type="text" name="endDate" id="endDate" class="form-control date" placeholder="Rango final" maxlength="10">
 							</div>
 						</div>
 						<button class="btn btn-outline-dark" type="submit">Buscar</button>
@@ -79,17 +79,19 @@
 									<th scope="col">N&uacute;mero de boleta</th>
 									<th scope="col">Fecha de venta</th>
 									<th scope="col">Monto de venta</th>
-									<th scope="col">Ver detalle</th>
+									<th scope="col">Opciones</th>
 								</tr>
 							</thead>
 							<tbody>
 								<tr th:each="sale : ${sales}" align="center">
 									<td th:text="${sale.client.name} + ' ' + ${sale.client.primaryLastName}"></td>
-									<td th:text="${sale.ticketNumber}"></td>
+									<td th:text="${#strings.concat('000',sale.id)}"></td>
 									<td th:text="${#dates.format(sale.saleDate, 'dd-MM-yyyy')}"></td>
 									<td th:text="'S/ ' + ${sale.total}"></td>
 									<td>
-										<a th:href="@{/sales/viewDetail/{id} ( id=${sale.id} ) }" class="btn btn-primary btn-sm" role="button" title="Información completa de la venta"><i class="fas fa-eye"></i></a>
+										<a th:href="@{/sales/viewDetail/{id} ( id = ${sale.id} )}" class="btn btn-primary btn-sm" role="button" title="Información completa de la venta"><i class="fas fa-eye"></i></a>
+										<a th:href="@{/sales/edit/{id} ( id = ${sale.id} )}" class="btn btn-primary btn-sm" role="button" title="Editar venta"><i class="fas fa-pencil-alt" aria-hidden="true"></i></a>
+										<a th:href="@{/sales/delete/{id} ( id = ${sale.id} )}" class="btn btn-primary btn-sm" sec:authorize="hasAnyAuthority('ADMINISTRACION')" onclick="return confirm('Esta seguro de eliminar la venta?')" role="button" title="Eliminar venta"><i class="fas fa-trash" aria-hidden="true"></i></a>
 									</td>
 								</tr>
 							</tbody>

@@ -1,6 +1,7 @@
 package com.faunahealth.web.repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -47,5 +48,7 @@ public interface ClientRepository extends JpaRepository<Client, Integer> {
 			, countQuery = "select count (c.id) from Client c")
 	Page<Client> findClientsByNameAndPrimaryLastNameAndPage(@Param("name") String name, @Param("primaryLastName") String primaryLastName, Pageable page);
 	List<Client> findByNameContainingAndPrimaryLastNameContaining(String name, String primaryLastName);
+	Optional<Client> findByDocumentNumberLike(String documentNumber);
+	Optional<Client> findByEmailAddressLike(String emailAddress);
 	
 }
